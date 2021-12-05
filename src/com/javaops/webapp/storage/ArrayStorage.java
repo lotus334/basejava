@@ -1,25 +1,29 @@
+package com.javaops.webapp.storage;
+
+import com.javaops.webapp.model.Resume;
+
 import java.util.Arrays;
 
 /**
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    Resume[] storage = new Resume[10000];
-    int lastIndex = 0;
+    private Resume[] storage = new Resume[10000];
+    private int lastIndex = 0;
 
-    void clear() {
+    public void clear() {
         for (int i = 0; i < lastIndex; i++) {
             storage[i] = null;
         }
         lastIndex = 0;
     }
 
-    void save(Resume r) {
+    public void save(Resume r) {
         storage[lastIndex] = r;
         lastIndex++;
     }
 
-    Resume get(String uuid) {
+    public Resume get(String uuid) {
         for (int i = 0; i < lastIndex; i++) {
             if (uuid.equals(storage[i].toString())) {
                 return storage[i];
@@ -28,12 +32,11 @@ public class ArrayStorage {
         return null;
     }
 
-    void delete(String uuid) {
+    public void delete(String uuid) {
         for (int i = 0; i < lastIndex; i++) {
             if (uuid.equals(storage[i].toString())) {
-                int remainingElements = size() - ( i + 1 );
-                System.arraycopy(storage, i + 1, storage, i, remainingElements);
-                storage[lastIndex] = null;
+                storage[i] = storage[lastIndex - 1];
+                storage[lastIndex - 1] = null;
                 lastIndex--;
                 return;
             }
@@ -43,11 +46,11 @@ public class ArrayStorage {
     /**
      * @return array, contains only Resumes in storage (without null)
      */
-    Resume[] getAll() {
+    public Resume[] getAll() {
         return Arrays.copyOf(storage, lastIndex);
     }
 
-    int size() {
+    public int size() {
         return lastIndex;
     }
 }
