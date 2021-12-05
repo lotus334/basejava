@@ -15,6 +15,7 @@ public class ArrayStorage {
     public void clear() {
         Arrays.fill(storage, 0 , lastIndex, null);
         lastIndex = 0;
+        System.out.println("Successfully clear storage");
     }
 
     public void save(Resume r) {
@@ -23,11 +24,12 @@ public class ArrayStorage {
             return;
         }
         if (getResumeIndex(r) != -1) {
-            System.out.println("Failed to save: object already exist");
+            System.out.println("Failed to save: resume " + r.toString() + " already exist");
             return;
         }
         storage[lastIndex] = r;
         lastIndex++;
+        System.out.println("Successfully save: resume " + r.toString());
     }
 
     public Resume get(String uuid) {
@@ -44,19 +46,20 @@ public class ArrayStorage {
             storage[resumeIndex] = storage[lastIndex - 1];
             storage[lastIndex - 1] = null;
             lastIndex--;
+            System.out.println("Successfully delete: resume " + uuid);
             return;
         }
-        System.out.println("Failed to delete: object not found");
+        System.out.println("Failed to delete: resume " + uuid + " not found");
     }
 
     public void update(Resume resume) {
         int resumeIndex = getResumeIndex(resume);
         if (resumeIndex != -1) {
             storage[resumeIndex] = resume;
-            System.out.println("successfully update");
+            System.out.println("Successfully update resume " + resume.toString());
             return;
         }
-        System.out.println("Failed to update: object not found");
+        System.out.println("Failed to update: resume " + resume.toString() + " not found");
     }
 
     /**
