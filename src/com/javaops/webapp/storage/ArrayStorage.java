@@ -13,9 +13,7 @@ public class ArrayStorage {
     private int lastIndex = 0;
 
     public void clear() {
-        for (int i = 0; i < lastIndex; i++) {
-            storage[i] = null;
-        }
+        Arrays.fill(storage, null);
         lastIndex = 0;
     }
 
