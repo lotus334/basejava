@@ -22,44 +22,39 @@ public class ArrayStorage {
             System.out.println("Failed to save: storage is full");
             return;
         }
-        for (int i = 0; i < lastIndex; i++) {
-            if (r.equals(storage[i])) {
-                System.out.println("Failed to save: object already exist");
-                return;
-            }
+        if (getResumeIndex(r) != -1) {
+            System.out.println("Failed to save: object already exist");
+            return;
         }
         storage[lastIndex] = r;
         lastIndex++;
     }
 
     public Resume get(String uuid) {
-        for (int i = 0; i < lastIndex; i++) {
-            if (uuid.equals(storage[i].getUuid())) {
-                return storage[i];
-            }
+        int resumeIndex = getResumeIndex(uuid);
+        if (resumeIndex != -1) {
+            return storage[resumeIndex];
         }
         return null;
     }
 
     public void delete(String uuid) {
-        for (int i = 0; i < lastIndex; i++) {
-            if (uuid.equals(storage[i].getUuid())) {
-                storage[i] = storage[lastIndex - 1];
-                storage[lastIndex - 1] = null;
-                lastIndex--;
-                return;
-            }
+        int resumeIndex = getResumeIndex(uuid);
+        if (resumeIndex != -1) {
+            storage[resumeIndex] = storage[lastIndex - 1];
+            storage[lastIndex - 1] = null;
+            lastIndex--;
+            return;
         }
         System.out.println("Failed to delete: object not found");
     }
 
     public void update(Resume resume) {
-        for (int i = 0; i < lastIndex; i++) {
-            if (resume.equals(storage[i])) {
-                storage[i] = resume;
-                System.out.println("successfully update");
-                return;
-            }
+        int resumeIndex = getResumeIndex(resume);
+        if (resumeIndex != -1) {
+            storage[resumeIndex] = resume;
+            System.out.println("successfully update");
+            return;
         }
         System.out.println("Failed to update: object not found");
     }
@@ -73,5 +68,23 @@ public class ArrayStorage {
 
     public int size() {
         return lastIndex;
+    }
+
+    private int getResumeIndex(Resume r) {
+        for (int i = 0; i < lastIndex; i++) {
+            if (r.equals(storage[i])) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private int getResumeIndex(String uuid) {
+        for (int i = 0; i < lastIndex; i++) {
+            if (uuid.equals(storage[i].getUuid())) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
