@@ -32,7 +32,7 @@ public class ArrayStorage {
 
     public Resume get(String uuid, boolean printMessage) {
         for (int i = 0; i < lastIndex; i++) {
-            if (uuid.equals(storage[i])) {
+            if (uuid.equals(storage[i].getUuid())) {
                 return storage[i];
             }
         }
@@ -44,7 +44,7 @@ public class ArrayStorage {
 
     public void delete(String uuid) {
         for (int i = 0; i < lastIndex; i++) {
-            if (uuid.equals(storage[i])) {
+            if (uuid.equals(storage[i].getUuid())) {
                 storage[i] = storage[lastIndex - 1];
                 storage[lastIndex - 1] = null;
                 lastIndex--;
