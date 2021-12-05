@@ -8,7 +8,8 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    private Resume[] storage = new Resume[10000];
+    private final int MAX_SIZE = 10000;
+    private Resume[] storage = new Resume[MAX_SIZE];
     private int lastIndex = 0;
 
     public void clear() {
@@ -19,15 +20,26 @@ public class ArrayStorage {
     }
 
     public void save(Resume r) {
+        if (lastIndex == MAX_SIZE) {
+            System.out.println("Failed to save: storage is full");
+            return;
+        }
+        if (get(r.getUuid(), false) != null) {
+            System.out.println("Failed to save: object already exist.");
+            return;
+        }
         storage[lastIndex] = r;
         lastIndex++;
     }
 
-    public Resume get(String uuid) {
+    public Resume get(String uuid, boolean printMessage) {
         for (int i = 0; i < lastIndex; i++) {
             if (uuid.equals(storage[i])) {
                 return storage[i];
             }
+        }
+        if (printMessage) {
+            System.out.println("Failed to get: object not found.");
         }
         return null;
     }
@@ -41,6 +53,7 @@ public class ArrayStorage {
                 return;
             }
         }
+        System.out.println("Failed to delete: object not found.");
     }
 
     public void update(Resume resume) {
@@ -51,7 +64,7 @@ public class ArrayStorage {
                 return;
             }
         }
-        System.out.println("object not found");
+        System.out.println("Failed to update: object not found.");
     }
 
     /**
