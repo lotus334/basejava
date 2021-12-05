@@ -25,7 +25,7 @@ public class ArrayStorage {
 
     public Resume get(String uuid) {
         for (int i = 0; i < lastIndex; i++) {
-            if (uuid.equals(storage[i].toString())) {
+            if (uuid.equals(storage[i])) {
                 return storage[i];
             }
         }
@@ -34,13 +34,24 @@ public class ArrayStorage {
 
     public void delete(String uuid) {
         for (int i = 0; i < lastIndex; i++) {
-            if (uuid.equals(storage[i].toString())) {
+            if (uuid.equals(storage[i])) {
                 storage[i] = storage[lastIndex - 1];
                 storage[lastIndex - 1] = null;
                 lastIndex--;
                 return;
             }
         }
+    }
+
+    public void update(Resume resume) {
+        for (int i = 0; i < lastIndex; i++) {
+            if (resume.equals(storage[i])) {
+                storage[i] = resume;
+                System.out.println("successfully update");
+                return;
+            }
+        }
+        System.out.println("object not found");
     }
 
     /**
