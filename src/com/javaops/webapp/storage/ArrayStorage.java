@@ -22,22 +22,21 @@ public class ArrayStorage {
             System.out.println("Failed to save: storage is full");
             return;
         }
-        if (get(r.getUuid(), false) != null) {
-            System.out.println("Failed to save: object already exist.");
-            return;
+        for (int i = 0; i < lastIndex; i++) {
+            if (r.equals(storage[i])) {
+                System.out.println("Failed to save: object already exist");
+                return;
+            }
         }
         storage[lastIndex] = r;
         lastIndex++;
     }
 
-    public Resume get(String uuid, boolean printMessage) {
+    public Resume get(String uuid) {
         for (int i = 0; i < lastIndex; i++) {
             if (uuid.equals(storage[i].getUuid())) {
                 return storage[i];
             }
-        }
-        if (printMessage) {
-            System.out.println("Failed to get: object not found.");
         }
         return null;
     }
@@ -51,7 +50,7 @@ public class ArrayStorage {
                 return;
             }
         }
-        System.out.println("Failed to delete: object not found.");
+        System.out.println("Failed to delete: object not found");
     }
 
     public void update(Resume resume) {
@@ -62,7 +61,7 @@ public class ArrayStorage {
                 return;
             }
         }
-        System.out.println("Failed to update: object not found.");
+        System.out.println("Failed to update: object not found");
     }
 
     /**
