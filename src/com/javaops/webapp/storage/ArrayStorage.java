@@ -23,7 +23,7 @@ public class ArrayStorage {
             System.out.println("Failed to save: storage is full");
             return;
         }
-        if (getResumeIndex(resume.getUuid()) != -1) {
+        if (getIndex(resume.getUuid()) != -1) {
             System.out.println("Failed to save: resume " + resume.toString() + " already exist");
             return;
         }
@@ -33,7 +33,7 @@ public class ArrayStorage {
     }
 
     public Resume get(String uuid) {
-        int resumeIndex = getResumeIndex(uuid);
+        int resumeIndex = getIndex(uuid);
         if (resumeIndex != -1) {
             return storage[resumeIndex];
         }
@@ -41,7 +41,7 @@ public class ArrayStorage {
     }
 
     public void delete(String uuid) {
-        int resumeIndex = getResumeIndex(uuid);
+        int resumeIndex = getIndex(uuid);
         if (resumeIndex != -1) {
             storage[resumeIndex] = storage[lastIndex - 1];
             storage[lastIndex - 1] = null;
@@ -53,7 +53,7 @@ public class ArrayStorage {
     }
 
     public void update(Resume resume) {
-        int resumeIndex = getResumeIndex(resume.getUuid());
+        int resumeIndex = getIndex(resume.getUuid());
         if (resumeIndex != -1) {
             storage[resumeIndex] = resume;
             System.out.println("Successfully update resume " + resume.toString());
@@ -73,7 +73,7 @@ public class ArrayStorage {
         return lastIndex;
     }
 
-    private int getResumeIndex(String uuid) {
+    private int getIndex(String uuid) {
         for (int i = 0; i < lastIndex; i++) {
             if (storage[i].getUuid().equals(uuid)) {
                 return i;
