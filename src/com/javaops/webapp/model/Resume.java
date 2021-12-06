@@ -9,7 +9,6 @@ public class Resume {
     // Unique identifier
     private String uuid;
 
-
     public String getUuid() {
         return uuid;
     }

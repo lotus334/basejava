@@ -18,18 +18,18 @@ public class ArrayStorage {
         System.out.println("Successfully clear storage");
     }
 
-    public void save(Resume r) {
+    public void save(Resume resume) {
         if (lastIndex == MAX_SIZE) {
             System.out.println("Failed to save: storage is full");
             return;
         }
-        if (getResumeIndex(r) != -1) {
-            System.out.println("Failed to save: resume " + r.toString() + " already exist");
+        if (getResumeIndex(resume.getUuid()) != -1) {
+            System.out.println("Failed to save: resume " + resume.toString() + " already exist");
             return;
         }
-        storage[lastIndex] = r;
+        storage[lastIndex] = resume;
         lastIndex++;
-        System.out.println("Successfully save: resume " + r.toString());
+        System.out.println("Successfully save: resume " + resume.toString());
     }
 
     public Resume get(String uuid) {
@@ -53,7 +53,7 @@ public class ArrayStorage {
     }
 
     public void update(Resume resume) {
-        int resumeIndex = getResumeIndex(resume);
+        int resumeIndex = getResumeIndex(resume.getUuid());
         if (resumeIndex != -1) {
             storage[resumeIndex] = resume;
             System.out.println("Successfully update resume " + resume.toString());
@@ -73,18 +73,9 @@ public class ArrayStorage {
         return lastIndex;
     }
 
-    private int getResumeIndex(Resume r) {
-        for (int i = 0; i < lastIndex; i++) {
-            if (r.equals(storage[i])) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
     private int getResumeIndex(String uuid) {
         for (int i = 0; i < lastIndex; i++) {
-            if (uuid.equals(storage[i].getUuid())) {
+            if (storage[i].getUuid().equals(uuid)) {
                 return i;
             }
         }
