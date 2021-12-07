@@ -5,29 +5,20 @@ import com.javaops.webapp.model.Resume;
 import java.util.Arrays;
 
 public class SortedArrayStorage extends AbstractArrayStorage{
-    @Override
-    public void clear() {
 
+    @Override
+    protected void insert(Resume resume) {
+        int index = Arrays.binarySearch(storage, 0, size, resume);
+        if (index < 0) {
+            index = - index - 1;
+        }
+        System.arraycopy(storage, index, storage, index + 1, size - index);
+        storage[index] = resume;
     }
 
     @Override
-    public void update(Resume r) {
-
-    }
-
-    @Override
-    public void save(Resume r) {
-
-    }
-
-    @Override
-    public void delete(String uuid) {
-
-    }
-
-    @Override
-    public Resume[] getAll() {
-        return new Resume[0];
+    protected void remove(int index) {
+        System.arraycopy(storage, index + 1, storage, index, size - index);
     }
 
     @Override
