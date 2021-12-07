@@ -22,10 +22,10 @@ public class ArrayStorage extends AbstractArrayStorage {
 
     protected int getIndex(String uuid) {
         for (int i = 0; i < size; i++) {
-            if (uuid.equals(storage[i].getUuid())) {
+            if (storage[i].getUuid().equals(uuid)) {
                 return i;
             }
         }
-        return STORAGE_LIMIT;
+        return -1;
     }
 }
