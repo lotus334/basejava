@@ -7,8 +7,7 @@ import java.util.Arrays;
 public class SortedArrayStorage extends AbstractArrayStorage{
 
     @Override
-    protected void insert(Resume resume) {
-        int index = Arrays.binarySearch(storage, 0, size, resume);
+    protected void insert(Resume resume, int index) {
         if (index < 0) {
             index = - index - 1;
         }
