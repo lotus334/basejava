@@ -3,8 +3,6 @@ package com.javaops.webapp;
 import com.javaops.webapp.exception.NotExistStorageException;
 import com.javaops.webapp.exception.StorageException;
 import com.javaops.webapp.model.Resume;
-import com.javaops.webapp.storage.AbstractArrayStorage;
-import com.javaops.webapp.storage.ArrayStorage;
 import com.javaops.webapp.storage.SortedArrayStorage;
 
 import java.io.BufferedReader;
@@ -40,8 +38,7 @@ public class MainArray {
                     System.out.println(ARRAY_STORAGE.size());
                     break;
                 case "save":
-                    r = new Resume();
-                    r.setUuid(uuid);
+                    r = new Resume(uuid);
                     try {
                         ARRAY_STORAGE.save(r);
                     } catch (StorageException e) {
