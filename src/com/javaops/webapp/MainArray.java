@@ -1,8 +1,8 @@
 package com.javaops.webapp;
 
+import com.javaops.webapp.exception.NotExistStorageException;
+import com.javaops.webapp.exception.StorageException;
 import com.javaops.webapp.model.Resume;
-import com.javaops.webapp.storage.AbstractArrayStorage;
-import com.javaops.webapp.storage.ArrayStorage;
 import com.javaops.webapp.storage.SortedArrayStorage;
 
 import java.io.BufferedReader;
@@ -39,15 +39,27 @@ public class MainArray {
                     break;
                 case "save":
                     r = new Resume(uuid);
-                    ARRAY_STORAGE.save(r);
+                    try {
+                        ARRAY_STORAGE.save(r);
+                    } catch (StorageException e) {
+                        System.out.println(e.getMessage());
+                    }
                     printAll();
                     break;
                 case "delete":
-                    ARRAY_STORAGE.delete(uuid);
+                    try {
+                        ARRAY_STORAGE.delete(uuid);
+                    } catch (NotExistStorageException e) {
+                        System.out.println(e.getMessage());
+                    }
                     printAll();
                     break;
                 case "get":
-                    System.out.println(ARRAY_STORAGE.get(uuid));
+                    try {
+                        System.out.println(ARRAY_STORAGE.get(uuid));
+                    } catch (NotExistStorageException e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case "clear":
                     ARRAY_STORAGE.clear();
