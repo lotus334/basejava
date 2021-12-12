@@ -42,10 +42,9 @@ public abstract class AbstractArrayStorageTest {
     // TO DO when in Resume appears new fields
     @Test
     public void update() throws Exception {
-        Resume resume = new Resume("uuid3");
+        Resume resume = new Resume(UUID_3);
         storage.update(resume);
-        Resume savedResume = storage.get(resume.getUuid());
-        assertSame(UUID_3, savedResume.getUuid());
+        assertSame(resume, storage.get(resume.getUuid()));
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -92,8 +91,7 @@ public abstract class AbstractArrayStorageTest {
     @Test
     public void delete() throws Exception {
         int sizeBefore = storage.size();
-        String uuid = "uuid3";
-        storage.delete(uuid);
+        storage.delete(UUID_3);
         assertEquals(sizeBefore - 1, storage.size());
     }
 
