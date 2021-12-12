@@ -61,7 +61,7 @@ public abstract class AbstractArrayStorage implements Storage {
     public Resume get(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
-            throw new NotExistStorageException("Resume " + uuid + " not exist");
+            throw new NotExistStorageException(uuid);
         }
         return storage[index];
     }
