@@ -4,9 +4,10 @@ import com.javaops.webapp.exception.ExistStorageException;
 import com.javaops.webapp.exception.NotExistStorageException;
 import com.javaops.webapp.exception.StorageException;
 import com.javaops.webapp.model.Resume;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public abstract class AbstractArrayStorageTest {
     protected Storage storage;
@@ -29,13 +30,13 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void size() throws Exception {
-        Assert.assertEquals(3, storage.size());
+        assertEquals(3, storage.size());
     }
 
     @Test
     public void clear() throws Exception {
         storage.clear();
-        Assert.assertEquals(0, storage.size());
+        assertEquals(0, storage.size());
     }
 
     // TO DO when in Resume appears new fields
@@ -43,7 +44,7 @@ public abstract class AbstractArrayStorageTest {
     public void update() throws Exception {
         Resume resume = new Resume("uuid3");
         storage.update(resume);
-        Assert.assertEquals(resume, storage.get(resume.getUuid()));
+        assertEquals(resume, storage.get(resume.getUuid()));
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -58,7 +59,7 @@ public abstract class AbstractArrayStorageTest {
         expected[0] = new Resume("uuid1");
         expected[1] = new Resume("uuid2");
         expected[2] = new Resume("uuid3");
-        Assert.assertArrayEquals(expected, storage.getAll());
+        assertArrayEquals(expected, storage.getAll());
     }
 
     @Test
@@ -66,7 +67,7 @@ public abstract class AbstractArrayStorageTest {
         int sizeBefore = storage.size();
         Resume resume = new Resume("uuid4");
         storage.save(resume);
-        Assert.assertEquals(sizeBefore + 1, storage.size());
+        assertEquals(sizeBefore + 1, storage.size());
     }
 
     @Test(expected = ExistStorageException.class)
@@ -82,7 +83,7 @@ public abstract class AbstractArrayStorageTest {
                 storage.save(new Resume());
             }
         } catch (StorageException e) {
-            Assert.fail("the overflow happened early");
+            fail("the overflow happened early");
         }
         storage.save(new Resume());
     }
@@ -92,7 +93,7 @@ public abstract class AbstractArrayStorageTest {
         int sizeBefore = storage.size();
         String uuid = "uuid3";
         storage.delete(uuid);
-        Assert.assertEquals(sizeBefore - 1, storage.size());
+        assertEquals(sizeBefore - 1, storage.size());
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -104,7 +105,7 @@ public abstract class AbstractArrayStorageTest {
     public void get() throws Exception {
         Resume resume = new Resume();
         storage.save(resume);
-        Assert.assertEquals(resume, storage.get(resume.getUuid()));
+        assertEquals(resume, storage.get(resume.getUuid()));
     }
 
     @Test(expected = NotExistStorageException.class)
