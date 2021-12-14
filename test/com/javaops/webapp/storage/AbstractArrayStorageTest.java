@@ -14,7 +14,7 @@ import static org.junit.Assert.fail;
 
 public abstract class AbstractArrayStorageTest {
     protected Storage storage;
-    protected Resume[] expectedResumes;
+    protected Resume[] expectedResumes = {RESUME_1, RESUME_2, RESUME_3};
 
     protected static final String UUID_1 = "uuid1";
     protected static final String UUID_2 = "uuid2";
@@ -33,8 +33,8 @@ public abstract class AbstractArrayStorageTest {
     public void setUpAbstractArrayStorage() throws Exception {
         storage.clear();
         storage.save(RESUME_1);
-        storage.save(RESUME_3);
         storage.save(RESUME_2);
+        storage.save(RESUME_3);
     }
 
     @Test
