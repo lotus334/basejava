@@ -104,14 +104,7 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void get() throws Exception {
-        Resume expected = null;
-        for (Resume resume : storage.getAll()) {
-            if (UUID_3.equals(resume.getUuid())) {
-                expected = resume;
-            }
-        }
-        Resume actual = storage.get(UUID_3);
-        assertSame(expected, actual);
+        assertSame(RESUME_3, storage.get(UUID_3));
     }
 
     @Test(expected = NotExistStorageException.class)
