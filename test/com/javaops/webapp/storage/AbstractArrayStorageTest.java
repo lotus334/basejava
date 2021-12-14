@@ -7,12 +7,14 @@ import com.javaops.webapp.model.Resume;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
 
 public abstract class AbstractArrayStorageTest {
     protected Storage storage;
+    protected final Resume[] EXPECTED_ARRAY;
 
     protected static final String UUID_1 = "uuid1";
     protected static final String UUID_2 = "uuid2";
@@ -23,8 +25,9 @@ public abstract class AbstractArrayStorageTest {
     protected static final Resume RESUME_3 = new Resume(UUID_3);
     protected static final Resume RESUME_4 = new Resume(UUID_4);
 
-    protected AbstractArrayStorageTest(Storage storage) {
+    protected AbstractArrayStorageTest(Storage storage, Resume[] EXPECTED_ARRAY) {
         this.storage = storage;
+        this.EXPECTED_ARRAY = EXPECTED_ARRAY;
     }
 
     @Before
@@ -60,7 +63,7 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void getAll() throws Exception {
-        assertEquals(storage.size(), storage.getAll().length);
+        assertArrayEquals(EXPECTED_ARRAY, storage.getAll());
     }
 
     @Test
@@ -87,11 +90,12 @@ public abstract class AbstractArrayStorageTest {
         storage.save(RESUME_4);
     }
 
-    @Test
+    @Test(expected = NotExistStorageException.class)
     public void delete() throws Exception {
         int sizeBefore = storage.size();
         storage.delete(UUID_3);
         assertEquals(sizeBefore - 1, storage.size());
+        storage.delete(UUID_3);
     }
 
     @Test(expected = NotExistStorageException.class)
