@@ -7,10 +7,7 @@ import com.javaops.webapp.model.Resume;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public abstract class AbstractArrayStorageTest {
     protected Storage storage;
@@ -51,8 +48,9 @@ public abstract class AbstractArrayStorageTest {
     // TO DO when in Resume appears new fields
     @Test
     public void update() throws Exception {
-        storage.update(RESUME_3);
-        assertGet(RESUME_3);
+        Resume newResume = new Resume(UUID_3);
+        storage.update(newResume);
+        assertSame(newResume, storage.get(UUID_3));
     }
 
     @Test(expected = NotExistStorageException.class)
