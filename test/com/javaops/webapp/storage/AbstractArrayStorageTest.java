@@ -70,6 +70,7 @@ public abstract class AbstractArrayStorageTest {
         int sizeBefore = storage.size();
         storage.save(RESUME_4);
         assertEquals(sizeBefore + 1, storage.size());
+        assertEquals(RESUME_4, storage.get(UUID_4));
     }
 
     @Test(expected = ExistStorageException.class)
