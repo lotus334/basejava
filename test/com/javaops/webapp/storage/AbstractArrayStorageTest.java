@@ -14,7 +14,7 @@ import static org.junit.Assert.fail;
 
 public abstract class AbstractArrayStorageTest {
     protected Storage storage;
-    protected final Resume[] EXPECTED_ARRAY;
+    protected Resume[] expectedResumes;
 
     protected static final String UUID_1 = "uuid1";
     protected static final String UUID_2 = "uuid2";
@@ -25,9 +25,8 @@ public abstract class AbstractArrayStorageTest {
     protected static final Resume RESUME_3 = new Resume(UUID_3);
     protected static final Resume RESUME_4 = new Resume(UUID_4);
 
-    protected AbstractArrayStorageTest(Storage storage, Resume[] EXPECTED_ARRAY) {
+    protected AbstractArrayStorageTest(Storage storage) {
         this.storage = storage;
-        this.EXPECTED_ARRAY = EXPECTED_ARRAY;
     }
 
     @Before
@@ -63,7 +62,7 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void getAll() throws Exception {
-        assertArrayEquals(EXPECTED_ARRAY, storage.getAll());
+        assertArrayEquals(expectedResumes, storage.getAll());
     }
 
     @Test
