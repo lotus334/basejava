@@ -1,5 +1,6 @@
 package com.javaops.webapp.storage;
 
+import com.javaops.webapp.exception.StorageException;
 import com.javaops.webapp.model.Resume;
 
 /**
@@ -8,16 +9,21 @@ import com.javaops.webapp.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    protected void insert(Resume resume, int index) {
+    protected void insertElement(Resume resume, int index) throws StorageException {
+        checkOverflow(resume.getUuid());
         storage[size] = resume;
+        size++;
     }
 
     @Override
-    protected void remove(int index) {
+    protected void removeElement(int index) {
         storage[index] = storage[size - 1];
+        size--;
+        storage[size] = null;
     }
 
-    protected int getIndex(String uuid) {
+    @Override
+    protected int getIndexOfElement(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
                 return i;

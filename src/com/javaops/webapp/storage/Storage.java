@@ -4,17 +4,17 @@ import com.javaops.webapp.model.Resume;
 
 public interface Storage {
 
-    void clear();
-
-    void update(Resume r);
-
-    void save(Resume r);
-
-    Resume get(String uuid);
+    void save(Resume resume);
 
     void delete(String uuid);
 
-    Resume[] getAll();
+    void update(Resume resume);
+
+    void clear();
 
     int size();
+
+    Resume[] getAll();
+
+    Resume get(String uuid);
 }
