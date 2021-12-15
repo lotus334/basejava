@@ -9,7 +9,7 @@ import com.javaops.webapp.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    protected void insertElement(Resume resume, int index) throws StorageException {
+    protected void insertElement(Resume resume, int index) {
         checkOverflow(resume.getUuid());
         storage[size] = resume;
         size++;
