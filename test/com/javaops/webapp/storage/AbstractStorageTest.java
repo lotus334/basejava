@@ -84,10 +84,6 @@ public abstract class AbstractStorageTest {
         storage.get("dummy");
     }
 
-    protected void assertGet(Resume r) {
-        assertEquals(r, storage.get(r.getUuid()));
-    }
-
     @Test
     public void clear() throws Exception {
         storage.clear();
@@ -103,5 +99,9 @@ public abstract class AbstractStorageTest {
     public void getAll() throws Exception {
         Resume[] expectedResumes = {RESUME_1, RESUME_2, RESUME_3};
         assertArrayEquals(expectedResumes, storage.getAll());
+    }
+
+    protected void assertGet(Resume r) {
+        assertEquals(r, storage.get(r.getUuid()));
     }
 }
