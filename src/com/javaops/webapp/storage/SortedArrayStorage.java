@@ -8,13 +8,6 @@ import java.util.Arrays;
 public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
-    protected void removeElement(int index) {
-        System.arraycopy(storage, index + 1, storage, index, size - 1 - index);
-        size--;
-        storage[size] = null;
-    }
-
-    @Override
     protected int getIndexOfElement(String uuid) {
         String[] ids = new String[size];
         for (int i = 0; i < size; i++) {
@@ -31,5 +24,10 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     @Override
     protected void insertNewElement(int index, Resume resume) {
         System.arraycopy(storage, index, storage, index + 1, size - index);
+    }
+
+    @Override
+    protected void removeElementFromStorage(int index) {
+        System.arraycopy(storage, index + 1, storage, index, size - 1 - index);
     }
 }

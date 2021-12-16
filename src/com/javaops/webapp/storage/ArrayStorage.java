@@ -9,13 +9,6 @@ import com.javaops.webapp.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    protected void removeElement(int index) {
-        storage[index] = storage[size - 1];
-        size--;
-        storage[size] = null;
-    }
-
-    @Override
     protected int getIndexOfElement(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
@@ -32,4 +25,9 @@ public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected void insertNewElement(int index, Resume resume) {}
+
+    @Override
+    protected void removeElementFromStorage(int index) {
+        storage[index] = storage[size - 1];
+    }
 }
