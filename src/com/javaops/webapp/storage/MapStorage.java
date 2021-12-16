@@ -2,44 +2,52 @@ package com.javaops.webapp.storage;
 
 import com.javaops.webapp.model.Resume;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MapStorage extends AbstractStorage {
-    @Override
-    protected int getIndexOfElement(String uuid) {
-        return 0;
-    }
-
-    @Override
-    protected void insertElement(Resume resume, int index) {
-
-    }
-
-    @Override
-    protected void removeElement(int index) {
-
-    }
-
-    @Override
-    protected void setElement(int index, Resume resume) {
-
-    }
-
-    @Override
-    protected Resume getElement(int index) {
-        return null;
-    }
+    private Map<String, Resume> storage = new HashMap();
 
     @Override
     public void clear() {
-
+        storage.clear();
     }
 
     @Override
     public int size() {
-        return 0;
+        return storage.size();
     }
 
     @Override
     public Resume[] getAll() {
-        return new Resume[0];
+        return storage.values().toArray(new Resume[0]);
+    }
+
+    @Override
+    protected int getIndexOfElement(String uuid) {
+        if (storage.get(uuid) != null) {
+            return 1;
+        }
+        return -1;
+    }
+
+    @Override
+    protected void insertElement(Resume resume, int index) {
+        storage.put(resume.getUuid(), resume);
+    }
+
+    @Override
+    protected void removeElement(int index, String uuid) {
+        storage.remove(uuid);
+    }
+
+    @Override
+    protected void setElement(int index, Resume resume) {
+        storage.put(resume.getUuid(), resume);
+    }
+
+    @Override
+    protected Resume getElement(int index, String uuid) {
+        return storage.get(uuid);
     }
 }
