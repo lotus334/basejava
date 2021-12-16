@@ -1,73 +1,64 @@
 package com.javaops.webapp.storage;
 
 import com.javaops.webapp.exception.StorageException;
-import com.javaops.webapp.exception.ExistStorageException;
-import com.javaops.webapp.exception.NotExistStorageException;
 import com.javaops.webapp.model.Resume;
 
 import java.util.Arrays;
 
-public abstract class AbstractArrayStorage implements Storage {
+public abstract class AbstractArrayStorage extends AbstractStorage {
 
     protected static final int STORAGE_LIMIT = 10000;
 
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
-    public void save(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index >= 0) {
-            throw new ExistStorageException(resume.getUuid());
-        }
-        if (size >= STORAGE_LIMIT) {
-            throw new StorageException("Storage overflow", resume.getUuid());
-        }
-        insert(resume, index);
-        size++;
-    }
-
-    public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        }
-        remove(index);
-        size--;
-        storage[size] = null;
-    }
-
-    public void update(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index < 0) {
-            throw new NotExistStorageException(resume.getUuid());
-        }
-        storage[index] = resume;
-    }
-
+    @Override
     public void clear() {
         Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
+    @Override
     public int size() {
         return size;
     }
 
+    @Override
     public Resume[] getAll() {
         return Arrays.copyOfRange(storage, 0, size);
     }
 
-    public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        }
+    @Override
+    protected void setElement(int index, Resume resume) {
+        storage[index] = resume;
+    }
+
+    @Override
+    protected Resume getElement(int index) {
         return storage[index];
     }
 
-    protected abstract void insert(Resume resume, int index);
+    @Override
+    protected void insertElement(Resume resume, int index) {
+        if (size >= STORAGE_LIMIT) {
+            throw new StorageException("Storage overflow", resume.getUuid());
+        }
+        index = getIndexOfNewElement(index);
+        insertNewElement(index, resume);
+        storage[index] = resume;
+        size++;
+    }
 
-    protected abstract void remove(int index);
+    @Override
+    protected void removeElement(int index) {
+        removeElementFromStorage(index);
+        size--;
+        storage[size] = null;
+    }
 
-    protected abstract int getIndex(String uuid);
+    protected abstract int getIndexOfNewElement(int index);
+
+    protected abstract void insertNewElement(int index, Resume resume);
+
+    protected abstract void removeElementFromStorage(int index);
 }

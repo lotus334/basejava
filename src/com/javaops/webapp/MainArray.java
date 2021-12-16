@@ -3,6 +3,7 @@ package com.javaops.webapp;
 import com.javaops.webapp.exception.NotExistStorageException;
 import com.javaops.webapp.exception.StorageException;
 import com.javaops.webapp.model.Resume;
+import com.javaops.webapp.storage.ListStorage;
 import com.javaops.webapp.storage.SortedArrayStorage;
 
 import java.io.BufferedReader;
@@ -14,11 +15,11 @@ import java.io.InputStreamReader;
  * (just run, no need to understand)
  */
 public class MainArray {
-    private final static SortedArrayStorage ARRAY_STORAGE = new SortedArrayStorage();
+    private final static ListStorage ARRAY_STORAGE = new ListStorage();
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        Resume r;
+        Resume resume;
         while (true) {
             System.out.print("Введите одну из команд - (list | size | save uuid | delete uuid | get uuid | clear | exit): ");
             String[] params = reader.readLine().trim().toLowerCase().split(" ");
@@ -38,9 +39,9 @@ public class MainArray {
                     System.out.println(ARRAY_STORAGE.size());
                     break;
                 case "save":
-                    r = new Resume(uuid);
+                    resume = new Resume(uuid);
                     try {
-                        ARRAY_STORAGE.save(r);
+                        ARRAY_STORAGE.save(resume);
                     } catch (StorageException e) {
                         System.out.println(e.getMessage());
                     }
@@ -64,6 +65,10 @@ public class MainArray {
                 case "clear":
                     ARRAY_STORAGE.clear();
                     printAll();
+                    break;
+                case "update":
+                    resume = new Resume(uuid);
+                    ARRAY_STORAGE.update(resume);
                     break;
                 case "exit":
                     return;
