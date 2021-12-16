@@ -3,8 +3,7 @@ package com.javaops.webapp;
 import com.javaops.webapp.exception.NotExistStorageException;
 import com.javaops.webapp.exception.StorageException;
 import com.javaops.webapp.model.Resume;
-import com.javaops.webapp.storage.ListStorage;
-import com.javaops.webapp.storage.SortedArrayStorage;
+import com.javaops.webapp.storage.MapStorage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,7 +14,7 @@ import java.io.InputStreamReader;
  * (just run, no need to understand)
  */
 public class MainArray {
-    private final static ListStorage ARRAY_STORAGE = new ListStorage();
+    private final static MapStorage ARRAY_STORAGE = new MapStorage();
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
