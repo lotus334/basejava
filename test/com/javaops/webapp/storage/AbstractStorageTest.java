@@ -10,12 +10,6 @@ import static org.junit.Assert.*;
 
 public abstract class AbstractStorageTest {
 
-    protected Storage storage;
-
-    public AbstractStorageTest(Storage storage) {
-        this.storage = storage;
-    }
-
     protected static final String UUID_1 = "uuid1";
     protected static final String UUID_2 = "uuid2";
     protected static final String UUID_3 = "uuid3";
@@ -24,6 +18,12 @@ public abstract class AbstractStorageTest {
     protected static final Resume RESUME_2 = new Resume(UUID_2);
     protected static final Resume RESUME_3 = new Resume(UUID_3);
     protected static final Resume RESUME_4 = new Resume(UUID_4);
+
+    protected Storage storage;
+
+    public AbstractStorageTest(Storage storage) {
+        this.storage = storage;
+    }
 
     @Before
     public void setUp() throws Exception {
