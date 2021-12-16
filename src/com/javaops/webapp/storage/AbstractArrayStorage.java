@@ -28,12 +28,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return Arrays.copyOfRange(storage, 0, size);
     }
 
-    protected void checkOverflow(String uuid) {
-        if (size >= STORAGE_LIMIT) {
-            throw new StorageException("Storage overflow", uuid);
-        }
-    }
-
     @Override
     protected void setElement(int index, Resume resume) {
         storage[index] = resume;
@@ -43,4 +37,19 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected Resume getElement(int index) {
         return storage[index];
     }
+
+    @Override
+    protected void insertElement(Resume resume, int index) {
+        if (size >= STORAGE_LIMIT) {
+            throw new StorageException("Storage overflow", resume.getUuid());
+        }
+        index = getIndexOfNewElement(index);
+        insertNewElement(index, resume);
+        storage[index] = resume;
+        size++;
+    }
+
+    protected abstract int getIndexOfNewElement(int index);
+
+    protected abstract void insertNewElement(int index, Resume resume);
 }

@@ -9,13 +9,6 @@ import com.javaops.webapp.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    protected void insertElement(Resume resume, int index) {
-        checkOverflow(resume.getUuid());
-        storage[size] = resume;
-        size++;
-    }
-
-    @Override
     protected void removeElement(int index) {
         storage[index] = storage[size - 1];
         size--;
@@ -31,4 +24,12 @@ public class ArrayStorage extends AbstractArrayStorage {
         }
         return -1;
     }
+
+    @Override
+    protected int getIndexOfNewElement(int index) {
+        return size;
+    }
+
+    @Override
+    protected void insertNewElement(int index, Resume resume) {}
 }
