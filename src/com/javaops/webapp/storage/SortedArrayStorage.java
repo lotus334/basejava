@@ -1,6 +1,5 @@
 package com.javaops.webapp.storage;
 
-import com.javaops.webapp.exception.StorageException;
 import com.javaops.webapp.model.Resume;
 
 import java.util.Arrays;
@@ -9,11 +8,8 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected int getIndexOfElement(String uuid) {
-        String[] ids = new String[size];
-        for (int i = 0; i < size; i++) {
-            ids[i] = storage[i].getUuid();
-        }
-        return Arrays.binarySearch(ids, 0, size, uuid);
+        Resume searchKey = new Resume(uuid);
+        return Arrays.binarySearch(storage, 0, size, searchKey);
     }
 
     @Override
