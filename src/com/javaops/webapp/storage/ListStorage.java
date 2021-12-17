@@ -34,22 +34,22 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void insertElement(Resume resume, Object searchKey) {
+    protected void doSave(Resume resume, Object searchKey) {
         storage.add(resume);
     }
 
     @Override
-    protected void removeElement(Object searchKey, String uuid) {
+    protected void doRemove(Object searchKey, String uuid) {
         storage.remove(((Integer) searchKey).intValue());
     }
 
     @Override
-    protected void setElement(Object index, Resume resume) {
+    protected void doUpdate(Object index, Resume resume) {
         storage.set((Integer) index, resume);
     }
 
     @Override
-    protected Resume getElement(Object searchKey, String uuid) {
+    protected Resume doGet(Object searchKey, String uuid) {
         return storage.get((Integer) searchKey);
     }
 
