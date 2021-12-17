@@ -8,47 +8,51 @@ public abstract class AbstractStorage implements Storage {
 
     public void save(Resume resume) {
         String uuid = resume.getUuid();
-        int index = getIndexOfElement(uuid);
-        if (index >= 0) {
+        Object searchKey = getSearchKey(uuid);
+        if (isExist(searchKey)) {
             throw new ExistStorageException(resume.getUuid());
         }
-        insertElement(resume, index);
+        insertElement(resume, searchKey);
     }
 
     public void delete(String uuid) {
-        int index = getIndexOfElement(uuid);
-        if (index < 0) {
+        Object searchKey = getSearchKey(uuid);
+        if (isNotExist(searchKey)) {
             throw new NotExistStorageException(uuid);
         }
-        removeElement(index, uuid);
+        removeElement(searchKey, uuid);
     }
 
     @Override
     public void update(Resume resume) {
         String uuid = resume.getUuid();
-        int index = getIndexOfElement(uuid);
-        if (index < 0) {
+        Object searchKey = getSearchKey(uuid);
+        if (isNotExist(searchKey)) {
             throw new NotExistStorageException(resume.getUuid());
         }
-        setElement(index, resume);
+        setElement(searchKey, resume);
     }
 
     @Override
     public Resume get(String uuid) {
-        int index = getIndexOfElement(uuid);
-        if (index < 0) {
+        Object searchKey = getSearchKey(uuid);
+        if (isNotExist(searchKey)) {
             throw new NotExistStorageException(uuid);
         }
-        return getElement(index, uuid);
+        return getElement(searchKey, uuid);
     }
 
-    protected abstract int getIndexOfElement(String uuid);
+    protected abstract Object getSearchKey(String uuid);
 
-    protected abstract void insertElement(Resume resume, int index);
+    protected abstract void insertElement(Resume resume, Object searchKey);
 
-    protected abstract void removeElement(int index, String uuid);
+    protected abstract void removeElement(Object searchKey, String uuid);
 
-    protected abstract void setElement(int index, Resume resume);
+    protected abstract void setElement(Object searchKey, Resume resume);
 
-    protected abstract Resume getElement(int index, String uuid);
+    protected abstract Resume getElement(Object searchKey, String uuid);
+
+    protected abstract boolean isExist(Object searchKey);
+
+    protected abstract boolean isNotExist(Object searchKey);
 }

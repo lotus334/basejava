@@ -24,32 +24,42 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected int getIndexOfElement(String uuid) {
+    protected Object getSearchKey(String uuid) {
         for (int i = 0; i < size(); i++) {
             if (storage.get(i).getUuid().equals(uuid)) {
                 return i;
             }
         }
-        return -1;
+        return null;
     }
 
     @Override
-    protected void insertElement(Resume resume, int index) {
+    protected void insertElement(Resume resume, Object searchKey) {
         storage.add(resume);
     }
 
     @Override
-    protected void removeElement(int index, String uuid) {
-        storage.remove(index);
+    protected void removeElement(Object searchKey, String uuid) {
+        storage.remove(((Integer) searchKey).intValue());
     }
 
     @Override
-    protected void setElement(int index, Resume resume) {
-        storage.set(index, resume);
+    protected void setElement(Object index, Resume resume) {
+        storage.set((Integer) index, resume);
     }
 
     @Override
-    protected Resume getElement(int index, String uuid) {
-        return storage.get(index);
+    protected Resume getElement(Object searchKey, String uuid) {
+        return storage.get((Integer) searchKey);
+    }
+
+    @Override
+    protected boolean isExist(Object searchKey) {
+        return searchKey != null;
+    }
+
+    @Override
+    protected boolean isNotExist(Object searchKey) {
+        return searchKey == null;
     }
 }
