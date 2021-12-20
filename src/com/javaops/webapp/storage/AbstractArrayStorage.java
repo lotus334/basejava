@@ -56,12 +56,9 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         storage[size] = null;
     }
 
+    @Override
     protected boolean isExist(Object searchKey) {
         return (Integer) searchKey >= 0;
-    }
-
-    protected boolean isNotExist(Object searchKey) {
-        return (Integer) searchKey < 0;
     }
 
     protected abstract int getIndexOfElement(int index);
