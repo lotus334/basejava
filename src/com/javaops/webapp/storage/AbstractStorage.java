@@ -40,10 +40,9 @@ public abstract class AbstractStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        Resume[] resumes = doGetAll();
-        List<Resume> list = Arrays.asList(resumes);
-        list.sort(RESUME_COMPARATOR);
-        return list;
+        List<Resume> resumes = Arrays.asList(doGetAll());
+        resumes.sort(RESUME_COMPARATOR);
+        return resumes;
     }
 
     private Object getExistingSearchKey(String uuid) {
