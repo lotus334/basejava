@@ -4,9 +4,7 @@ import com.javaops.webapp.model.Resume;
 
 import java.util.*;
 
-public class MapStorage extends AbstractStorage {
-
-    protected static final Comparator<Resume> RESUME_COMPARATOR = ((o1, o2) -> o1.getUuid().compareTo(o2.getUuid()));
+public class MapByUuidStorage extends AbstractStorage {
 
     private Map<String, Resume> storage = new TreeMap<>();
 
