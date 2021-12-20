@@ -2,8 +2,6 @@ package com.javaops.webapp.storage;
 
 import com.javaops.webapp.model.Resume;
 
-import java.util.*;
-
 public class MapByUuidStorage extends AbstractMapStorage {
 
     @Override
@@ -29,10 +27,5 @@ public class MapByUuidStorage extends AbstractMapStorage {
     @Override
     protected Resume doGet(Object searchKey, String uuid) {
         return storage.get(searchKey);
-    }
-
-    @Override
-    public List<Resume> getAllSorted() {
-        return new ArrayList<>(storage.values());
     }
 }
