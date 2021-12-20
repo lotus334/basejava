@@ -4,7 +4,6 @@ import com.javaops.webapp.exception.NotExistStorageException;
 import com.javaops.webapp.exception.StorageException;
 import com.javaops.webapp.model.Resume;
 import com.javaops.webapp.storage.ListStorage;
-import com.javaops.webapp.storage.SortedArrayStorage;
 
 import java.io.BufferedReader;
 import java.io.IOException;

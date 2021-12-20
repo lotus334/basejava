@@ -2,11 +2,11 @@ package com.javaops.webapp.storage;
 
 import com.javaops.webapp.model.Resume;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-public class ListStorage extends AbstractStorage {
-
-    private List<Resume> storage = new ArrayList<>();
+public class MapStorage extends AbstractStorage {
+    private Map<String, Resume> storage = new LinkedHashMap<>();
 
     @Override
     public void clear() {
@@ -20,37 +20,32 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     public Resume[] getAll() {
-        return storage.toArray(new Resume[0]);
+        return storage.values().toArray(new Resume[0]);
     }
 
     @Override
     protected Object getSearchKey(String uuid) {
-        for (int i = 0; i < size(); i++) {
-            if (storage.get(i).getUuid().equals(uuid)) {
-                return i;
-            }
-        }
-        return null;
+        return storage.get(uuid) == null ? null : uuid;
     }
 
     @Override
     protected void doSave(Resume resume, Object searchKey) {
-        storage.add(resume);
+        storage.put(resume.getUuid(), resume);
     }
 
     @Override
     protected void doRemove(Object searchKey, String uuid) {
-        storage.remove(((Integer) searchKey).intValue());
+        storage.remove(uuid);
     }
 
     @Override
-    protected void doUpdate(Object index, Resume resume) {
-        storage.set((Integer) index, resume);
+    protected void doUpdate(Object searchKey, Resume resume) {
+        storage.put(resume.getUuid(), resume);
     }
 
     @Override
     protected Resume doGet(Object searchKey, String uuid) {
-        return storage.get((Integer) searchKey);
+        return storage.get(searchKey);
     }
 
     @Override
