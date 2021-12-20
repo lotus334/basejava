@@ -35,7 +35,7 @@ public abstract class AbstractStorage implements Storage {
     @Override
     public Resume get(String uuid) {
         Object searchKey = getNotExistingSearchKey(uuid);
-        return doGet(searchKey, uuid);
+        return doGet(searchKey);
     }
 
     @Override
@@ -69,7 +69,7 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract void doUpdate(Object searchKey, Resume resume);
 
-    protected abstract Resume doGet(Object searchKey, String uuid);
+    protected abstract Resume doGet(Object searchKey);
 
     protected abstract boolean isExist(Object searchKey);
 

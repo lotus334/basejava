@@ -29,7 +29,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume doGet(Object index, String uuid) {
+    protected Resume doGet(Object index) {
         return storage[(Integer) index];
     }
 
