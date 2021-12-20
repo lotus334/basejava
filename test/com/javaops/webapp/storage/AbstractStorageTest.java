@@ -14,10 +14,10 @@ public abstract class AbstractStorageTest {
     protected static final String UUID_2 = "uuid2";
     protected static final String UUID_3 = "uuid3";
     protected static final String UUID_4 = "uuid4";
-    protected static final Resume RESUME_1 = new Resume(UUID_1);
-    protected static final Resume RESUME_2 = new Resume(UUID_2);
-    protected static final Resume RESUME_3 = new Resume(UUID_3);
-    protected static final Resume RESUME_4 = new Resume(UUID_4);
+    protected static final Resume RESUME_1 = new Resume("fullName1", UUID_1);
+    protected static final Resume RESUME_2 = new Resume("fullName2", UUID_2);
+    protected static final Resume RESUME_3 = new Resume("fullName3", UUID_3);
+    protected static final Resume RESUME_4 = new Resume("fullName4", UUID_4);
 
     protected Storage storage;
 
@@ -62,7 +62,7 @@ public abstract class AbstractStorageTest {
     // TO DO when in Resume appears new fields
     @Test
     public void update() throws Exception {
-        Resume newResume = new Resume(UUID_3);
+        Resume newResume = new Resume("fullName3", UUID_3);
         storage.update(newResume);
         assertSame(newResume, storage.get(UUID_3));
     }
