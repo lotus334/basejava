@@ -1,5 +1,6 @@
 package com.javaops.webapp.model;
 
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -17,6 +18,8 @@ public class Resume implements Comparable<Resume> {
     }
 
     public Resume(String fullName, String uuid) {
+        Objects.requireNonNull(uuid, "uuid must not be null");
+        Objects.requireNonNull(uuid, "fullName must not be null");
         this.fullName = fullName;
         this.uuid = uuid;
     }
@@ -42,7 +45,7 @@ public class Resume implements Comparable<Resume> {
 
     @Override
     public String toString() {
-        return uuid;
+        return uuid + '(' + fullName + ')';
     }
 
     @Override
