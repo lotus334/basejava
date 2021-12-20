@@ -55,6 +55,11 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return (Integer) searchKey >= 0;
     }
 
+    @Override
+    public Resume[] doGetAll() {
+        return Arrays.copyOfRange(storage, 0, size);
+    }
+
     protected abstract void insertElement(int index, Resume resume);
 
     protected abstract void removeElement(int index);

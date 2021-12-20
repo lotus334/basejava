@@ -6,8 +6,6 @@ import java.util.*;
 
 public class ListStorage extends AbstractStorage {
 
-    protected static final Comparator<Resume> RESUME_COMPARATOR = ((o1, o2) -> o1.getUuid().compareTo(o2.getUuid()));
-
     private List<Resume> storage = new ArrayList<>();
 
     @Override
@@ -59,5 +57,10 @@ public class ListStorage extends AbstractStorage {
     public List<Resume> getAllSorted() {
         storage.sort(RESUME_COMPARATOR);
         return storage;
+    }
+
+    @Override
+    public Resume[] doGetAll() {
+        return storage.toArray(new Resume[0]);
     }
 }

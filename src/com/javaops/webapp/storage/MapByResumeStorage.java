@@ -4,22 +4,8 @@ import com.javaops.webapp.model.Resume;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
-public class MapByResumeStorage extends AbstractStorage {
-
-    private Map<String, Resume> storage = new TreeMap<>();
-
-    @Override
-    public void clear() {
-        storage.clear();
-    }
-
-    @Override
-    public int size() {
-        return storage.size();
-    }
+public class MapByResumeStorage extends AbstractMapStorage {
 
     @Override
     protected Object getSearchKey(String uuid) {
@@ -44,11 +30,6 @@ public class MapByResumeStorage extends AbstractStorage {
     @Override
     protected Resume doGet(Object searchKey, String uuid) {
         return storage.get(searchKey);
-    }
-
-    @Override
-    protected boolean isExist(Object searchKey) {
-        return searchKey != null;
     }
 
     @Override
