@@ -5,27 +5,22 @@ import com.javaops.webapp.model.Resume;
 public class MapByResumeStorage extends AbstractMapStorage {
 
     @Override
-    protected Object getSearchKey(String uuid) {
-        return storage.get(uuid) == null ? null : uuid;
+    protected Resume getSearchKey(String uuid) {
+        return storage.get(uuid);
     }
 
     @Override
-    protected void doSave(Resume resume, Object searchKey) {
-        storage.put(resume.getUuid(), resume);
+    protected Resume doGet(Object resume, String uuid) {
+        return (Resume) resume;
     }
 
     @Override
-    protected void doRemove(Object searchKey, String uuid) {
-        storage.remove(uuid);
+    protected boolean isExist(Object resume) {
+        return resume != null;
     }
 
     @Override
-    protected void doUpdate(Object searchKey, Resume resume) {
-        storage.put(resume.getUuid(), resume);
-    }
-
-    @Override
-    protected Resume doGet(Object searchKey) {
-        return storage.get(searchKey);
+    protected void doRemove(Object resume) {
+        storage.remove(((Resume) resume).getUuid());
     }
 }

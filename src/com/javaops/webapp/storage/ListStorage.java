@@ -34,7 +34,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void doRemove(Object searchKey, String uuid) {
+    protected void doRemove(Object searchKey) {
         storage.remove(((Integer) searchKey).intValue());
     }
 
@@ -44,7 +44,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume doGet(Object searchKey) {
+    protected Resume doGet(Object searchKey, String uuid) {
         return storage.get((Integer) searchKey);
     }
 

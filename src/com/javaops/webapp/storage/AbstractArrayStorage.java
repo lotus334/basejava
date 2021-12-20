@@ -29,7 +29,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume doGet(Object index) {
+    protected Resume doGet(Object index, String uuid) {
         return storage[(Integer) index];
     }
 
@@ -44,7 +44,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void doRemove(Object index, String uuid) {
+    protected void doRemove(Object index) {
         removeElement((Integer) index);
         size--;
         storage[size] = null;
