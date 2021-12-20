@@ -24,11 +24,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume[] getAll() {
-        return Arrays.copyOfRange(storage, 0, size);
-    }
-
-    @Override
     protected void doUpdate(Object index, Resume resume) {
         storage[(Integer) index] = resume;
     }

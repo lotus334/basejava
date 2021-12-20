@@ -2,6 +2,8 @@ package com.javaops.webapp.storage;
 
 import com.javaops.webapp.model.Resume;
 
+import java.util.List;
+
 public interface Storage {
 
     void save(Resume resume);
@@ -14,7 +16,7 @@ public interface Storage {
 
     int size();
 
-    Resume[] getAll();
+    List<Resume> getAllSorted();
 
     Resume get(String uuid);
 }

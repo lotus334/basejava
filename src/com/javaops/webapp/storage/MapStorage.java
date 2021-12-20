@@ -2,11 +2,13 @@ package com.javaops.webapp.storage;
 
 import com.javaops.webapp.model.Resume;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class MapStorage extends AbstractStorage {
-    private Map<String, Resume> storage = new LinkedHashMap<>();
+
+    protected static final Comparator<Resume> RESUME_COMPARATOR = ((o1, o2) -> o1.getUuid().compareTo(o2.getUuid()));
+
+    private Map<String, Resume> storage = new TreeMap<>();
 
     @Override
     public void clear() {
@@ -16,11 +18,6 @@ public class MapStorage extends AbstractStorage {
     @Override
     public int size() {
         return storage.size();
-    }
-
-    @Override
-    public Resume[] getAll() {
-        return storage.values().toArray(new Resume[0]);
     }
 
     @Override
@@ -51,5 +48,10 @@ public class MapStorage extends AbstractStorage {
     @Override
     protected boolean isExist(Object searchKey) {
         return searchKey != null;
+    }
+
+    @Override
+    public List<Resume> getAllSorted() {
+        return new ArrayList<>(storage.values());
     }
 }

@@ -6,6 +6,8 @@ import com.javaops.webapp.model.Resume;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public abstract class AbstractStorageTest {
@@ -29,8 +31,8 @@ public abstract class AbstractStorageTest {
     public void setUp() throws Exception {
         storage.clear();
         storage.save(RESUME_1);
-        storage.save(RESUME_2);
         storage.save(RESUME_3);
+        storage.save(RESUME_2);
     }
 
     @Test
@@ -96,9 +98,9 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    public void getAll() throws Exception {
-        Resume[] expectedResumes = {RESUME_1, RESUME_2, RESUME_3};
-        assertArrayEquals(expectedResumes, storage.getAll());
+    public void getAllSorted() throws Exception {
+        List<Resume> expectedResumes = List.of(RESUME_1, RESUME_2, RESUME_3);
+        assertEquals(expectedResumes, storage.getAllSorted());
     }
 
     protected void assertGet(Resume r) {
