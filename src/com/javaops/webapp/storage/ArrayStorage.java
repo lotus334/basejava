@@ -2,14 +2,10 @@ package com.javaops.webapp.storage;
 
 import com.javaops.webapp.model.Resume;
 
-import java.util.Comparator;
-
 /**
  * Array based storage for Resumes
  */
 public class ArrayStorage extends AbstractArrayStorage {
-
-    protected static final Comparator<Resume> RESUME_COMPARATOR = ((o1, o2) -> o1.getUuid().compareTo(o2.getUuid()));
 
     @Override
     protected Integer getSearchKey(String uuid) {
