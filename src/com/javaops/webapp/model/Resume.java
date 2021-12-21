@@ -1,7 +1,6 @@
 package com.javaops.webapp.model;
 
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Initial resume class
@@ -12,6 +11,7 @@ public class Resume implements Comparable<Resume> {
     private final String uuid;
 
     private String fullName;
+    private Map<Sections, Section> sections = new TreeMap<>();
 
     public Resume(String fullName) {
         this(fullName, UUID.randomUUID().toString());
@@ -24,8 +24,36 @@ public class Resume implements Comparable<Resume> {
         this.uuid = uuid;
     }
 
+    public <T> void setSection(Sections section, T content) {
+        switch (section) {
+            case PERSONAL, OBJECTIVE -> {
+                sections.put(section, new TextSection((String) content));
+                break;
+            }
+            case ACHIEVEMENT, QUALIFICATIONS -> {
+                sections.put(section, new ListSection((List<String>) content));
+                break;
+            }
+            case EDUCATION, EXPERIENCE -> {
+                sections.put(section, new ListSection((List<String>) content));
+                break;
+            }
+        }
+    }
+
+    public <T> T getSection(Sections section) {
+        if (sections.get(section) != null) {
+            return (T) sections.get(section).getContent();
+        }
+        return null;
+    }
+
     public String getUuid() {
         return uuid;
+    }
+
+    public String getFullName() {
+        return fullName;
     }
 
     @Override
@@ -51,9 +79,5 @@ public class Resume implements Comparable<Resume> {
     @Override
     public int compareTo(Resume o) {
         return uuid.compareTo(o.uuid);
-    }
-
-    public String getFullName() {
-        return fullName;
     }
 }
