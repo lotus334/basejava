@@ -10,17 +10,17 @@ public class MapByResumeStorage extends AbstractMapStorage {
     }
 
     @Override
-    protected Resume doGet(Object resume, String uuid) {
-        return (Resume) resume;
+    protected Resume doGet(Resume resume, String uuid) {
+        return resume;
     }
 
     @Override
-    protected boolean isExist(Object resume) {
+    protected boolean isExist(Resume resume) {
         return resume != null;
     }
 
     @Override
-    protected void doRemove(Object resume) {
-        storage.remove(((Resume) resume).getUuid());
+    protected void doRemove(Resume resume) {
+        storage.remove(resume.getUuid());
     }
 }

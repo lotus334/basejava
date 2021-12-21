@@ -5,9 +5,9 @@ import com.javaops.webapp.model.Resume;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class AbstractMapStorage extends AbstractStorage {
+public abstract class AbstractMapStorage extends AbstractStorage<Resume> {
 
-    protected Map<Object, Resume> storage = new HashMap<>();
+    protected Map<String, Resume> storage = new HashMap<>();
 
     @Override
     public void clear() {
@@ -25,12 +25,12 @@ public abstract class AbstractMapStorage extends AbstractStorage {
     }
 
     @Override
-    protected void doSave(Resume r, Object resume) {
+    protected void doSave(Resume r, Resume resume) {
         storage.put(r.getUuid(), r);
     }
 
     @Override
-    protected void doUpdate(Object resume, Resume r) {
+    protected void doUpdate(Resume resume, Resume r) {
         storage.put(r.getUuid(), r);
     }
 }

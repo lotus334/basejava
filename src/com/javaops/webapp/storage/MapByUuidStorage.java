@@ -10,17 +10,17 @@ public class MapByUuidStorage extends AbstractMapStorage {
     }
 
     @Override
-    protected Resume doGet(Object resume, String uuid) {
+    protected Resume doGet(Resume resume, String uuid) {
         return storage.get(uuid);
     }
 
     @Override
-    protected boolean isExist(Object uuid) {
-        return storage.get(uuid) != null;
+    protected boolean isExist(Resume resume) {
+        return storage.get(resume.getUuid()) != null;
     }
 
     @Override
-    protected void doRemove(Object resume) {
-        storage.remove(resume);
+    protected void doRemove(Resume resume) {
+        storage.remove(resume.getUuid());
     }
 }

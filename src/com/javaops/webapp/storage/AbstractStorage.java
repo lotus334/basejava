@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-public abstract class AbstractStorage implements Storage {
+public abstract class AbstractStorage<SK> implements Storage {
 
     protected static final Comparator<Resume> RESUME_COMPARATOR = ((Comparator.comparing(Resume::getFullName)
                                                                         .thenComparing(Resume::getUuid)));
@@ -16,26 +16,26 @@ public abstract class AbstractStorage implements Storage {
     @Override
     public void save(Resume resume) {
         String uuid = resume.getUuid();
-        Object searchKey = getExistentSearchKey(uuid);
+        SK searchKey = getExistentSearchKey(uuid);
         doSave(resume, searchKey);
     }
 
     @Override
     public void delete(String uuid) {
-        Object searchKey = getNotExistentSearchKey(uuid);
+        SK searchKey = getNotExistentSearchKey(uuid);
         doRemove(searchKey);
     }
 
     @Override
     public void update(Resume resume) {
         String uuid = resume.getUuid();
-        Object searchKey = getNotExistentSearchKey(uuid);
+        SK searchKey = getNotExistentSearchKey(uuid);
         doUpdate(searchKey, resume);
     }
 
     @Override
     public Resume get(String uuid) {
-        Object searchKey = getNotExistentSearchKey(uuid);
+        SK searchKey = getNotExistentSearchKey(uuid);
         return doGet(searchKey, uuid);
     }
 
@@ -46,33 +46,33 @@ public abstract class AbstractStorage implements Storage {
         return resumes;
     }
 
-    private Object getExistentSearchKey(String uuid) {
-        Object searchKey = getSearchKey(uuid);
+    private SK getExistentSearchKey(String uuid) {
+        SK searchKey = getSearchKey(uuid);
         if (isExist(searchKey)) {
             throw new ExistStorageException(uuid);
         }
         return searchKey;
     }
 
-    private Object getNotExistentSearchKey(String uuid) {
-        Object searchKey = getSearchKey(uuid);
+    private SK getNotExistentSearchKey(String uuid) {
+        SK searchKey = getSearchKey(uuid);
         if (!isExist(searchKey)) {
             throw new NotExistStorageException(uuid);
         }
         return searchKey;
     }
 
-    protected abstract Object getSearchKey(String uuid);
+    protected abstract <SK> SK getSearchKey(String uuid);
 
-    protected abstract void doSave(Resume resume, Object searchKey);
+    protected abstract void doSave(Resume resume, SK searchKey);
 
-    protected abstract void doRemove(Object searchKey);
+    protected abstract void doRemove(SK searchKey);
 
-    protected abstract void doUpdate(Object searchKey, Resume resume);
+    protected abstract void doUpdate(SK searchKey, Resume resume);
 
-    protected abstract Resume doGet(Object searchKey, String uuid);
+    protected abstract Resume doGet(SK searchKey, String uuid);
 
-    protected abstract boolean isExist(Object searchKey);
+    protected abstract boolean isExist(SK searchKey);
 
     protected abstract Resume[] doGetAll();
 }
