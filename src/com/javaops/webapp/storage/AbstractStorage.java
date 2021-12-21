@@ -62,7 +62,7 @@ public abstract class AbstractStorage<SK> implements Storage {
         return searchKey;
     }
 
-    protected abstract <SK> SK getSearchKey(String uuid);
+    protected abstract SK getSearchKey(String uuid);
 
     protected abstract void doSave(Resume resume, SK searchKey);
 

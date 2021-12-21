@@ -20,6 +20,16 @@ public abstract class AbstractMapStorage extends AbstractStorage<Resume> {
     }
 
     @Override
+    protected Resume getSearchKey(String uuid) {
+        return storage.get(uuid);
+    }
+
+    @Override
+    protected boolean isExist(Resume resume) {
+        return resume != null;
+    }
+
+    @Override
     public Resume[] doGetAll() {
         return storage.values().toArray(new Resume[0]);
     }
