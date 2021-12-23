@@ -11,7 +11,7 @@ public class Resume implements Comparable<Resume> {
     private final String uuid;
 
     private String fullName;
-    private Map<Sections, Section> sections = new TreeMap<>();
+    private Map<SectionTypes, Section> sections = new TreeMap<>();
 
     public Resume(String fullName) {
         this(fullName, UUID.randomUUID().toString());
@@ -24,8 +24,12 @@ public class Resume implements Comparable<Resume> {
         this.uuid = uuid;
     }
 
-    public <T> void setSection(Sections section, T content) {
+    public <T> void setSection(SectionTypes section, T content) {
         switch (section) {
+            case CONTACTS -> {
+                sections.put(section, new ContactSection());
+                break;
+            }
             case PERSONAL, OBJECTIVE -> {
                 sections.put(section, new TextSection((String) content));
                 break;
@@ -35,13 +39,13 @@ public class Resume implements Comparable<Resume> {
                 break;
             }
             case EDUCATION, EXPERIENCE -> {
-                sections.put(section, new ListSection((List<String>) content));
+                sections.put(section, new ObjectSection());
                 break;
             }
         }
     }
 
-    public <T> T getSection(Sections section) {
+    public <T> T getSection(SectionTypes section) {
         if (sections.get(section) != null) {
             return (T) sections.get(section).getContent();
         }

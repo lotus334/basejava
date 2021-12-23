@@ -1,7 +1,8 @@
 package com.javaops.webapp.model;
 
-public enum Sections {
+public enum SectionTypes {
 
+    CONTACTS("Контакты"),
     PERSONAL("Личные качества"),
     OBJECTIVE("Позиция"),
     ACHIEVEMENT("Достижения"),
@@ -11,7 +12,7 @@ public enum Sections {
 
     public String title;
 
-    Sections(String title) {
+    SectionTypes(String title) {
         this.title = title;
     }
 }
