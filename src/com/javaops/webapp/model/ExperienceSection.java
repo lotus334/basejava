@@ -1,6 +1,6 @@
 package com.javaops.webapp.model;
 
-public class ObjectSection implements Section {
+public class ExperienceSection implements Section {
     String title;
     String dateFrom;
     String dateTo;

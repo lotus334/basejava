@@ -1,10 +1,10 @@
 package com.javaops.webapp.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ContactSection implements Section {
-    private List<Contact> contacts = new ArrayList<>();
+    private Map<ContactTypes, String> contacts = new HashMap<>();
 
     @Override
     public <T> T getContent() {

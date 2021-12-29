@@ -39,7 +39,7 @@ public class Resume implements Comparable<Resume> {
                 break;
             }
             case EDUCATION, EXPERIENCE -> {
-                sections.put(section, new ObjectSection());
+                sections.put(section, new ExperienceSection());
                 break;
             }
         }
