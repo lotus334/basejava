@@ -1,9 +1,11 @@
 package com.javaops.webapp.model;
 
+import java.time.YearMonth;
+
 public class ExperienceSection implements Section {
     String title;
-    String dateFrom;
-    String dateTo;
+    YearMonth dateFrom;
+    YearMonth dateTo;
     String description;
     String additionalInfo;
 
