@@ -27,7 +27,7 @@ public class Resume implements Comparable<Resume> {
     public <T> void setSection(SectionTypes section, T content) {
         switch (section) {
             case CONTACTS -> {
-                sections.put(section, new ContactSection());
+                sections.put(section, new ContactSection((Map<ContactTypes, String>) content));
                 break;
             }
             case PERSONAL, OBJECTIVE -> {
@@ -39,10 +39,14 @@ public class Resume implements Comparable<Resume> {
                 break;
             }
             case EDUCATION, EXPERIENCE -> {
-                sections.put(section, new ExperienceSection());
+                sections.put(section, new ExperienceSection((List<Experience>) content));
                 break;
             }
         }
+    }
+
+    public Set<SectionTypes> getSections() {
+        return sections.keySet();
     }
 
     public <T> T getSection(SectionTypes section) {

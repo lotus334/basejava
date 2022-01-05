@@ -1,16 +1,16 @@
 package com.javaops.webapp.model;
 
-import java.time.YearMonth;
+import java.util.List;
 
 public class ExperienceSection implements Section {
-    String title;
-    YearMonth dateFrom;
-    YearMonth dateTo;
-    String description;
-    String additionalInfo;
+    List<Experience> list;
+
+    public ExperienceSection(List<Experience> list) {
+        this.list = list;
+    }
 
     @Override
-    public <T> T getContent() {
-        return null;
+    public List<Experience> getContent() {
+        return list;
     }
 }

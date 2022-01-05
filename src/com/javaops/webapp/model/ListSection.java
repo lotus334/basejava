@@ -10,7 +10,7 @@ public class ListSection implements Section {
     }
 
     @Override
-    public <T> T getContent() {
-        return (T) content;
+    public List<String> getContent() {
+        return content;
     }
 }
