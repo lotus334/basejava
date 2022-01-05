@@ -2,15 +2,20 @@ package com.javaops.webapp.model;
 
 import java.util.List;
 
-public class ListSection implements Section {
-    List<String> content;
+public class ListSection implements Section<List<String>, String> {
+    private List<String> sectionStorage;
 
-    public ListSection(List<String> content) {
-        this.content = content;
+    public ListSection(List<String> sectionStorage) {
+        this.sectionStorage = sectionStorage;
     }
 
     @Override
-    public List<String> getContent() {
-        return content;
+    public List<String> getSectionStorage() {
+        return sectionStorage;
+    }
+
+    @Override
+    public void addContent(String content) {
+        this.sectionStorage.add(content);
     }
 }

@@ -17,7 +17,10 @@ public class ResumeTestData {
         Map<ContactTypes, String> contacts = new HashMap<>();
         contacts.put(ContactTypes.EMAIL, "lotus33497@yandex.ru");
         contacts.put(ContactTypes.TELEPHONE, "89994663481");
+        contacts.put(ContactTypes.SKYPE, "lotus33497");
+        contacts.remove(ContactTypes.SKYPE);
         MY_RESUME.setSection(CONTACTS, contacts);
+        MY_RESUME.getSection(CONTACTS);
 
         MY_RESUME.setSection(SectionTypes.OBJECTIVE, "Developer");
 

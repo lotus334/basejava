@@ -24,6 +24,10 @@ public class Resume implements Comparable<Resume> {
         this.uuid = uuid;
     }
 
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
     public <T> void setSection(SectionTypes section, T content) {
         switch (section) {
             case CONTACTS -> {
@@ -51,7 +55,7 @@ public class Resume implements Comparable<Resume> {
 
     public <T> T getSection(SectionTypes section) {
         if (sections.get(section) != null) {
-            return (T) sections.get(section).getContent();
+            return (T) sections.get(section).getSectionStorage();
         }
         return null;
     }
