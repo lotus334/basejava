@@ -50,6 +50,7 @@ public class ResumeTestData {
         List<Experience> experiences = new ArrayList<>();
         Experience exp1 = new Experience(
                 "Java Online Projects",
+                "https://javaops.ru/",
                 YearMonth.of(2013, 10),
                 YearMonth.now(),
                 "Автор проекта.",
@@ -57,6 +58,7 @@ public class ResumeTestData {
         );
         Experience exp2 = new Experience(
                 "Wrike",
+                "https://www.wrike.com/",
                 YearMonth.of(2014, 10),
                 YearMonth.of(2016, 1),
                 "Старший разработчик (backend).",
@@ -72,6 +74,7 @@ public class ResumeTestData {
         List<Experience> additionalExperiences = List.of(
                 new Experience(
                         "RIT Center",
+                        null,
                         YearMonth.of(2012, 4),
                         YearMonth.of(2014, 10),
                         "Java архитектор",
@@ -122,10 +125,10 @@ public class ResumeTestData {
                     List<Experience> list = MY_RESUME.getSectionStorage(section);
                     System.out.println("============================");
                     for (Experience exp : list) {
-                        System.out.println(exp.title);
-                        System.out.println(exp.dateFrom + " - " + exp.dateTo);
-                        System.out.println(exp.description);
-                        System.out.println(exp.additionalInfo);
+                        System.out.println(exp.getTitle());
+                        System.out.println(exp.getDateFrom() + " - " + exp.getDateTo());
+                        System.out.println(exp.getDescription());
+                        System.out.println(exp.getAdditionalInfo());
                         System.out.println("============================");
                     }
                     System.out.println("----------------------------");

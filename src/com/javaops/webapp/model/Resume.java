@@ -25,10 +25,12 @@ public class Resume implements Comparable<Resume> {
     }
 
     public void setFullName(String fullName) {
+        Objects.requireNonNull(fullName, "fullName must not be null");
         this.fullName = fullName;
     }
 
     public <T> void setSection(SectionTypes section, T content) {
+        Objects.requireNonNull(content, "can not set content as null");
         switch (section) {
             case CONTACTS -> {
                 sections.put(section, new ContactSection((Map<ContactTypes, String>) content));
@@ -76,21 +78,6 @@ public class Resume implements Comparable<Resume> {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Resume resume = (Resume) o;
-
-        return uuid.equals(resume.uuid);
-    }
-
-    @Override
-    public int hashCode() {
-        return uuid.hashCode();
-    }
-
-    @Override
     public String toString() {
         return uuid + '(' + fullName + ')';
     }
@@ -98,5 +85,18 @@ public class Resume implements Comparable<Resume> {
     @Override
     public int compareTo(Resume o) {
         return uuid.compareTo(o.uuid);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Resume resume = (Resume) o;
+        return uuid.equals(resume.uuid) && fullName.equals(resume.fullName) && Objects.equals(sections, resume.sections);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uuid, fullName, sections);
     }
 }
