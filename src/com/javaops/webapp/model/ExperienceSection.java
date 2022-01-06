@@ -3,7 +3,7 @@ package com.javaops.webapp.model;
 import java.util.List;
 import java.util.Objects;
 
-public class ExperienceSection implements Section<List<Experience>> {
+public class ExperienceSection implements Section<List<Experience>, String> {
     private List<Experience> sectionStorage;
 
     public ExperienceSection(List<Experience> sectionStorage) {
@@ -18,6 +18,11 @@ public class ExperienceSection implements Section<List<Experience>> {
     @Override
     public void addContent(List<Experience> content) {
         sectionStorage.addAll(content);
+    }
+
+    @Override
+    public void removeContent(String title) {
+        sectionStorage.removeIf(exp -> exp.getTitle().equals(title));
     }
 
     @Override

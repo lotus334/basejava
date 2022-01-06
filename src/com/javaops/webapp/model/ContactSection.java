@@ -3,7 +3,7 @@ package com.javaops.webapp.model;
 import java.util.Map;
 import java.util.Objects;
 
-public class ContactSection implements Section<Map<ContactTypes, String>> {
+public class ContactSection implements Section<Map<ContactTypes, String>, ContactTypes> {
     private Map<ContactTypes, String> sectionStorage;
 
     ContactSection(Map<ContactTypes, String> sectionStorage) {
@@ -18,6 +18,11 @@ public class ContactSection implements Section<Map<ContactTypes, String>> {
     @Override
     public void addContent(Map<ContactTypes, String> content) {
         sectionStorage.putAll(content);
+    }
+
+    @Override
+    public void removeContent(ContactTypes content) {
+        sectionStorage.remove(content);
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.javaops.webapp.model;
 
 import java.util.Objects;
 
-public class TextSection implements Section<String> {
+public class TextSection implements Section<String, String> {
     private String sectionStorage;
 
     public TextSection(String content) {
@@ -17,6 +17,11 @@ public class TextSection implements Section<String> {
     @Override
     public void addContent(String content) {
         this.sectionStorage = content;
+    }
+
+    @Override
+    public void removeContent(String content) {
+        this.sectionStorage = null;
     }
 
     @Override

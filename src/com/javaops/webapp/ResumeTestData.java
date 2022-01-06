@@ -19,15 +19,20 @@ public class ResumeTestData {
         contacts.put(ContactTypes.EMAIL, "lotus33497@yandex.ru");
         contacts.put(ContactTypes.TELEPHONE, "89994663481");
         contacts.put(ContactTypes.SKYPE, "lotus33497");
-        contacts.remove(ContactTypes.SKYPE);
         MY_RESUME.setSection(CONTACTS, contacts);
 
         //ADD CONTACTS
         Map<ContactTypes, String> additionalContacts = Map.of(ContactTypes.GITHUB, "lotus334");
         MY_RESUME.getSection(CONTACTS).addContent(additionalContacts);
 
+        //REMOVE CONTACTS
+        MY_RESUME.getSection(CONTACTS).removeContent(ContactTypes.SKYPE);
+
         //SET OBJECTIVE
-        MY_RESUME.setSection(SectionTypes.OBJECTIVE, "Developer");
+        MY_RESUME.setSection(OBJECTIVE, "Developer");
+
+        //REMOVE OBJECTIVE
+        MY_RESUME.getSection(OBJECTIVE).removeContent("");
 
         //SET ACHIEVEMENT
         List<String> achievement = new ArrayList<>();
@@ -37,7 +42,7 @@ public class ResumeTestData {
                 "Более 1000 выпускников. ");
         achievement.add("Реализация двухфакторной аутентификации для онлайн платформы управления проектами Wrike. " +
                 "Интеграция с Twilio, DuoSecurity, Google Authenticator, Jira, Zendesk. ");
-        MY_RESUME.setSection(SectionTypes.ACHIEVEMENT, achievement);
+        MY_RESUME.setSection(ACHIEVEMENT, achievement);
 
         //ADD ACHIEVEMENT
         List<String> additionalAchievement = List.of("Налаживание процесса разработки и непрерывной интеграции ERP " +
@@ -45,6 +50,12 @@ public class ResumeTestData {
                 "окружением на стеке: Scala/Play/Anorm/JQuery. Разработка SSO аутентификации и авторизации различных " +
                 "ERP модулей, интеграция CIFS/SMB java сервера. ");
         MY_RESUME.getSection(ACHIEVEMENT).addContent(additionalAchievement);
+
+        //REMOVE ACHIEVEMENT
+        MY_RESUME.getSection(ACHIEVEMENT).removeContent("Налаживание процесса разработки и непрерывной интеграции ERP " +
+                "системы River BPM. Интеграция с 1С, Bonita BPM, CMIS, LDAP. Разработка приложения управления " +
+                "окружением на стеке: Scala/Play/Anorm/JQuery. Разработка SSO аутентификации и авторизации различных " +
+                "ERP модулей, интеграция CIFS/SMB java сервера. ");
 
         //SET EXPERIENCE
         List<Experience> experiences = new ArrayList<>();
@@ -68,7 +79,7 @@ public class ResumeTestData {
         );
         experiences.add(exp1);
         experiences.add(exp2);
-        MY_RESUME.setSection(SectionTypes.EXPERIENCE, experiences);
+        MY_RESUME.setSection(EXPERIENCE, experiences);
 
         //ADD EXPERIENCE
         List<Experience> additionalExperiences = List.of(
@@ -92,12 +103,16 @@ public class ResumeTestData {
         );
         MY_RESUME.getSection(EXPERIENCE).addContent(additionalExperiences);
 
+        //REMOVE EXPERIENCE
+        MY_RESUME.getSection(EXPERIENCE).removeContent("RIT Center");
+
         printAll();
     }
 
     static void printAll() {
         System.out.println("----------------------------");
         for (SectionTypes section : MY_RESUME.getSections()) {
+            if (MY_RESUME.getSectionStorage(section) == null) continue;
             System.out.println(section.title);
             switch (section) {
                 case CONTACTS -> {
