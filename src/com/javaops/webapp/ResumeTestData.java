@@ -8,22 +8,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.javaops.webapp.model.SectionTypes.CONTACTS;
+import static com.javaops.webapp.model.SectionTypes.*;
 
 public class ResumeTestData {
     private static final Resume MY_RESUME = new Resume("DmitriyVass");
 
     public static void main(String[] args) {
+        // SET CONTACTS
         Map<ContactTypes, String> contacts = new HashMap<>();
         contacts.put(ContactTypes.EMAIL, "lotus33497@yandex.ru");
         contacts.put(ContactTypes.TELEPHONE, "89994663481");
         contacts.put(ContactTypes.SKYPE, "lotus33497");
         contacts.remove(ContactTypes.SKYPE);
         MY_RESUME.setSection(CONTACTS, contacts);
-        MY_RESUME.getSectionStorage(CONTACTS);
 
+        //ADD CONTACTS
+        Map<ContactTypes, String> additionalContacts = Map.of(ContactTypes.GITHUB, "lotus334");
+        MY_RESUME.getSection(CONTACTS).addContent(additionalContacts);
+
+        //SET OBJECTIVE
         MY_RESUME.setSection(SectionTypes.OBJECTIVE, "Developer");
 
+        //SET ACHIEVEMENT
         List<String> achievement = new ArrayList<>();
         achievement.add("С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", " +
                 "\"Многомодульный maven. Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP)." +
@@ -33,6 +39,14 @@ public class ResumeTestData {
                 "Интеграция с Twilio, DuoSecurity, Google Authenticator, Jira, Zendesk. ");
         MY_RESUME.setSection(SectionTypes.ACHIEVEMENT, achievement);
 
+        //ADD ACHIEVEMENT
+        List<String> additionalAchievement = List.of("Налаживание процесса разработки и непрерывной интеграции ERP " +
+                "системы River BPM. Интеграция с 1С, Bonita BPM, CMIS, LDAP. Разработка приложения управления " +
+                "окружением на стеке: Scala/Play/Anorm/JQuery. Разработка SSO аутентификации и авторизации различных " +
+                "ERP модулей, интеграция CIFS/SMB java сервера. ");
+        MY_RESUME.getSection(ACHIEVEMENT).addContent(additionalAchievement);
+
+        //SET EXPERIENCE
         List<Experience> experiences = new ArrayList<>();
         Experience exp1 = new Experience(
                 "Java Online Projects",
@@ -53,6 +67,27 @@ public class ResumeTestData {
         experiences.add(exp1);
         experiences.add(exp2);
         MY_RESUME.setSection(SectionTypes.EXPERIENCE, experiences);
+
+        //ADD EXPERIENCE
+        List<Experience> additionalExperiences = List.of(
+                new Experience(
+                        "RIT Center",
+                        YearMonth.of(2012, 4),
+                        YearMonth.of(2014, 10),
+                        "Java архитектор",
+                        "Организация процесса разработки системы ERP для разных окружений: " +
+                                "релизная политика, версионирование, ведение CI (Jenkins), " +
+                                "миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx), " +
+                                "AAA via SSO. Архитектура БД и серверной части системы. " +
+                                "Разработка интергационных сервисов: CMIS, BPMN2, 1C (WebServices), " +
+                                "сервисов общего назначения (почта, экспорт в pdf, doc, html). " +
+                                "Интеграция Alfresco JLAN для online редактирование из браузера документов MS Office. " +
+                                "Maven + plugin development, Ant, Apache Commons, Spring security, Spring MVC, Tomcat," +
+                                "WSO2, xcmis, OpenCmis, Bonita, Python scripting, " +
+                                "Unix shell remote scripting via ssh tunnels, PL/Python"
+                )
+        );
+        MY_RESUME.getSection(EXPERIENCE).addContent(additionalExperiences);
 
         printAll();
     }

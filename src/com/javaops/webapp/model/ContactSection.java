@@ -2,7 +2,7 @@ package com.javaops.webapp.model;
 
 import java.util.Map;
 
-public class ContactSection implements Section<Map<ContactTypes, String>, Map<ContactTypes, String>> {
+public class ContactSection implements Section<Map<ContactTypes, String>> {
     private Map<ContactTypes, String> sectionStorage;
 
     ContactSection(Map<ContactTypes, String> sectionStorage) {

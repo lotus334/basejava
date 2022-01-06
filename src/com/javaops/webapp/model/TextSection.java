@@ -1,6 +1,6 @@
 package com.javaops.webapp.model;
 
-public class TextSection implements Section<String, String> {
+public class TextSection implements Section<String> {
     private String sectionStorage;
 
     public TextSection(String content) {

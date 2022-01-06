@@ -2,7 +2,7 @@ package com.javaops.webapp.model;
 
 import java.util.List;
 
-public class ListSection implements Section<List<String>, String> {
+public class ListSection implements Section<List<String>> {
     private List<String> sectionStorage;
 
     public ListSection(List<String> sectionStorage) {
@@ -15,7 +15,7 @@ public class ListSection implements Section<List<String>, String> {
     }
 
     @Override
-    public void addContent(String content) {
-        this.sectionStorage.add(content);
+    public void addContent(List<String> content) {
+        this.sectionStorage.addAll(content);
     }
 }

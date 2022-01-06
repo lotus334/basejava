@@ -1,8 +1,8 @@
 package com.javaops.webapp.model;
 
-public interface Section<T, E> {
+public interface Section<T> {
 
     T getSectionStorage();
 
-    void addContent(E content);
+    void addContent(T content);
 }
