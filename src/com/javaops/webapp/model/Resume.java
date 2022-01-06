@@ -53,7 +53,7 @@ public class Resume implements Comparable<Resume> {
         return sections.keySet();
     }
 
-    public <T> T getSection(SectionTypes section) {
+    public <T> T getSectionStorage(SectionTypes section) {
         if (sections.get(section) != null) {
             return (T) sections.get(section).getSectionStorage();
         }

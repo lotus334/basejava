@@ -20,7 +20,7 @@ public class ResumeTestData {
         contacts.put(ContactTypes.SKYPE, "lotus33497");
         contacts.remove(ContactTypes.SKYPE);
         MY_RESUME.setSection(CONTACTS, contacts);
-        MY_RESUME.getSection(CONTACTS);
+        MY_RESUME.getSectionStorage(CONTACTS);
 
         MY_RESUME.setSection(SectionTypes.OBJECTIVE, "Developer");
 
@@ -63,7 +63,7 @@ public class ResumeTestData {
             System.out.println(section.title);
             switch (section) {
                 case CONTACTS -> {
-                    Map<ContactTypes, String> contacts = MY_RESUME.getSection(section);
+                    Map<ContactTypes, String> contacts = MY_RESUME.getSectionStorage(section);
                     for (ContactTypes contactType: contacts.keySet()) {
                         System.out.println(contactType.title + " - " + contacts.get(contactType));
                     }
@@ -71,12 +71,12 @@ public class ResumeTestData {
                     break;
                 }
                 case PERSONAL, OBJECTIVE -> {
-                    System.out.println((String) MY_RESUME.getSection(section));
+                    System.out.println((String) MY_RESUME.getSectionStorage(section));
                     System.out.println("----------------------------");
                     break;
                 }
                 case ACHIEVEMENT, QUALIFICATIONS -> {
-                    List<String> list = MY_RESUME.getSection(section);
+                    List<String> list = MY_RESUME.getSectionStorage(section);
                     for (String str : list) {
                         System.out.println(str);
                     }
@@ -84,7 +84,7 @@ public class ResumeTestData {
                     break;
                 }
                 case EDUCATION, EXPERIENCE -> {
-                    List<Experience> list = MY_RESUME.getSection(section);
+                    List<Experience> list = MY_RESUME.getSectionStorage(section);
                     System.out.println("============================");
                     for (Experience exp : list) {
                         System.out.println(exp.title);
