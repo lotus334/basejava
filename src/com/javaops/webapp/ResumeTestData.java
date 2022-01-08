@@ -29,7 +29,8 @@ public class ResumeTestData {
         //TO DO - REMOVE CONTACTS
 
         //SET OBJECTIVE
-        MY_RESUME.setSection(OBJECTIVE, "Developer");
+        TextSection objectiveSection = new TextSection("Developer");
+        MY_RESUME.setSection(OBJECTIVE, objectiveSection);
 
         //REMOVE OBJECTIVE
         MY_RESUME.getSection(OBJECTIVE);
@@ -42,7 +43,8 @@ public class ResumeTestData {
                 "Более 1000 выпускников. ");
         achievement.add("Реализация двухфакторной аутентификации для онлайн платформы управления проектами Wrike. " +
                 "Интеграция с Twilio, DuoSecurity, Google Authenticator, Jira, Zendesk. ");
-        MY_RESUME.setSection(ACHIEVEMENT, achievement);
+        ListSection achievementSection = new ListSection(achievement);
+        MY_RESUME.setSection(ACHIEVEMENT, achievementSection);
 
         //ADD ACHIEVEMENT
         List<String> additionalAchievement = List.of("Налаживание процесса разработки и непрерывной интеграции ERP " +
@@ -79,7 +81,8 @@ public class ResumeTestData {
         );
         experiences.add(exp1);
         experiences.add(exp2);
-        MY_RESUME.setSection(EXPERIENCE, experiences);
+        ExperienceSection experienceSection = new ExperienceSection(experiences);
+        MY_RESUME.setSection(EXPERIENCE, experienceSection);
 
         //ADD EXPERIENCE
         List<Experience> additionalExperiences = List.of(
@@ -124,7 +127,8 @@ public class ResumeTestData {
                 null);
         education.add(edu1);
         education.add(edu2);
-        MY_RESUME.setSection(EDUCATION, education);
+        ExperienceSection educationSection = new ExperienceSection(education);
+        MY_RESUME.setSection(EDUCATION, educationSection);
 
         printAll();
     }

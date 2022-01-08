@@ -46,22 +46,9 @@ public class Resume implements Comparable<Resume> {
         contacts.putAll(content);
     }
 
-    public <T> void setSection(SectionTypes section, T content) {
-        Objects.requireNonNull(content, "can not set content as null");
-        switch (section) {
-            case PERSONAL, OBJECTIVE -> {
-                sections.put(section, new TextSection((String) content));
-                break;
-            }
-            case ACHIEVEMENT, QUALIFICATIONS -> {
-                sections.put(section, new ListSection((List<String>) content));
-                break;
-            }
-            case EDUCATION, EXPERIENCE -> {
-                sections.put(section, new ExperienceSection((List<Experience>) content));
-                break;
-            }
-        }
+    public void setSection(SectionTypes sectionType, Section section) {
+        Objects.requireNonNull(section, "can not set content as null");
+        sections.put(sectionType, section);
     }
 
     public Set<SectionTypes> getSections() {
