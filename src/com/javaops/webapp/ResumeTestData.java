@@ -106,6 +106,26 @@ public class ResumeTestData {
         //REMOVE EXPERIENCE
         MY_RESUME.getSection(EXPERIENCE).removeContent("RIT Center");
 
+        List<Experience> education = new ArrayList<>();
+        Experience edu1 = new Experience(
+                "Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики",
+                "https://itmo.ru/ru/",
+                YearMonth.of(1987, 9),
+                YearMonth.of(1993, 7),
+                "Инженер (программист Fortran, C)",
+                null
+        );
+        Experience edu2 = new Experience(
+                "Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики",
+                "https://itmo.ru/ru/",
+                YearMonth.of(1993, 9),
+                YearMonth.of(1996, 7),
+                "Аспирантура (программист С, С++)",
+                null);
+        experiences.add(edu1);
+        experiences.add(edu2);
+        MY_RESUME.setSection(EDUCATION, education);
+
         printAll();
     }
 
