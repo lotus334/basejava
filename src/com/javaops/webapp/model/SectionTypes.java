@@ -2,7 +2,6 @@ package com.javaops.webapp.model;
 
 public enum SectionTypes {
 
-    CONTACTS("Контакты"),
     PERSONAL("Личные качества"),
     OBJECTIVE("Позиция"),
     ACHIEVEMENT("Достижения"),

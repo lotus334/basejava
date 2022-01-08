@@ -19,14 +19,14 @@ public class ResumeTestData {
         contacts.put(ContactTypes.EMAIL, "lotus33497@yandex.ru");
         contacts.put(ContactTypes.TELEPHONE, "89994663481");
         contacts.put(ContactTypes.SKYPE, "lotus33497");
-        MY_RESUME.setSection(CONTACTS, contacts);
+        MY_RESUME.setContacts(contacts);
 
         //ADD CONTACTS
-        Map<ContactTypes, String> additionalContacts = Map.of(ContactTypes.GITHUB, "lotus334");
-        MY_RESUME.getSection(CONTACTS).addContent(additionalContacts);
+        Map<ContactTypes, String> additionalContacts = MY_RESUME.getContacts();
+        additionalContacts.putAll(Map.of(ContactTypes.GITHUB, "lotus334"));
+        MY_RESUME.setContacts(additionalContacts);
 
-        //REMOVE CONTACTS
-        MY_RESUME.getSection(CONTACTS).removeContent(ContactTypes.SKYPE);
+        //TO DO - REMOVE CONTACTS
 
         //SET OBJECTIVE
         MY_RESUME.setSection(OBJECTIVE, "Developer");
@@ -131,18 +131,14 @@ public class ResumeTestData {
 
     static void printAll() {
         System.out.println("----------------------------");
+        Map<ContactTypes, String> contacts = MY_RESUME.getContacts();
+        for (ContactTypes key : MY_RESUME.getContacts().keySet()) {
+            System.out.println(key + " - " + contacts.get(key));
+        }
         for (SectionTypes section : MY_RESUME.getSections()) {
             if (MY_RESUME.getSectionStorage(section) == null) continue;
             System.out.println(section.title);
             switch (section) {
-                case CONTACTS -> {
-                    Map<ContactTypes, String> contacts = MY_RESUME.getSectionStorage(section);
-                    for (ContactTypes contactType: contacts.keySet()) {
-                        System.out.println(contactType.title + " - " + contacts.get(contactType));
-                    }
-                    System.out.println("----------------------------");
-                    break;
-                }
                 case PERSONAL, OBJECTIVE -> {
                     System.out.println((String) MY_RESUME.getSectionStorage(section));
                     System.out.println("----------------------------");

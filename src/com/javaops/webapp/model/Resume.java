@@ -11,6 +11,7 @@ public class Resume implements Comparable<Resume> {
     private final String uuid;
 
     private String fullName;
+    private Map<ContactTypes, String> contacts = new TreeMap<>();
     private Map<SectionTypes, Section> sections = new TreeMap<>();
 
     public Resume(String fullName) {
@@ -24,18 +25,30 @@ public class Resume implements Comparable<Resume> {
         this.uuid = uuid;
     }
 
+    public String getUuid() {
+        return uuid;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
     public void setFullName(String fullName) {
         Objects.requireNonNull(fullName, "fullName must not be null");
         this.fullName = fullName;
     }
 
+    public Map<ContactTypes, String> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(Map<ContactTypes, String> content) {
+        contacts.putAll(content);
+    }
+
     public <T> void setSection(SectionTypes section, T content) {
         Objects.requireNonNull(content, "can not set content as null");
         switch (section) {
-            case CONTACTS -> {
-                sections.put(section, new ContactSection((Map<ContactTypes, String>) content));
-                break;
-            }
             case PERSONAL, OBJECTIVE -> {
                 sections.put(section, new TextSection((String) content));
                 break;
@@ -67,14 +80,6 @@ public class Resume implements Comparable<Resume> {
             return (T) sections.get(section).getSectionStorage();
         }
         return null;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public String getFullName() {
-        return fullName;
     }
 
     @Override
