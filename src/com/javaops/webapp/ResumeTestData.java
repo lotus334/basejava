@@ -140,9 +140,12 @@ public class ResumeTestData {
             System.out.println(key.getTitle() + " - " + contacts.get(key));
             System.out.println("----------------------------");
         }
-        for (SectionTypes section : MY_RESUME.getSections()) {
-            System.out.println(section.getTitle());
-            MY_RESUME.getSection(section).printContent();
+        for (SectionTypes sectionType : SectionTypes.values()) {
+            Section section = MY_RESUME.getSection(sectionType);
+            if (section != null) {
+                System.out.println(sectionType.getTitle());
+                section.printContent();
+            }
             System.out.println("----------------------------");
         }
     }

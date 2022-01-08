@@ -16,14 +16,6 @@ public class ListSection implements Section {
         }
     }
 
-    public void addContent(List<String> content) {
-        this.sectionStorage.addAll(content);
-    }
-
-    public void removeContent(String content) {
-        sectionStorage.remove(content);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

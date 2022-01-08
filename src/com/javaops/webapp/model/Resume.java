@@ -51,10 +51,6 @@ public class Resume implements Comparable<Resume> {
         sections.put(sectionType, section);
     }
 
-    public Set<SectionTypes> getSections() {
-        return sections.keySet();
-    }
-
     public Section getSection(SectionTypes section) {
         if (sections.get(section) != null) {
             return sections.get(section);
