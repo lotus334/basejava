@@ -3,26 +3,24 @@ package com.javaops.webapp.model;
 import java.util.List;
 import java.util.Objects;
 
-public class ExperienceSection implements Section<List<Experience>, String> {
+public class ExperienceSection implements Section {
+    @Override
+    public String toString() {
+        return "ExperienceSection{" +
+                "sectionStorage=" + sectionStorage +
+                '}';
+    }
+
     private List<Experience> sectionStorage;
 
     public ExperienceSection(List<Experience> sectionStorage) {
         this.sectionStorage = sectionStorage;
     }
 
-    @Override
-    public List<Experience> getSectionStorage() {
-        return sectionStorage;
-    }
-
-    @Override
-    public void addContent(List<Experience> content) {
-        sectionStorage.addAll(content);
-    }
-
-    @Override
-    public void removeContent(String title) {
-        sectionStorage.removeIf(exp -> exp.getTitle().equals(title));
+    public void printContent() {
+        for (Experience exp : sectionStorage) {
+            System.out.println(exp.toString());
+        }
     }
 
     @Override

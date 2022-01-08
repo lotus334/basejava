@@ -84,4 +84,16 @@ public class Experience {
     public int hashCode() {
         return Objects.hash(title, link, dateFrom, dateTo, description, additionalInfo);
     }
+
+    @Override
+    public String toString() {
+        return "Experience{" +
+                "title='" + title + '\'' +
+                ", link='" + link + '\'' +
+                ", dateFrom=" + dateFrom +
+                ", dateTo=" + dateTo +
+                ", description='" + description + '\'' +
+                ", additionalInfo='" + additionalInfo + '\'' +
+                '}';
+    }
 }

@@ -2,26 +2,15 @@ package com.javaops.webapp.model;
 
 import java.util.Objects;
 
-public class TextSection implements Section<String, String> {
+public class TextSection implements Section {
     private String sectionStorage;
 
     public TextSection(String content) {
         this.sectionStorage = content;
     }
 
-    @Override
-    public String getSectionStorage() {
-        return sectionStorage;
-    }
-
-    @Override
-    public void addContent(String content) {
-        this.sectionStorage = content;
-    }
-
-    @Override
-    public void removeContent(String content) {
-        this.sectionStorage = null;
+    public void printContent() {
+        System.out.println(sectionStorage);
     }
 
     @Override

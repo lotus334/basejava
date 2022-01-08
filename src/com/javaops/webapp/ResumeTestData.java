@@ -32,7 +32,7 @@ public class ResumeTestData {
         MY_RESUME.setSection(OBJECTIVE, "Developer");
 
         //REMOVE OBJECTIVE
-        MY_RESUME.getSection(OBJECTIVE).removeContent("");
+        MY_RESUME.getSection(OBJECTIVE);
 
         //SET ACHIEVEMENT
         List<String> achievement = new ArrayList<>();
@@ -49,13 +49,13 @@ public class ResumeTestData {
                 "системы River BPM. Интеграция с 1С, Bonita BPM, CMIS, LDAP. Разработка приложения управления " +
                 "окружением на стеке: Scala/Play/Anorm/JQuery. Разработка SSO аутентификации и авторизации различных " +
                 "ERP модулей, интеграция CIFS/SMB java сервера. ");
-        MY_RESUME.getSection(ACHIEVEMENT).addContent(additionalAchievement);
+//        MY_RESUME.getSection(ACHIEVEMENT).addContent(additionalAchievement);
 
         //REMOVE ACHIEVEMENT
-        MY_RESUME.getSection(ACHIEVEMENT).removeContent("Налаживание процесса разработки и непрерывной интеграции ERP " +
-                "системы River BPM. Интеграция с 1С, Bonita BPM, CMIS, LDAP. Разработка приложения управления " +
-                "окружением на стеке: Scala/Play/Anorm/JQuery. Разработка SSO аутентификации и авторизации различных " +
-                "ERP модулей, интеграция CIFS/SMB java сервера. ");
+//        MY_RESUME.getSection(ACHIEVEMENT).removeContent("Налаживание процесса разработки и непрерывной интеграции ERP " +
+//                "системы River BPM. Интеграция с 1С, Bonita BPM, CMIS, LDAP. Разработка приложения управления " +
+//                "окружением на стеке: Scala/Play/Anorm/JQuery. Разработка SSO аутентификации и авторизации различных " +
+//                "ERP модулей, интеграция CIFS/SMB java сервера. ");
 
         //SET EXPERIENCE
         List<Experience> experiences = new ArrayList<>();
@@ -101,10 +101,10 @@ public class ResumeTestData {
                                 "Unix shell remote scripting via ssh tunnels, PL/Python"
                 )
         );
-        MY_RESUME.getSection(EXPERIENCE).addContent(additionalExperiences);
+//        MY_RESUME.getSection(EXPERIENCE).addContent(additionalExperiences);
 
         //REMOVE EXPERIENCE
-        MY_RESUME.getSection(EXPERIENCE).removeContent("RIT Center");
+//        MY_RESUME.getSection(EXPERIENCE).removeContent("RIT Center");
 
         List<Experience> education = new ArrayList<>();
         Experience edu1 = new Experience(
@@ -122,8 +122,8 @@ public class ResumeTestData {
                 YearMonth.of(1996, 7),
                 "Аспирантура (программист С, С++)",
                 null);
-        experiences.add(edu1);
-        experiences.add(edu2);
+        education.add(edu1);
+        education.add(edu2);
         MY_RESUME.setSection(EDUCATION, education);
 
         printAll();
@@ -133,39 +133,13 @@ public class ResumeTestData {
         System.out.println("----------------------------");
         Map<ContactTypes, String> contacts = MY_RESUME.getContacts();
         for (ContactTypes key : MY_RESUME.getContacts().keySet()) {
-            System.out.println(key + " - " + contacts.get(key));
+            System.out.println(key.getTitle() + " - " + contacts.get(key));
+            System.out.println("----------------------------");
         }
         for (SectionTypes section : MY_RESUME.getSections()) {
-            if (MY_RESUME.getSectionStorage(section) == null) continue;
-            System.out.println(section.title);
-            switch (section) {
-                case PERSONAL, OBJECTIVE -> {
-                    System.out.println((String) MY_RESUME.getSectionStorage(section));
-                    System.out.println("----------------------------");
-                    break;
-                }
-                case ACHIEVEMENT, QUALIFICATIONS -> {
-                    List<String> list = MY_RESUME.getSectionStorage(section);
-                    for (String str : list) {
-                        System.out.println(str);
-                    }
-                    System.out.println("----------------------------");
-                    break;
-                }
-                case EDUCATION, EXPERIENCE -> {
-                    List<Experience> list = MY_RESUME.getSectionStorage(section);
-                    System.out.println("============================");
-                    for (Experience exp : list) {
-                        System.out.println(exp.getTitle());
-                        System.out.println(exp.getDateFrom() + " - " + exp.getDateTo());
-                        System.out.println(exp.getDescription());
-                        System.out.println(exp.getAdditionalInfo());
-                        System.out.println("============================");
-                    }
-                    System.out.println("----------------------------");
-                    break;
-                }
-            }
+            System.out.println(section.getTitle());
+            MY_RESUME.getSection(section).printContent();
+            System.out.println("----------------------------");
         }
     }
 }

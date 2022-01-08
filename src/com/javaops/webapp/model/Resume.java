@@ -75,21 +75,19 @@ public class Resume implements Comparable<Resume> {
         return null;
     }
 
-    public <T> T getSectionStorage(SectionTypes section) {
-        if (sections.get(section) != null) {
-            return (T) sections.get(section).getSectionStorage();
-        }
-        return null;
+    @Override
+    public int compareTo(Resume o) {
+        return uuid.compareTo(o.uuid);
     }
 
     @Override
     public String toString() {
-        return uuid + '(' + fullName + ')';
-    }
-
-    @Override
-    public int compareTo(Resume o) {
-        return uuid.compareTo(o.uuid);
+        return "Resume{" +
+                "uuid='" + uuid + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", contacts=" + contacts +
+                ", sections=" + sections +
+                '}';
     }
 
     @Override
@@ -97,11 +95,11 @@ public class Resume implements Comparable<Resume> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Resume resume = (Resume) o;
-        return uuid.equals(resume.uuid) && fullName.equals(resume.fullName) && Objects.equals(sections, resume.sections);
+        return Objects.equals(uuid, resume.uuid) && Objects.equals(fullName, resume.fullName) && Objects.equals(contacts, resume.contacts) && Objects.equals(sections, resume.sections);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, fullName, sections);
+        return Objects.hash(uuid, fullName, contacts, sections);
     }
 }

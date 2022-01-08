@@ -3,24 +3,23 @@ package com.javaops.webapp.model;
 import java.util.List;
 import java.util.Objects;
 
-public class ListSection implements Section<List<String>, String> {
+public class ListSection implements Section {
     private List<String> sectionStorage;
 
     public ListSection(List<String> sectionStorage) {
         this.sectionStorage = sectionStorage;
     }
 
-    @Override
-    public List<String> getSectionStorage() {
-        return sectionStorage;
+    public void printContent() {
+        for (String item : sectionStorage) {
+            System.out.println(item);
+        }
     }
 
-    @Override
     public void addContent(List<String> content) {
         this.sectionStorage.addAll(content);
     }
 
-    @Override
     public void removeContent(String content) {
         sectionStorage.remove(content);
     }
@@ -36,5 +35,12 @@ public class ListSection implements Section<List<String>, String> {
     @Override
     public int hashCode() {
         return Objects.hash(sectionStorage);
+    }
+
+    @Override
+    public String toString() {
+        return "ListSection{" +
+                "sectionStorage=" + sectionStorage +
+                '}';
     }
 }
