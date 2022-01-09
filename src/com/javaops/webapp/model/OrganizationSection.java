@@ -2,11 +2,11 @@ package com.javaops.webapp.model;
 
 import java.util.List;
 
-public class ExperienceSection implements Section {
+public class OrganizationSection implements Section {
 
     private List<Organization> sectionStorage;
 
-    public ExperienceSection(List<Organization> sectionStorage) {
+    public OrganizationSection(List<Organization> sectionStorage) {
         this.sectionStorage = sectionStorage;
     }
 

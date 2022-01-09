@@ -89,8 +89,8 @@ public class ResumeTestData {
         );
         organizations.add(exp1);
         organizations.add(exp2);
-        ExperienceSection experienceSection = new ExperienceSection(organizations);
-        MY_RESUME.setSection(EXPERIENCE, experienceSection);
+        OrganizationSection organizationSection = new OrganizationSection(organizations);
+        MY_RESUME.setSection(EXPERIENCE, organizationSection);
 
         //ADD EXPERIENCE
         List<Organization> additionalOrganizations = List.of(
@@ -141,7 +141,7 @@ public class ResumeTestData {
                 )
         );
         education.add(edu1);
-        ExperienceSection educationSection = new ExperienceSection(education);
+        OrganizationSection educationSection = new OrganizationSection(education);
         MY_RESUME.setSection(EDUCATION, educationSection);
 
         printAll();
