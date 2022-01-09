@@ -47,10 +47,10 @@ public class ResumeTestData {
         MY_RESUME.setSection(ACHIEVEMENT, achievementSection);
 
         //ADD ACHIEVEMENT
-        List<String> additionalAchievement = List.of("Налаживание процесса разработки и непрерывной интеграции ERP " +
-                "системы River BPM. Интеграция с 1С, Bonita BPM, CMIS, LDAP. Разработка приложения управления " +
-                "окружением на стеке: Scala/Play/Anorm/JQuery. Разработка SSO аутентификации и авторизации различных " +
-                "ERP модулей, интеграция CIFS/SMB java сервера. ");
+//        List<String> additionalAchievement = List.of("Налаживание процесса разработки и непрерывной интеграции ERP " +
+//                "системы River BPM. Интеграция с 1С, Bonita BPM, CMIS, LDAP. Разработка приложения управления " +
+//                "окружением на стеке: Scala/Play/Anorm/JQuery. Разработка SSO аутентификации и авторизации различных " +
+//                "ERP модулей, интеграция CIFS/SMB java сервера. ");
 //        MY_RESUME.getSection(ACHIEVEMENT).addContent(additionalAchievement);
 
         //REMOVE ACHIEVEMENT
@@ -64,20 +64,28 @@ public class ResumeTestData {
         Experience exp1 = new Experience(
                 "Java Online Projects",
                 "https://javaops.ru/",
-                YearMonth.of(2013, 10),
-                YearMonth.now(),
-                "Автор проекта.",
-                "Создание, организация и проведение Java онлайн проектов и стажировок."
+                List.of(
+                        new Position(
+                                YearMonth.of(2013, 10),
+                                YearMonth.now(),
+                                "Автор проекта.",
+                                "Создание, организация и проведение Java онлайн проектов и стажировок."
+                        )
+                )
         );
         Experience exp2 = new Experience(
                 "Wrike",
                 "https://www.wrike.com/",
-                YearMonth.of(2014, 10),
-                YearMonth.of(2016, 1),
-                "Старший разработчик (backend).",
-                "Проектирование и разработка онлайн платформы управления проектами Wrike " +
-                        "(Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). " +
-                        "Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.."
+                List.of(
+                        new Position(
+                                YearMonth.of(2014, 10),
+                                YearMonth.of(2016, 1),
+                                "Старший разработчик (backend).",
+                                "Проектирование и разработка онлайн платформы управления проектами Wrike " +
+                                        "(Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). " +
+                                        "Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.."
+                        )
+                )
         );
         experiences.add(exp1);
         experiences.add(exp2);
@@ -89,19 +97,23 @@ public class ResumeTestData {
                 new Experience(
                         "RIT Center",
                         null,
-                        YearMonth.of(2012, 4),
-                        YearMonth.of(2014, 10),
-                        "Java архитектор",
-                        "Организация процесса разработки системы ERP для разных окружений: " +
-                                "релизная политика, версионирование, ведение CI (Jenkins), " +
-                                "миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx), " +
-                                "AAA via SSO. Архитектура БД и серверной части системы. " +
-                                "Разработка интергационных сервисов: CMIS, BPMN2, 1C (WebServices), " +
-                                "сервисов общего назначения (почта, экспорт в pdf, doc, html). " +
-                                "Интеграция Alfresco JLAN для online редактирование из браузера документов MS Office. " +
-                                "Maven + plugin development, Ant, Apache Commons, Spring security, Spring MVC, Tomcat," +
-                                "WSO2, xcmis, OpenCmis, Bonita, Python scripting, " +
-                                "Unix shell remote scripting via ssh tunnels, PL/Python"
+                        List.of(
+                                new Position(
+                                        YearMonth.of(2012, 4),
+                                        YearMonth.of(2014, 10),
+                                        "Java архитектор",
+                                        "Организация процесса разработки системы ERP для разных окружений: " +
+                                                "релизная политика, версионирование, ведение CI (Jenkins), " +
+                                                "миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx), " +
+                                                "AAA via SSO. Архитектура БД и серверной части системы. " +
+                                                "Разработка интергационных сервисов: CMIS, BPMN2, 1C (WebServices), " +
+                                                "сервисов общего назначения (почта, экспорт в pdf, doc, html). " +
+                                                "Интеграция Alfresco JLAN для online редактирование из браузера документов MS Office. " +
+                                                "Maven + plugin development, Ant, Apache Commons, Spring security, Spring MVC, Tomcat," +
+                                                "WSO2, xcmis, OpenCmis, Bonita, Python scripting, " +
+                                                "Unix shell remote scripting via ssh tunnels, PL/Python"
+                                )
+                        )
                 )
         );
 //        MY_RESUME.getSection(EXPERIENCE).addContent(additionalExperiences);
@@ -113,20 +125,22 @@ public class ResumeTestData {
         Experience edu1 = new Experience(
                 "Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики",
                 "https://itmo.ru/ru/",
-                YearMonth.of(1987, 9),
-                YearMonth.of(1993, 7),
-                "Инженер (программист Fortran, C)",
-                null
+                List.of(
+                        new Position(
+                                YearMonth.of(1987, 9),
+                                YearMonth.of(1993, 7),
+                                "Инженер (программист Fortran, C)",
+                                null
+                        ),
+                        new Position(
+                                YearMonth.of(1993, 9),
+                                YearMonth.of(1996, 7),
+                                "Аспирантура (программист С, С++)",
+                                null
+                        )
+                )
         );
-        Experience edu2 = new Experience(
-                "Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики",
-                "https://itmo.ru/ru/",
-                YearMonth.of(1993, 9),
-                YearMonth.of(1996, 7),
-                "Аспирантура (программист С, С++)",
-                null);
         education.add(edu1);
-        education.add(edu2);
         ExperienceSection educationSection = new ExperienceSection(education);
         MY_RESUME.setSection(EDUCATION, educationSection);
 
@@ -145,8 +159,8 @@ public class ResumeTestData {
             if (section != null) {
                 System.out.println(sectionType.getTitle());
                 section.printContent();
+                System.out.println("----------------------------");
             }
-            System.out.println("----------------------------");
         }
     }
 }

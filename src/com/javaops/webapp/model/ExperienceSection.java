@@ -1,15 +1,8 @@
 package com.javaops.webapp.model;
 
 import java.util.List;
-import java.util.Objects;
 
 public class ExperienceSection implements Section {
-    @Override
-    public String toString() {
-        return "ExperienceSection{" +
-                "sectionStorage=" + sectionStorage +
-                '}';
-    }
 
     private List<Experience> sectionStorage;
 
@@ -19,20 +12,16 @@ public class ExperienceSection implements Section {
 
     public void printContent() {
         for (Experience exp : sectionStorage) {
-            System.out.println(exp.toString());
+            System.out.println(exp.getTitle());
+            System.out.println(exp.getLink());
+            for (Position position : exp.getPositions()) {
+                System.out.println(position.getDateFrom());
+                System.out.println(position.getDateTo());
+                System.out.println(position.getDescription());
+                if (position.getAdditionalInfo() != null) {
+                    System.out.println(position.getAdditionalInfo());
+                }
+            }
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ExperienceSection that = (ExperienceSection) o;
-        return sectionStorage.equals(that.sectionStorage);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(sectionStorage);
     }
 }
