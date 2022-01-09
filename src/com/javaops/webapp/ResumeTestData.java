@@ -60,8 +60,8 @@ public class ResumeTestData {
 //                "ERP модулей, интеграция CIFS/SMB java сервера. ");
 
         //SET EXPERIENCE
-        List<Experience> experiences = new ArrayList<>();
-        Experience exp1 = new Experience(
+        List<Organization> organizations = new ArrayList<>();
+        Organization exp1 = new Organization(
                 "Java Online Projects",
                 "https://javaops.ru/",
                 List.of(
@@ -73,7 +73,7 @@ public class ResumeTestData {
                         )
                 )
         );
-        Experience exp2 = new Experience(
+        Organization exp2 = new Organization(
                 "Wrike",
                 "https://www.wrike.com/",
                 List.of(
@@ -87,14 +87,14 @@ public class ResumeTestData {
                         )
                 )
         );
-        experiences.add(exp1);
-        experiences.add(exp2);
-        ExperienceSection experienceSection = new ExperienceSection(experiences);
+        organizations.add(exp1);
+        organizations.add(exp2);
+        ExperienceSection experienceSection = new ExperienceSection(organizations);
         MY_RESUME.setSection(EXPERIENCE, experienceSection);
 
         //ADD EXPERIENCE
-        List<Experience> additionalExperiences = List.of(
-                new Experience(
+        List<Organization> additionalOrganizations = List.of(
+                new Organization(
                         "RIT Center",
                         null,
                         List.of(
@@ -121,8 +121,8 @@ public class ResumeTestData {
         //REMOVE EXPERIENCE
 //        MY_RESUME.getSection(EXPERIENCE).removeContent("RIT Center");
 
-        List<Experience> education = new ArrayList<>();
-        Experience edu1 = new Experience(
+        List<Organization> education = new ArrayList<>();
+        Organization edu1 = new Organization(
                 "Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики",
                 "https://itmo.ru/ru/",
                 List.of(

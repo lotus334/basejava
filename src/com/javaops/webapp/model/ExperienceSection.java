@@ -4,14 +4,14 @@ import java.util.List;
 
 public class ExperienceSection implements Section {
 
-    private List<Experience> sectionStorage;
+    private List<Organization> sectionStorage;
 
-    public ExperienceSection(List<Experience> sectionStorage) {
+    public ExperienceSection(List<Organization> sectionStorage) {
         this.sectionStorage = sectionStorage;
     }
 
     public void printContent() {
-        for (Experience exp : sectionStorage) {
+        for (Organization exp : sectionStorage) {
             System.out.println(exp.getTitle());
             System.out.println(exp.getLink());
             for (Position position : exp.getPositions()) {
