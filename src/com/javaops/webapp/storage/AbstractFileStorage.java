@@ -4,6 +4,7 @@ import com.javaops.webapp.exception.StorageException;
 import com.javaops.webapp.model.Resume;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -23,12 +24,16 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-
+        String[] list = directory.list();
+            for (String name : list) {
+                File file = new File(directory.getAbsolutePath(), name);
+                file.delete();
+            }
     }
 
     @Override
     public int size() {
-        return 0;
+        return directory.list().length;
     }
 
     @Override
@@ -60,12 +65,21 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected Resume doGet(File file, String uuid) {
+        if (isExist(file)) {
+            return doRead(file);
+        }
         return null;
     }
 
+    protected abstract Resume doRead(File file);
+
     @Override
     protected void doRemove(File file) {
-
+        try (FileInputStream fis = new FileInputStream(file)) {
+            fis.read();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
