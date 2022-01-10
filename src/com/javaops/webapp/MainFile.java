@@ -28,14 +28,13 @@ public class MainFile {
 //            throw new RuntimeException(e);
 //        }
 
-        printRecursivelyFiles(".", 0);
+        printRecursivelyFiles("src/com/javaops/webapp", 0);
     }
 
     public static void printRecursivelyFiles(String startDir, int depthLineCounter) {
         File file = new File(startDir);
         if (file.isDirectory()) {
-            printDepthLine(depthLineCounter);
-            System.out.println(file.getName());
+            System.out.println(file.getAbsolutePath());
             String[] list = file.list();
             if (list != null) {
                 depthLineCounter++;
@@ -44,14 +43,7 @@ public class MainFile {
                 }
             }
         } else {
-            printDepthLine(depthLineCounter);
-            System.out.println(file.getName());
-        }
-    }
-
-    public static void printDepthLine(int depthLineCounter) {
-        for (int i = 0; i < depthLineCounter; i++) {
-            System.out.print("-");
+            System.out.println(file.getAbsoluteFile() + file.getName());
         }
     }
 }
