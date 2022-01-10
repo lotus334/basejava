@@ -17,7 +17,7 @@ public class ResumeTestData {
         printAll(MY_RESUME);
     }
 
-    static Resume createFilledResume(String uuid, String fullName) {
+    public static Resume createFilledResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
 
         // SET CONTACTS
