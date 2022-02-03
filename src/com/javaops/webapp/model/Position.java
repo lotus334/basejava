@@ -56,7 +56,10 @@ public class Position {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Position position = (Position) o;
-        return dateFrom.equals(position.dateFrom) && dateTo.equals(position.dateTo) && description.equals(position.description) && Objects.equals(additionalInfo, position.additionalInfo);
+        return dateFrom.equals(position.dateFrom) &&
+                dateTo.equals(position.dateTo) &&
+                description.equals(position.description) &&
+                Objects.equals(additionalInfo, position.additionalInfo);
     }
 
     @Override

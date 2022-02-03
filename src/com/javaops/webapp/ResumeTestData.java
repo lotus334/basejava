@@ -28,7 +28,8 @@ public class ResumeTestData {
         resume.setContacts(contacts);
 
         //SET OBJECTIVE
-        TextSection objectiveSection = new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям");
+        TextSection objectiveSection =
+                new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям");
         resume.setSection(OBJECTIVE, objectiveSection);
 
         //SET ACHIEVEMENT
