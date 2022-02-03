@@ -16,21 +16,6 @@ public class OrganizationSection implements Section {
         return sectionStorage;
     }
 
-    public void printContent() {
-        for (Organization exp : sectionStorage) {
-            System.out.println(exp.getTitle());
-            System.out.println(exp.getLink());
-            for (Position position : exp.getPositions()) {
-                System.out.println(position.getDateFrom());
-                System.out.println(position.getDateTo());
-                System.out.println(position.getDescription());
-                if (position.getAdditionalInfo() != null) {
-                    System.out.println(position.getAdditionalInfo());
-                }
-            }
-        }
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

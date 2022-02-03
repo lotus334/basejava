@@ -15,12 +15,6 @@ public class ListSection implements Section {
         return sectionStorage;
     }
 
-    public void printContent() {
-        for (String item : sectionStorage) {
-            System.out.println(item);
-        }
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -14,10 +14,6 @@ public class TextSection implements Section {
         return sectionStorage;
     }
 
-    public void printContent() {
-        System.out.println(sectionStorage);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
