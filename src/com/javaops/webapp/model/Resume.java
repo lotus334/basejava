@@ -29,21 +29,21 @@ public class Resume implements Comparable<Resume> {
         return uuid;
     }
 
-    public String getFullName() {
-        return fullName;
-    }
-
     public void setFullName(String fullName) {
         Objects.requireNonNull(fullName, "fullName must not be null");
         this.fullName = fullName;
     }
 
-    public Map<ContactTypes, String> getContacts() {
-        return contacts;
+    public String getFullName() {
+        return fullName;
     }
 
     public void setContacts(Map<ContactTypes, String> content) {
         contacts.putAll(content);
+    }
+
+    public Map<ContactTypes, String> getContacts() {
+        return contacts;
     }
 
     public void setSection(SectionTypes sectionType, Section section) {

@@ -32,6 +32,14 @@ public class Organization {
         this.link = link;
     }
 
+    public List<Position> getPositions() {
+        return positions;
+    }
+
+    public void setPositions(List<Position> positions) {
+        this.positions = positions;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -52,13 +60,5 @@ public class Organization {
                 ", link='" + link + '\'' +
                 ", positions=" + positions +
                 '}';
-    }
-
-    public List<Position> getPositions() {
-        return positions;
-    }
-
-    public void setPositions(List<Position> positions) {
-        this.positions = positions;
     }
 }

@@ -6,7 +6,12 @@ public class TextSection implements Section {
     private String sectionStorage;
 
     public TextSection(String content) {
+        Objects.requireNonNull(content, "content must not be null");
         this.sectionStorage = content;
+    }
+
+    public String getSectionStorage() {
+        return sectionStorage;
     }
 
     public void printContent() {

@@ -7,7 +7,12 @@ public class ListSection implements Section {
     private List<String> sectionStorage;
 
     public ListSection(List<String> sectionStorage) {
+        Objects.requireNonNull(sectionStorage, "sectionStorage must not be null");
         this.sectionStorage = sectionStorage;
+    }
+
+    public List<String> getSectionStorage() {
+        return sectionStorage;
     }
 
     public void printContent() {
