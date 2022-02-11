@@ -4,7 +4,6 @@ import com.javaops.webapp.exception.StorageException;
 import com.javaops.webapp.model.Resume;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -24,16 +23,16 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-        String[] list = directory.list();
-            for (String name : list) {
-                File file = new File(directory.getAbsolutePath(), name);
-                file.delete();
-            }
+        String[] list = getListOfFiles();
+        for (String name : list) {
+            File file = new File(directory.getAbsolutePath(), name);
+            file.delete();
+        }
     }
 
     @Override
     public int size() {
-        return directory.list().length;
+        return getListOfFiles().length;
     }
 
     @Override
@@ -43,7 +42,11 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected void doUpdate(File file, Resume resume) {
-
+        try {
+            doWrite(resume, file);
+        } catch (IOException e) {
+            throw new StorageException("IO error", file.getName(), e);
+        }
     }
 
     @Override
@@ -61,29 +64,35 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         }
     }
 
-    protected abstract void doWrite(Resume r, File file) throws IOException;
-
     @Override
     protected Resume doGet(File file, String uuid) {
-        if (isExist(file)) {
-            return doRead(file);
-        }
-        return null;
+        return doRead(file);
     }
-
-    protected abstract Resume doRead(File file);
 
     @Override
     protected void doRemove(File file) {
-        try (FileInputStream fis = new FileInputStream(file)) {
-            fis.read();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        file.delete();
     }
 
     @Override
     protected Resume[] doGetAll() {
-        return null;
+        String[] list = getListOfFiles();
+        Resume[] resumes = new Resume[list.length];
+        for (int i = 0; i < list.length; i++) {
+            resumes[i] = doRead(new File(list[i]));
+        }
+        return resumes;
     }
+
+    private String[] getListOfFiles() {
+        String[] list = directory.list();
+        if (list != null) {
+            return list;
+        }
+        return new String[]{};
+    }
+
+    protected abstract Resume doRead(File file);
+
+    protected abstract void doWrite(Resume r, File file) throws IOException;
 }
