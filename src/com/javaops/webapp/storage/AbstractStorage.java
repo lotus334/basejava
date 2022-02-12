@@ -42,7 +42,7 @@ public abstract class AbstractStorage<SK> implements Storage {
     public Resume get(String uuid) {
         LOG.info("Get " + uuid);
         SK searchKey = getNotExistentSearchKey(uuid);
-        return doGet(searchKey, uuid);
+        return doGet(searchKey);
     }
 
     @Override
@@ -79,7 +79,7 @@ public abstract class AbstractStorage<SK> implements Storage {
 
     protected abstract void doUpdate(SK searchKey, Resume resume);
 
-    protected abstract Resume doGet(SK searchKey, String uuid);
+    protected abstract Resume doGet(SK searchKey);
 
     protected abstract boolean isExist(SK searchKey);
 

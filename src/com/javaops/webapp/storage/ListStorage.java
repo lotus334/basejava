@@ -45,7 +45,7 @@ public class ListStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    protected Resume doGet(Integer searchKey, String uuid) {
+    protected Resume doGet(Integer searchKey) {
         return storage.get(searchKey);
     }
 

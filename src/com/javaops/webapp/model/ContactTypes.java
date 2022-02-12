@@ -10,7 +10,7 @@ public enum ContactTypes {
     STACKOVERFLOW("Стэк оверфлоу"),
     HOMEPAGE("Домашняя страница");
 
-    private String title;
+    private final String title;
 
     ContactTypes(String title) {
         this.title = title;

@@ -65,7 +65,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     }
 
     @Override
-    protected Resume doGet(File file, String uuid) {
+    protected Resume doGet(File file) {
         return doRead(file);
     }
 
