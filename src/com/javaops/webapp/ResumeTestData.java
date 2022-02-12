@@ -172,7 +172,7 @@ public class ResumeTestData {
             Section section = resume.getSection(sectionType);
             if (section != null) {
                 System.out.println(sectionType.getTitle());
-                System.out.println(section.toString());
+                System.out.println(section);
                 System.out.println("----------------------------");
             }
         }
