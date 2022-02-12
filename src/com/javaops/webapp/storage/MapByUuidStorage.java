@@ -2,11 +2,7 @@ package com.javaops.webapp.storage;
 
 import com.javaops.webapp.model.Resume;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class MapByUuidStorage extends AbstractStorage<String> {
-    private static Map<String, Resume> storage = new HashMap<>();
+public class MapByUuidStorage extends AbstractMapStorage<String> {
 
     @Override
     protected String getSearchKey(String uuid) {
@@ -36,20 +32,5 @@ public class MapByUuidStorage extends AbstractStorage<String> {
     @Override
     protected boolean isExist(String searchKey) {
         return storage.containsKey(searchKey);
-    }
-
-    @Override
-    protected Resume[] doGetAll() {
-        return storage.values().toArray(new Resume[0]);
-    }
-
-    @Override
-    public void clear() {
-        storage = new HashMap<>();
-    }
-
-    @Override
-    public int size() {
-        return storage.size();
     }
 }

@@ -1,6 +1,6 @@
 package com.javaops.webapp.storage;
 
-public class MapByUuidStorageTest extends AbstractStorageTest {
+public class MapByUuidStorageTest extends AbstractMapStorageTest {
 
     public MapByUuidStorageTest() {
         super(new MapByUuidStorage());
