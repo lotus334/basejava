@@ -4,15 +4,15 @@ import java.util.List;
 import java.util.Objects;
 
 public class ListSection implements Section {
-    private List<String> sectionStorage;
+    private List<String> skills;
 
-    public ListSection(List<String> sectionStorage) {
-        Objects.requireNonNull(sectionStorage, "sectionStorage must not be null");
-        this.sectionStorage = sectionStorage;
+    public ListSection(List<String> skills) {
+        Objects.requireNonNull(skills, "skills must not be null");
+        this.skills = skills;
     }
 
-    public List<String> getSectionStorage() {
-        return sectionStorage;
+    public List<String> getSkills() {
+        return skills;
     }
 
     @Override
@@ -20,18 +20,18 @@ public class ListSection implements Section {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ListSection that = (ListSection) o;
-        return sectionStorage.equals(that.sectionStorage);
+        return skills.equals(that.skills);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(sectionStorage);
+        return Objects.hash(skills);
     }
 
     @Override
     public String toString() {
         return "ListSection{" +
-                "sectionStorage=" + sectionStorage +
+                "skills=" + skills +
                 '}';
     }
 }

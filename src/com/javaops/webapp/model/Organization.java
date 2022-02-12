@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Organization {
-    List<Position> positions;
+    private List<Position> positions;
     private String title;
     private String link;
 
