@@ -28,22 +28,21 @@ public class MainFile {
 //            throw new RuntimeException(e);
 //        }
 
-        printRecursivelyFiles("src/com/javaops/webapp", 0);
+        printRecursivelyFiles("src/com/javaops/webapp");
     }
 
-    public static void printRecursivelyFiles(String startDir, int depthLineCounter) {
+    public static void printRecursivelyFiles(String startDir) {
         File file = new File(startDir);
         if (file.isDirectory()) {
-            System.out.println(file.getAbsolutePath());
             String[] list = file.list();
             if (list != null) {
-                depthLineCounter++;
                 for (String name : list) {
-                    printRecursivelyFiles(startDir + "/" + name, depthLineCounter);
+                    printRecursivelyFiles(startDir + "/" + name);
                 }
             }
         } else {
-            System.out.println(file.getAbsoluteFile() + file.getName());
+            System.out.println(file.getName());
+            file.getAbsolutePath()
         }
     }
 }
