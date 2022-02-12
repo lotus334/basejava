@@ -11,10 +11,11 @@ import java.util.Map;
 import static com.javaops.webapp.model.SectionTypes.*;
 
 public class ResumeTestData {
-    private static final Resume MY_RESUME = createFilledResume("uuid1", "Григорий Кислин");
 
     public static void main(String[] args) {
-        printAll(MY_RESUME);
+        Resume myResume = createFilledResume("uuid1", "Григорий Кислин");
+
+        printAll(myResume);
     }
 
     public static Resume createFilledResume(String uuid, String fullName) {
