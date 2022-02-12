@@ -42,7 +42,6 @@ public class MainFile {
             }
         } else {
             System.out.println(file.getName());
-            file.getAbsolutePath()
         }
     }
 }
