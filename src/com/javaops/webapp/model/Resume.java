@@ -1,6 +1,9 @@
 package com.javaops.webapp.model;
 
-import java.util.*;
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Initial resume class
@@ -29,21 +32,21 @@ public class Resume implements Comparable<Resume> {
         return uuid;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
+
     public void setFullName(String fullName) {
         Objects.requireNonNull(fullName, "fullName must not be null");
         this.fullName = fullName;
     }
 
-    public String getFullName() {
-        return fullName;
+    public Map<ContactTypes, String> getContacts() {
+        return contacts;
     }
 
     public void setContacts(Map<ContactTypes, String> content) {
         contacts.putAll(content);
-    }
-
-    public Map<ContactTypes, String> getContacts() {
-        return contacts;
     }
 
     public void setSection(SectionTypes sectionType, Section section) {
