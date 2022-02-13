@@ -23,16 +23,20 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-        String[] list = getListOfFiles();
-        for (String name : list) {
-            File file = new File(directory.getAbsolutePath(), name);
-            file.delete();
+        File[] listFiles = directory.listFiles();
+        if (listFiles != null) {
+            for (File file : listFiles) {
+                doRemove(file);
+            }
         }
     }
 
     @Override
     public int size() {
-        return getListOfFiles().length;
+        if (directory.listFiles() != null) {
+            return directory.listFiles().length;
+        }
+        return 0;
     }
 
     @Override
@@ -71,25 +75,19 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected void doRemove(File file) {
-        file.delete();
+        if (!file.delete()) {
+            throw new StorageException(file.getName() + " delete error", file.getName());
+        }
     }
 
     @Override
     protected Resume[] doGetAll() {
-        String[] list = getListOfFiles();
-        Resume[] resumes = new Resume[list.length];
-        for (int i = 0; i < list.length; i++) {
-            resumes[i] = doRead(new File(list[i]));
+        File[] listFiles = directory.listFiles();
+        Resume[] resumes = new Resume[listFiles.length];
+        for (int i = 0; i < listFiles.length; i++) {
+            resumes[i] = doRead(listFiles[i]);
         }
         return resumes;
-    }
-
-    private String[] getListOfFiles() {
-        String[] list = directory.list();
-        if (list != null) {
-            return list;
-        }
-        return new String[]{};
     }
 
     protected abstract Resume doRead(File file);
