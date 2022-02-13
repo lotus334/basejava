@@ -33,8 +33,9 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     public int size() {
-        if (directory.listFiles() != null) {
-            return directory.listFiles().length;
+        File[] listFiles = directory.listFiles();
+        if (listFiles != null) {
+            return listFiles.length;
         }
         return 0;
     }
@@ -61,7 +62,9 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected void doSave(Resume r, File file) {
         try {
-            file.createNewFile();
+            if (!file.createNewFile()) {
+                throw new StorageException(file.getName() + " create error", file.getName());
+            }
             doWrite(r, file);
         } catch (IOException e) {
             throw new StorageException("IO error", file.getName(), e);
@@ -83,9 +86,12 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected Resume[] doGetAll() {
         File[] listFiles = directory.listFiles();
-        Resume[] resumes = new Resume[listFiles.length];
-        for (int i = 0; i < listFiles.length; i++) {
-            resumes[i] = doRead(listFiles[i]);
+        Resume[] resumes = new Resume[0];
+        if (listFiles != null) {
+            resumes = new Resume[listFiles.length];
+            for (int i = 0; i < listFiles.length; i++) {
+                resumes[i] = doRead(listFiles[i]);
+            }
         }
         return resumes;
     }
