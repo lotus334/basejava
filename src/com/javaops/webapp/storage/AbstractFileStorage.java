@@ -33,9 +33,9 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     public int size() {
-        File[] listFiles = directory.listFiles();
-        if (listFiles != null) {
-            return listFiles.length;
+        String[] list = directory.list();
+        if (list != null) {
+            return list.length;
         }
         return 0;
     }
@@ -50,7 +50,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         try {
             doWrite(resume, file);
         } catch (IOException e) {
-            throw new StorageException("IO error", file.getName(), e);
+            throw new StorageException("File write error", file.getName(), e);
         }
     }
 
@@ -60,20 +60,22 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     }
 
     @Override
-    protected void doSave(Resume r, File file) {
+    protected void doSave(Resume resume, File file) {
         try {
-            if (!file.createNewFile()) {
-                throw new StorageException(file.getName() + " create error", file.getName());
-            }
-            doWrite(r, file);
+            file.createNewFile();
         } catch (IOException e) {
-            throw new StorageException("IO error", file.getName(), e);
+            throw new StorageException("Couldn't create file" + file.getAbsolutePath(), file.getName(), e);
         }
+        doUpdate(file, resume);
     }
 
     @Override
     protected Resume doGet(File file) {
-        return doRead(file);
+        try {
+            return doRead(file);
+        } catch (IOException e) {
+            throw new StorageException("File read error", file.getName());
+        }
     }
 
     @Override
@@ -86,17 +88,17 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected Resume[] doGetAll() {
         File[] listFiles = directory.listFiles();
-        Resume[] resumes = new Resume[0];
-        if (listFiles != null) {
-            resumes = new Resume[listFiles.length];
-            for (int i = 0; i < listFiles.length; i++) {
-                resumes[i] = doRead(listFiles[i]);
-            }
+        if (listFiles == null) {
+            throw new StorageException("Directory read error", null);
+        }
+        Resume[] resumes = new Resume[listFiles.length];
+        for (int i = 0; i < listFiles.length; i++) {
+            resumes[i] = doGet(listFiles[i]);
         }
         return resumes;
     }
 
-    protected abstract Resume doRead(File file);
+    protected abstract Resume doRead(File file) throws IOException;
 
     protected abstract void doWrite(Resume r, File file) throws IOException;
 }
