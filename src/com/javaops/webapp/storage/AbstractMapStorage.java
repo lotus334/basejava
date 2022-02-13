@@ -16,7 +16,7 @@ public abstract class AbstractMapStorage<SK> extends AbstractStorage<SK> {
 
     @Override
     public void clear() {
-        storage = new HashMap<>();
+        storage.clear();
     }
 
     @Override
