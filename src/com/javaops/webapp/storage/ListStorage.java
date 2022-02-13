@@ -2,7 +2,8 @@ package com.javaops.webapp.storage;
 
 import com.javaops.webapp.model.Resume;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ListStorage extends AbstractStorage<Integer> {
 
@@ -44,7 +45,7 @@ public class ListStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    protected Resume doGet(Integer searchKey, String uuid) {
+    protected Resume doGet(Integer searchKey) {
         return storage.get(searchKey);
     }
 

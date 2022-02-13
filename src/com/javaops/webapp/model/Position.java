@@ -23,32 +23,16 @@ public class Position {
         return dateFrom;
     }
 
-    public void setDateFrom(YearMonth dateFrom) {
-        this.dateFrom = dateFrom;
-    }
-
     public YearMonth getDateTo() {
         return dateTo;
-    }
-
-    public void setDateTo(YearMonth dateTo) {
-        this.dateTo = dateTo;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getAdditionalInfo() {
         return additionalInfo;
-    }
-
-    public void setAdditionalInfo(String additionalInfo) {
-        this.additionalInfo = additionalInfo;
     }
 
     @Override
@@ -56,7 +40,10 @@ public class Position {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Position position = (Position) o;
-        return dateFrom.equals(position.dateFrom) && dateTo.equals(position.dateTo) && description.equals(position.description) && Objects.equals(additionalInfo, position.additionalInfo);
+        return dateFrom.equals(position.dateFrom) &&
+                dateTo.equals(position.dateTo) &&
+                description.equals(position.description) &&
+                Objects.equals(additionalInfo, position.additionalInfo);
     }
 
     @Override

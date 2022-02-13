@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Objects;
 
 public class Organization {
+    private List<Position> positions;
     private String title;
     private String link;
-    List<Position> positions;
 
     public Organization(String title, String link, List<Position> positions) {
         Objects.requireNonNull(title, "title must not be null");
@@ -20,16 +20,12 @@ public class Organization {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getLink() {
         return link;
     }
 
-    public void setLink(String link) {
-        this.link = link;
+    public List<Position> getPositions() {
+        return positions;
     }
 
     @Override
@@ -52,13 +48,5 @@ public class Organization {
                 ", link='" + link + '\'' +
                 ", positions=" + positions +
                 '}';
-    }
-
-    public List<Position> getPositions() {
-        return positions;
-    }
-
-    public void setPositions(List<Position> positions) {
-        this.positions = positions;
     }
 }

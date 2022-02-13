@@ -4,7 +4,7 @@ import com.javaops.webapp.exception.StorageException;
 import com.javaops.webapp.model.Resume;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
 

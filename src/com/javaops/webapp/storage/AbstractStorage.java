@@ -11,10 +11,9 @@ import java.util.logging.Logger;
 
 public abstract class AbstractStorage<SK> implements Storage {
 
-    private static final Logger LOG = Logger.getLogger(AbstractStorage.class.getName());
-
     protected static final Comparator<Resume> RESUME_COMPARATOR = ((Comparator.comparing(Resume::getFullName)
-                                                                        .thenComparing(Resume::getUuid)));
+            .thenComparing(Resume::getUuid)));
+    private static final Logger LOG = Logger.getLogger(AbstractStorage.class.getName());
 
     @Override
     public void save(Resume resume) {
@@ -43,7 +42,7 @@ public abstract class AbstractStorage<SK> implements Storage {
     public Resume get(String uuid) {
         LOG.info("Get " + uuid);
         SK searchKey = getNotExistentSearchKey(uuid);
-        return doGet(searchKey, uuid);
+        return doGet(searchKey);
     }
 
     @Override
@@ -80,7 +79,7 @@ public abstract class AbstractStorage<SK> implements Storage {
 
     protected abstract void doUpdate(SK searchKey, Resume resume);
 
-    protected abstract Resume doGet(SK searchKey, String uuid);
+    protected abstract Resume doGet(SK searchKey);
 
     protected abstract boolean isExist(SK searchKey);
 

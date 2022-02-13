@@ -3,14 +3,15 @@ package com.javaops.webapp.model;
 import java.util.Objects;
 
 public class TextSection implements Section {
-    private String sectionStorage;
+    private String article;
 
-    public TextSection(String content) {
-        this.sectionStorage = content;
+    public TextSection(String article) {
+        Objects.requireNonNull(article, "article must not be null");
+        this.article = article;
     }
 
-    public void printContent() {
-        System.out.println(sectionStorage);
+    public String getArticle() {
+        return article;
     }
 
     @Override
@@ -18,16 +19,16 @@ public class TextSection implements Section {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TextSection that = (TextSection) o;
-        return sectionStorage.equals(that.sectionStorage);
+        return article.equals(that.article);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(sectionStorage);
+        return Objects.hash(article);
     }
 
     @Override
     public String toString() {
-        return sectionStorage;
+        return article;
     }
 }
