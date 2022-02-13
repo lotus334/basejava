@@ -1,4 +1,6 @@
 package com.javaops.webapp.model;
 
-public interface Section {
+import java.io.Serializable;
+
+public abstract class Section implements Serializable {
 }

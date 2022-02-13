@@ -3,7 +3,9 @@ package com.javaops.webapp.model;
 import java.util.List;
 import java.util.Objects;
 
-public class OrganizationSection implements Section {
+public class OrganizationSection extends Section {
+
+    private static final long serialVersionUID = 1L;
 
     private List<Organization> sectionStorage;
 

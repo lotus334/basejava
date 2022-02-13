@@ -10,7 +10,8 @@ import org.junit.runners.Suite;
                 SortedArrayStorageTest.class,
                 ListStorageTest.class,
                 MapByUuidStorageTest.class,
-                MapByResumeStorageTest.class
+                MapByResumeStorageTest.class,
+                ObjectStreamStorageTest.class
         }
 )
 public class AllStorageTest {

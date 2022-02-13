@@ -2,7 +2,10 @@ package com.javaops.webapp.model;
 
 import java.util.Objects;
 
-public class TextSection implements Section {
+public class TextSection extends Section {
+
+    private static final long serialVersionUID = 1L;
+
     private String article;
 
     public TextSection(String article) {
