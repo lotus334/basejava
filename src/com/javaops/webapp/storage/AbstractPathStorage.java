@@ -4,7 +4,9 @@ import com.javaops.webapp.exception.StorageException;
 import com.javaops.webapp.model.Resume;
 
 import java.io.*;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -34,58 +36,46 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
 
     @Override
     public int size() {
-        return directory.getNameCount();
+        return directory.toFile().list().length;
     }
 
     @Override
     protected Path getSearchKey(String uuid) {
-        List<Path> list = null;
-        try {
-            list = Files
-                    .list(directory)
-                    .filter(el -> el.getFileName().toString().equals(uuid))
-                    .collect(Collectors.toList());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (list == null) {
-            return null;
-        }
-        return list.get(0);
+        return Paths.get(directory.toString() + "/" + uuid);
     }
 
-//    @Override
-//    protected void doUpdate(Path file, Resume resume) {
-//        try {
-//            doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
-//        } catch (IOException e) {
-//            throw new StorageException("File write error", file.getName(), e);
-//        }
-//    }
+    @Override
+    protected void doUpdate(Path file, Resume resume) {
+        try {
+            doWrite(resume, new BufferedOutputStream(new FileOutputStream(file.toFile())));
+        } catch (IOException e) {
+            throw new StorageException("File write error", file.toFile().getName(), e);
+        }
+    }
 
     @Override
     protected boolean isExist(Path file) {
         return Files.exists(file, NOFOLLOW_LINKS);
     }
 
-//    @Override
-//    protected void doSave(Resume resume, Path file) {
-//        try {
-//            file.createNewFile();
-//        } catch (IOException e) {
-//            throw new StorageException("Couldn't create file" + file.getAbsolutePath(), file.getName(), e);
-//        }
-//        doUpdate(file, resume);
-//    }
+    @Override
+    protected void doSave(Resume resume, Path file) {
+        try {
+            Files.createFile(file);
+        } catch (IOException e) {
+            throw new StorageException("Couldn't create file" + file.toFile().getAbsolutePath(), file.toFile().getName(), e);
+        }
+        doUpdate(file, resume);
+    }
 
-//    @Override
-//    protected Resume doGet(File file) {
-//        try {
-//            return doRead(new BufferedInputStream(new FileInputStream(file)));
-//        } catch (IOException e) {
-//            throw new StorageException("File read error", file.getName());
-//        }
-//    }
+    @Override
+    protected Resume doGet(Path file) {
+        try {
+            return doRead(new BufferedInputStream(new FileInputStream(file.toFile())));
+        } catch (IOException e) {
+            throw new StorageException("File read error", file.toFile().getName());
+        }
+    }
 
     @Override
     protected void doRemove(Path file) {
@@ -96,18 +86,23 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
         }
     }
 
-//    @Override
-//    protected Resume[] doGetAll() {
-//        File[] listFiles = directory.listFiles();
-//        if (listFiles == null) {
-//            throw new StorageException("Directory read error", null);
-//        }
-//        Resume[] resumes = new Resume[listFiles.length];
-//        for (int i = 0; i < listFiles.length; i++) {
-//            resumes[i] = doGet(listFiles[i]);
-//        }
-//        return resumes;
-//    }
+    @Override
+    protected Resume[] doGetAll() {
+        List<Path> listPaths = null;
+        try {
+            listPaths = Files
+                    .list(directory)
+                    .collect(Collectors.toList());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Resume[] resumes = new Resume[listPaths.size()];
+        for (int i = 0; i < listPaths.size(); i++) {
+            resumes[i] = doGet(listPaths.get(i));
+        }
+        return resumes;
+    }
 
     protected abstract Resume doRead(InputStream inputStream) throws IOException;
 
