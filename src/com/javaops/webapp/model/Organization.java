@@ -12,8 +12,8 @@ public class Organization implements Serializable {
     private List<Position> positions;
     private Link homePage;
 
-    public Organization(String title, String url, Position... positions) {
-        this(title, url, Arrays.asList(positions));
+    public Organization(String name, String url, Position... positions) {
+        this(new Link(name, url), Arrays.asList(positions));
     }
 
     public Organization(String name, String url, List<Position> positions) {
@@ -45,5 +45,13 @@ public class Organization implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(positions, homePage);
+    }
+
+    @Override
+    public String toString() {
+        return "Organization{" +
+                "positions=" + positions +
+                ", homePage=" + homePage +
+                '}';
     }
 }
