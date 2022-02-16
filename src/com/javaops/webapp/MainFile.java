@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class MainFile {
     public static void main(String[] args) {
@@ -38,15 +36,7 @@ public class MainFile {
 
         Path directory = Paths.get("/home/dmitriyvass/basejava/src/com/javaops/webapp");
 
-        List<Path> list = null;
-        try {
-            list = Files.list(directory).filter(el -> el.getFileName().toString().equals("MainFile.java")).collect(Collectors.toList());
-//            list = Files.list(directory).collect(Collectors.toList());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println(list);
-
+        printRecursivelyFilesAndDirs(directory, 0);
     }
 
     public static void printRecursivelyFiles(String startDir) {
@@ -61,5 +51,27 @@ public class MainFile {
         } else {
             System.out.println(file.getName());
         }
+    }
+
+    public static void printRecursivelyFilesAndDirs(Path startDir, int offset) {
+        if (Files.isDirectory(startDir)) {
+            printFileWithOffset(startDir.toFile(), offset);
+            try {
+                offset++;
+                int finalDepth = offset;
+                Files.list(startDir).forEach(el -> printRecursivelyFilesAndDirs(el, finalDepth));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            printFileWithOffset(startDir.toFile(), offset);
+        }
+    }
+
+    private static void printFileWithOffset(File file, int depth) {
+        for (int i = 0; i < depth; i++) {
+            System.out.print("      ");
+        }
+        System.out.println(file.getName());
     }
 }
