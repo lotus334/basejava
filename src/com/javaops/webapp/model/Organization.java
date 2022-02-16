@@ -1,6 +1,7 @@
 package com.javaops.webapp.model;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -9,23 +10,24 @@ public class Organization implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private List<Position> positions;
-    private String title;
-    private String link;
+    private Link homePage;
 
-    public Organization(String title, String link, List<Position> positions) {
-        Objects.requireNonNull(title, "title must not be null");
+    public Organization(String title, String url, Position... positions) {
+        this(title, url, Arrays.asList(positions));
+    }
+
+    public Organization(String name, String url, List<Position> positions) {
+        this(new Link(name, url), positions);
+    }
+
+    public Organization(Link homePage, List<Position> positions) {
         Objects.requireNonNull(positions, "positions must not be null");
-        this.title = title;
-        this.link = link;
+        this.homePage = homePage;
         this.positions = positions;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getLink() {
-        return link;
+    public Link getHomePage() {
+        return homePage;
     }
 
     public List<Position> getPositions() {
@@ -37,20 +39,11 @@ public class Organization implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Organization that = (Organization) o;
-        return title.equals(that.title) && Objects.equals(link, that.link) && positions.equals(that.positions);
+        return positions.equals(that.positions) && homePage.equals(that.homePage);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, link, positions);
-    }
-
-    @Override
-    public String toString() {
-        return "Experience{" +
-                "title='" + title + '\'' +
-                ", link='" + link + '\'' +
-                ", positions=" + positions +
-                '}';
+        return Objects.hash(positions, homePage);
     }
 }
