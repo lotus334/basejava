@@ -1,6 +1,7 @@
 package com.javaops.webapp.model;
 
 import java.io.Serializable;
+import java.time.Month;
 import java.time.YearMonth;
 import java.util.Objects;
 
@@ -12,6 +13,18 @@ public class Position implements Serializable {
     private YearMonth dateTo;
     private String description;
     private String additionalInfo;
+
+    public Position(int startYear, Month startMonth, String title, String description) {
+        this(YearMonth.of(startYear, startMonth), title, description);
+    }
+
+    public Position(int startYear, Month startMonth, int endYear, Month endMonth, String title, String description) {
+        this(YearMonth.of(startYear, startMonth), YearMonth.of(endYear, endMonth), title, description);
+    }
+
+    public Position(YearMonth dateFrom, String description, String additionalInfo) {
+        this(dateFrom, YearMonth.now(), description, additionalInfo);
+    }
 
     public Position(YearMonth dateFrom, YearMonth dateTo, String description, String additionalInfo) {
         Objects.requireNonNull(dateFrom, "dateFrom must not be null");
