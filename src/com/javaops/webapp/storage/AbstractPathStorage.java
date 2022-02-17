@@ -36,20 +36,26 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
 
     @Override
     public int size() {
-        return directory.toFile().list().length;
+        int size;
+        try {
+            size = (int) Files.list(directory).count();
+        } catch (IOException e) {
+            throw new StorageException("Error determining the size of directory ", null, e);
+        }
+        return size;
     }
 
     @Override
     protected Path getSearchKey(String uuid) {
-        return Paths.get(directory.toString() + "/" + uuid);
+        return Paths.get(directory.toString() + File.separator + uuid);
     }
 
     @Override
     protected void doUpdate(Path file, Resume resume) {
         try {
-            doWrite(resume, new BufferedOutputStream(new FileOutputStream(file.toFile())));
+            doWrite(resume, new BufferedOutputStream(Files.newOutputStream(file)));
         } catch (IOException e) {
-            throw new StorageException("File write error", file.toFile().getName(), e);
+            throw new StorageException("File write error", file.getFileName().toString(), e);
         }
     }
 
@@ -63,7 +69,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
         try {
             Files.createFile(file);
         } catch (IOException e) {
-            throw new StorageException("Couldn't create file" + file.toFile().getAbsolutePath(), file.toFile().getName(), e);
+            throw new StorageException("Couldn't create file" + file.getFileName().toString(), file.getFileName().toString(), e);
         }
         doUpdate(file, resume);
     }
@@ -71,9 +77,9 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
     @Override
     protected Resume doGet(Path file) {
         try {
-            return doRead(new BufferedInputStream(new FileInputStream(file.toFile())));
+            return doRead(new BufferedInputStream(Files.newInputStream(file)));
         } catch (IOException e) {
-            throw new StorageException("File read error", file.toFile().getName());
+            throw new StorageException("File read error", file.getFileName().toString());
         }
     }
 
@@ -82,19 +88,19 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
         try {
             Files.delete(file);
         } catch (IOException e) {
-            throw new StorageException("Path delete error", file.toString());
+            throw new StorageException("Path delete error", file.getFileName().toString());
         }
     }
 
     @Override
     protected Resume[] doGetAll() {
-        List<Path> listPaths = null;
+        List<Path> listPaths;
         try {
             listPaths = Files
                     .list(directory)
                     .collect(Collectors.toList());
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new StorageException("Error while getting all paths", null, e);
         }
 
         Resume[] resumes = new Resume[listPaths.size()];
