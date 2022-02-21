@@ -7,9 +7,8 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 
@@ -31,27 +30,17 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     public void clear() {
-        try {
-            Files.list(directory).forEach(this::doRemove);
-        } catch (IOException e) {
-            throw new StorageException("Path delete error", null);
-        }
+        getFiles().forEach(this::doRemove);
     }
 
     @Override
     public int size() {
-        int size;
-        try {
-            size = (int) Files.list(directory).count();
-        } catch (IOException e) {
-            throw new StorageException("Error determining the size of directory ", null, e);
-        }
-        return size;
+        return (int) getFiles().count();
     }
 
     @Override
     protected Path getSearchKey(String uuid) {
-        return Paths.get(directory.toString() + File.separator + uuid);
+        return directory.resolve(uuid);
     }
 
     @Override
@@ -98,20 +87,9 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected Resume[] doGetAll() {
-        List<Path> listPaths;
-        try {
-            listPaths = Files
-                    .list(directory)
-                    .collect(Collectors.toList());
-        } catch (IOException e) {
-            throw new StorageException("Error while getting all paths", null, e);
-        }
-
-        Resume[] resumes = new Resume[listPaths.size()];
-        for (int i = 0; i < listPaths.size(); i++) {
-            resumes[i] = doGet(listPaths.get(i));
-        }
-        return resumes;
+        return getFiles()
+                .map(this::doGet)
+                .toArray(Resume[]::new);
     }
 
     protected Resume doRead(InputStream inputStream) throws IOException {
@@ -120,5 +98,13 @@ public class PathStorage extends AbstractStorage<Path> {
 
     protected void doWrite(Resume r, OutputStream outputStream) throws IOException {
         objectStreamStorage.doWrite(r, outputStream);
+    }
+
+    private Stream<Path> getFiles() {
+        try {
+            return Files.list(directory);
+        } catch (IOException e) {
+            throw new StorageException("Error get files of directory", e.getMessage());
+        }
     }
 }
