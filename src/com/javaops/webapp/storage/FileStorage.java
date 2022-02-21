@@ -15,7 +15,7 @@ public class FileStorage extends AbstractStorage<File> {
 
     protected FileStorage(File directory, ObjectStreamStorageInterface objectStreamStorage) {
         Objects.requireNonNull(directory, "directory must not be null");
-        Objects.requireNonNull(objectStreamStorage, "objectStreamStorage must not be ull");
+        Objects.requireNonNull(objectStreamStorage, "objectStreamStorage must not be null");
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not directory");
         }
@@ -86,9 +86,6 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     protected Resume[] doGetAll() {
         File[] listFiles = directory.listFiles();
-        if (listFiles == null) {
-            throw new StorageException("Directory read error", null);
-        }
         List<Resume> resumes = new ArrayList<>();
         for (File file : listFiles) {
             resumes.add(doGet(file));
