@@ -4,6 +4,8 @@ import com.javaops.webapp.exception.StorageException;
 import com.javaops.webapp.model.Resume;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class FileStorage extends AbstractStorage<File> {
@@ -26,21 +28,14 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-        File[] listFiles = directory.listFiles();
-        if (listFiles != null) {
-            for (File file : listFiles) {
-                doRemove(file);
-            }
+        for (File file : directory.listFiles()) {
+            doRemove(file);
         }
     }
 
     @Override
     public int size() {
-        String[] list = directory.list();
-        if (list != null) {
-            return list.length;
-        }
-        return 0;
+        return directory.list().length;
     }
 
     @Override
@@ -94,11 +89,11 @@ public class FileStorage extends AbstractStorage<File> {
         if (listFiles == null) {
             throw new StorageException("Directory read error", null);
         }
-        Resume[] resumes = new Resume[listFiles.length];
-        for (int i = 0; i < listFiles.length; i++) {
-            resumes[i] = doGet(listFiles[i]);
+        List<Resume> resumes = new ArrayList<>();
+        for (File file : listFiles) {
+            resumes.add(doGet(file));
         }
-        return resumes;
+        return resumes.toArray(new Resume[0]);
     }
 
     protected Resume doRead(InputStream inputStream) throws IOException {
