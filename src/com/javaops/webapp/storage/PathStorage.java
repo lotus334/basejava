@@ -13,16 +13,20 @@ import java.util.stream.Collectors;
 
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 
-public abstract class AbstractPathStorage extends AbstractStorage<Path> {
+public class PathStorage extends AbstractStorage<Path> {
 
     private Path directory;
 
-    protected AbstractPathStorage(String dir) {
+    private ObjectStreamStorageInterface objectStreamStorage;
+
+    protected PathStorage(String dir, ObjectStreamStorageInterface objectStreamStorage) {
         directory = Paths.get(dir);
         Objects.requireNonNull(directory, "directory must not be null");
+        Objects.requireNonNull(objectStreamStorage, "objectStreamStorage must not be ull");
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new IllegalArgumentException(dir + " is not directory or is not writable");
         }
+        this.objectStreamStorage = objectStreamStorage;
     }
 
     @Override
@@ -104,7 +108,11 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
         return resumes;
     }
 
-    protected abstract Resume doRead(InputStream inputStream) throws IOException;
+    protected Resume doRead(InputStream inputStream) throws IOException {
+        return objectStreamStorage.doRead(inputStream);
+    }
 
-    protected abstract void doWrite(Resume r, OutputStream outputStream) throws IOException;
+    protected void doWrite(Resume r, OutputStream outputStream) throws IOException {
+        objectStreamStorage.doWrite(r, outputStream);
+    }
 }

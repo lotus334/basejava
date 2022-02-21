@@ -6,11 +6,14 @@ import com.javaops.webapp.model.Resume;
 import java.io.*;
 import java.util.Objects;
 
-public abstract class AbstractFileStorage extends AbstractStorage<File> {
+public class FileStorage extends AbstractStorage<File> {
     private File directory;
 
-    protected AbstractFileStorage(File directory) {
+    private ObjectStreamStorageInterface objectStreamStorage;
+
+    protected FileStorage(File directory, ObjectStreamStorageInterface objectStreamStorage) {
         Objects.requireNonNull(directory, "directory must not be null");
+        Objects.requireNonNull(objectStreamStorage, "objectStreamStorage must not be ull");
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not directory");
         }
@@ -18,6 +21,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not readable/writable");
         }
         this.directory = directory;
+        this.objectStreamStorage = objectStreamStorage;
     }
 
     @Override
@@ -97,7 +101,11 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         return resumes;
     }
 
-    protected abstract Resume doRead(InputStream inputStream) throws IOException;
+    protected Resume doRead(InputStream inputStream) throws IOException {
+        return objectStreamStorage.doRead(inputStream);
+    }
 
-    protected abstract void doWrite(Resume r, OutputStream outputStream) throws IOException;
+    protected void doWrite(Resume r, OutputStream outputStream) throws IOException {
+        objectStreamStorage.doWrite(r, outputStream);
+    }
 }
