@@ -2,6 +2,7 @@ package com.javaops.webapp.storage;
 
 import com.javaops.webapp.exception.StorageException;
 import com.javaops.webapp.model.Resume;
+import com.javaops.webapp.storage.strategy.Strategy;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -11,9 +12,9 @@ import java.util.Objects;
 public class FileStorage extends AbstractStorage<File> {
     private File directory;
 
-    private ObjectStreamStorageInterface objectStreamStorage;
+    private Strategy objectStreamStorage;
 
-    protected FileStorage(File directory, ObjectStreamStorageInterface objectStreamStorage) {
+    protected FileStorage(File directory, Strategy objectStreamStorage) {
         Objects.requireNonNull(directory, "directory must not be null");
         Objects.requireNonNull(objectStreamStorage, "objectStreamStorage must not be null");
         if (!directory.isDirectory()) {
@@ -46,7 +47,7 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     protected void doUpdate(File file, Resume resume) {
         try {
-            doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
+            objectStreamStorage.doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
             throw new StorageException("File write error", file.getName(), e);
         }
@@ -70,7 +71,7 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     protected Resume doGet(File file) {
         try {
-            return doRead(new BufferedInputStream(new FileInputStream(file)));
+            return objectStreamStorage.doRead(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             throw new StorageException("File read error", file.getName());
         }
@@ -91,13 +92,5 @@ public class FileStorage extends AbstractStorage<File> {
             resumes.add(doGet(file));
         }
         return resumes.toArray(new Resume[0]);
-    }
-
-    protected Resume doRead(InputStream inputStream) throws IOException {
-        return objectStreamStorage.doRead(inputStream);
-    }
-
-    protected void doWrite(Resume r, OutputStream outputStream) throws IOException {
-        objectStreamStorage.doWrite(r, outputStream);
     }
 }

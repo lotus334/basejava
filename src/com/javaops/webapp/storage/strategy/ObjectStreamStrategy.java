@@ -1,11 +1,11 @@
-package com.javaops.webapp.storage;
+package com.javaops.webapp.storage.strategy;
 
 import com.javaops.webapp.exception.StorageException;
 import com.javaops.webapp.model.Resume;
 
 import java.io.*;
 
-public class ObjectStreamStorage implements ObjectStreamStorageInterface {
+public class ObjectStreamStrategy implements Strategy {
 
     @Override
     public Resume doRead(InputStream inputStream) throws IOException {

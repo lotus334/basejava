@@ -2,6 +2,7 @@ package com.javaops.webapp.storage;
 
 import com.javaops.webapp.exception.StorageException;
 import com.javaops.webapp.model.Resume;
+import com.javaops.webapp.storage.strategy.Strategy;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -16,9 +17,9 @@ public class PathStorage extends AbstractStorage<Path> {
 
     private Path directory;
 
-    private ObjectStreamStorageInterface objectStreamStorage;
+    private Strategy objectStreamStorage;
 
-    protected PathStorage(String dir, ObjectStreamStorageInterface objectStreamStorage) {
+    protected PathStorage(String dir, Strategy objectStreamStorage) {
         directory = Paths.get(dir);
         Objects.requireNonNull(directory, "directory must not be null");
         Objects.requireNonNull(objectStreamStorage, "objectStreamStorage must not be ull");
@@ -46,7 +47,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected void doUpdate(Path file, Resume resume) {
         try {
-            doWrite(resume, new BufferedOutputStream(Files.newOutputStream(file)));
+            objectStreamStorage.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(file)));
         } catch (IOException e) {
             throw new StorageException("File write error", file.getFileName().toString(), e);
         }
@@ -70,7 +71,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected Resume doGet(Path file) {
         try {
-            return doRead(new BufferedInputStream(Files.newInputStream(file)));
+            return objectStreamStorage.doRead(new BufferedInputStream(Files.newInputStream(file)));
         } catch (IOException e) {
             throw new StorageException("File read error", file.getFileName().toString());
         }
@@ -90,14 +91,6 @@ public class PathStorage extends AbstractStorage<Path> {
         return getFiles()
                 .map(this::doGet)
                 .toArray(Resume[]::new);
-    }
-
-    protected Resume doRead(InputStream inputStream) throws IOException {
-        return objectStreamStorage.doRead(inputStream);
-    }
-
-    protected void doWrite(Resume r, OutputStream outputStream) throws IOException {
-        objectStreamStorage.doWrite(r, outputStream);
     }
 
     private Stream<Path> getFiles() {
