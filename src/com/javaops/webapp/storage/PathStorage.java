@@ -45,44 +45,44 @@ public class PathStorage extends AbstractStorage<Path> {
     }
 
     @Override
-    protected void doUpdate(Path file, Resume resume) {
+    protected void doUpdate(Path path, Resume resume) {
         try {
-            objectStreamStorage.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(file)));
+            objectStreamStorage.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
-            throw new StorageException("File write error", file.getFileName().toString(), e);
+            throw new StorageException("File write error", path.getFileName().toString(), e);
         }
     }
 
     @Override
-    protected boolean isExist(Path file) {
-        return Files.exists(file);
+    protected boolean isExist(Path path) {
+        return Files.exists(path);
     }
 
     @Override
-    protected void doSave(Resume resume, Path file) {
+    protected void doSave(Resume resume, Path path) {
         try {
-            Files.createFile(file);
+            Files.createFile(path);
         } catch (IOException e) {
-            throw new StorageException("Couldn't create file" + file.getFileName().toString(), file.getFileName().toString(), e);
+            throw new StorageException("Couldn't create path" + path.getFileName().toString(), path.getFileName().toString(), e);
         }
-        doUpdate(file, resume);
+        doUpdate(path, resume);
     }
 
     @Override
-    protected Resume doGet(Path file) {
+    protected Resume doGet(Path path) {
         try {
-            return objectStreamStorage.doRead(new BufferedInputStream(Files.newInputStream(file)));
+            return objectStreamStorage.doRead(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
-            throw new StorageException("File read error", file.getFileName().toString());
+            throw new StorageException("File read error", path.getFileName().toString());
         }
     }
 
     @Override
-    protected void doRemove(Path file) {
+    protected void doRemove(Path path) {
         try {
-            Files.delete(file);
+            Files.delete(path);
         } catch (IOException e) {
-            throw new StorageException("Path delete error", file.getFileName().toString());
+            throw new StorageException("Path delete error", path.getFileName().toString());
         }
     }
 
