@@ -4,14 +4,14 @@ import com.javaops.webapp.exception.StorageException;
 import com.javaops.webapp.model.Resume;
 import com.javaops.webapp.storage.strategy.Strategy;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.stream.Stream;
-
-import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 
 public class PathStorage extends AbstractStorage<Path> {
 
@@ -55,7 +55,7 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected boolean isExist(Path file) {
-        return Files.exists(file, NOFOLLOW_LINKS);
+        return Files.exists(file);
     }
 
     @Override
