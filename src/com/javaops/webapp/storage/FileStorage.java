@@ -73,14 +73,14 @@ public class FileStorage extends AbstractStorage<File> {
         try {
             return objectStreamStorage.doRead(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
-            throw new StorageException("File read error", file.getName());
+            throw new StorageException("File read error", file.getName(), e);
         }
     }
 
     @Override
     protected void doRemove(File file) {
         if (!file.delete()) {
-            throw new StorageException(file.getName() + " delete error", file.getName());
+            throw new StorageException("File delete error", file.getName());
         }
     }
 
