@@ -12,7 +12,7 @@ public class ObjectStreamStrategy implements Strategy {
         try (ObjectInputStream objectInputStream = new ObjectInputStream(inputStream)) {
             return (Resume) objectInputStream.readObject();
         } catch (ClassNotFoundException e) {
-            throw new StorageException("Error read resume", null, e);
+            throw new StorageException("Error read resume", e);
         }
     }
 
