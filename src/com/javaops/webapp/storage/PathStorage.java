@@ -2,7 +2,7 @@ package com.javaops.webapp.storage;
 
 import com.javaops.webapp.exception.StorageException;
 import com.javaops.webapp.model.Resume;
-import com.javaops.webapp.storage.strategy.Strategy;
+import com.javaops.webapp.storage.serializer.StreamSerializer;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -14,18 +14,17 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 public class PathStorage extends AbstractStorage<Path> {
-
     private Path directory;
+    private StreamSerializer objectStreamStorage;
 
-    private Strategy objectStreamStorage;
-
-    protected PathStorage(String dir, Strategy objectStreamStorage) {
-        directory = Paths.get(dir);
+    protected PathStorage(String directory, StreamSerializer objectStreamStorage) {
         Objects.requireNonNull(directory, "directory must not be null");
         Objects.requireNonNull(objectStreamStorage, "objectStreamStorage must not be ull");
-        if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
-            throw new IllegalArgumentException(dir + " is not directory or is not writable");
+        this.directory = Paths.get(directory);
+        if (!Files.isDirectory(this.directory) || !Files.isWritable(this.directory)) {
+            throw new IllegalArgumentException(directory + " is not directory or is not writable");
         }
+        Objects.requireNonNull(objectStreamStorage, "objectStreamStorage must not be null");
         this.objectStreamStorage = objectStreamStorage;
     }
 
