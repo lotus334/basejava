@@ -1,6 +1,10 @@
 package com.javaops.webapp;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class MainFile {
     public static void main(String[] args) {
@@ -28,7 +32,11 @@ public class MainFile {
 //            throw new RuntimeException(e);
 //        }
 
-        printRecursivelyFiles("src/com/javaops/webapp");
+//        printRecursivelyFiles("src/com/javaops/webapp");
+
+        Path directory = Paths.get("/home/dmitriyvass/basejava/src/com/javaops/webapp");
+
+        printRecursivelyFilesAndDirs(directory, 0);
     }
 
     public static void printRecursivelyFiles(String startDir) {
@@ -43,5 +51,27 @@ public class MainFile {
         } else {
             System.out.println(file.getName());
         }
+    }
+
+    public static void printRecursivelyFilesAndDirs(Path startDir, int offset) {
+        if (Files.isDirectory(startDir)) {
+            printFileWithOffset(startDir.toFile(), offset);
+            try {
+                offset++;
+                int finalDepth = offset;
+                Files.list(startDir).forEach(el -> printRecursivelyFilesAndDirs(el, finalDepth));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            printFileWithOffset(startDir.toFile(), offset);
+        }
+    }
+
+    private static void printFileWithOffset(File file, int depth) {
+        for (int i = 0; i < depth; i++) {
+            System.out.print("      ");
+        }
+        System.out.println(file.getName());
     }
 }
