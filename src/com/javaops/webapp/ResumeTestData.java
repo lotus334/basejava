@@ -31,7 +31,7 @@ public class ResumeTestData {
         //SET OBJECTIVE
         TextSection objectiveSection =
                 new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям");
-        resume.setSection(OBJECTIVE, objectiveSection);
+        resume.setSections(OBJECTIVE, objectiveSection);
 
         //SET ACHIEVEMENT
         List<String> achievement = new ArrayList<>(List.of(
@@ -54,7 +54,7 @@ public class ResumeTestData {
                 "Реализация протоколов по приему платежей всех основных платежных системы России " +
                         "(Cyberplat, Eport, Chronopay, Сбербанк), Белоруcсии(Erip, Osmp) и Никарагуа."
         ));
-        resume.setSection(ACHIEVEMENT, new ListSection(achievement));
+        resume.setSections(ACHIEVEMENT, new ListSection(achievement));
 
         //SET
         List<String> qualificationSection = new ArrayList<>(List.of(
@@ -80,7 +80,7 @@ public class ResumeTestData {
                         "UML, функционального программирования ",
                 "Родной русский, английский \"upper intermediate\""
         ));
-        resume.setSection(QUALIFICATIONS, new ListSection(qualificationSection));
+        resume.setSections(QUALIFICATIONS, new ListSection(qualificationSection));
 
         //SET EXPERIENCE
         List<Organization> organizations = new ArrayList<>(List.of(
@@ -133,7 +133,7 @@ public class ResumeTestData {
                 )
         ));
         OrganizationSection organizationSection = new OrganizationSection(organizations);
-        resume.setSection(EXPERIENCE, organizationSection);
+        resume.setSections(EXPERIENCE, organizationSection);
 
         //SET EDUCATION
         List<Organization> education = new ArrayList<>();
@@ -157,7 +157,7 @@ public class ResumeTestData {
         );
         education.add(edu1);
         OrganizationSection educationSection = new OrganizationSection(education);
-        resume.setSection(EDUCATION, educationSection);
+        resume.setSections(EDUCATION, educationSection);
         return resume;
     }
 

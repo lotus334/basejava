@@ -9,6 +9,8 @@ public class OrganizationSection extends Section {
 
     private List<Organization> sectionStorage;
 
+    public OrganizationSection() {}
+
     public OrganizationSection(List<Organization> sectionStorage) {
         Objects.requireNonNull(sectionStorage, "sectionStorage must not be null");
         this.sectionStorage = sectionStorage;

@@ -8,6 +8,8 @@ public class TextSection extends Section {
 
     private String article;
 
+    public TextSection() {}
+
     public TextSection(String article) {
         Objects.requireNonNull(article, "article must not be null");
         this.article = article;
