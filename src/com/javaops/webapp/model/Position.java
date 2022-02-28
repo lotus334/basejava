@@ -1,6 +1,6 @@
 package com.javaops.webapp.model;
 
-import com.javaops.webapp.util.YearMonthAdapter;
+import com.javaops.webapp.util.XmlYearMonthAdapter;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -15,9 +15,9 @@ public class Position implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @XmlJavaTypeAdapter(YearMonthAdapter.class)
+    @XmlJavaTypeAdapter(XmlYearMonthAdapter.class)
     private YearMonth dateFrom;
-    @XmlJavaTypeAdapter(YearMonthAdapter.class)
+    @XmlJavaTypeAdapter(XmlYearMonthAdapter.class)
     private YearMonth dateTo;
     private String description;
     private String additionalInfo;

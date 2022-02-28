@@ -3,7 +3,7 @@ package com.javaops.webapp.util;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.time.YearMonth;
 
-public class YearMonthAdapter extends XmlAdapter<String, YearMonth> {
+public class XmlYearMonthAdapter extends XmlAdapter<String, YearMonth> {
     @Override
     public YearMonth unmarshal(String s) throws Exception {
         return YearMonth.parse(s);
