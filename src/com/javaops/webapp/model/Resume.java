@@ -1,5 +1,9 @@
 package com.javaops.webapp.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorOrder;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.EnumMap;
 import java.util.Map;
@@ -9,12 +13,14 @@ import java.util.UUID;
 /**
  * Initial resume class
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Resume implements Comparable<Resume>, Serializable {
 
     private static final long serialVersionUID = 1L;
 
     // Unique identifier
-    private final String uuid;
+    private String uuid;
 
     private String fullName;
     private Map<ContactTypes, String> contacts = new EnumMap<>(ContactTypes.class);
@@ -30,6 +36,8 @@ public class Resume implements Comparable<Resume>, Serializable {
         this.fullName = fullName;
         this.uuid = uuid;
     }
+
+    public Resume() {}
 
     public String getUuid() {
         return uuid;

@@ -1,8 +1,11 @@
 package com.javaops.webapp.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import java.util.List;
 import java.util.Objects;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ListSection extends Section {
 
     private static final long serialVersionUID = 1L;
@@ -13,6 +16,8 @@ public class ListSection extends Section {
         Objects.requireNonNull(skills, "skills must not be null");
         this.skills = skills;
     }
+
+    public ListSection() {}
 
     public List<String> getSkills() {
         return skills;

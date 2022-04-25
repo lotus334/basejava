@@ -1,15 +1,23 @@
 package com.javaops.webapp.model;
 
+import com.javaops.webapp.util.YearMonthAdapter;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.Month;
 import java.time.YearMonth;
 import java.util.Objects;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Position implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @XmlJavaTypeAdapter(YearMonthAdapter.class)
     private YearMonth dateFrom;
+    @XmlJavaTypeAdapter(YearMonthAdapter.class)
     private YearMonth dateTo;
     private String description;
     private String additionalInfo;
@@ -35,6 +43,8 @@ public class Position implements Serializable {
         this.description = description;
         this.additionalInfo = additionalInfo;
     }
+
+    public Position() {}
 
     public YearMonth getDateFrom() {
         return dateFrom;
