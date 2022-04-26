@@ -24,6 +24,7 @@ public class Resume implements Comparable<Resume>, Serializable {
 
     private String fullName;
     private Map<ContactTypes, String> contacts = new EnumMap<>(ContactTypes.class);
+
     private Map<SectionTypes, Section> sections = new EnumMap<>(SectionTypes.class);
 
     public Resume(String fullName) {
@@ -70,6 +71,10 @@ public class Resume implements Comparable<Resume>, Serializable {
             return sections.get(section);
         }
         return null;
+    }
+
+    public Map<SectionTypes, Section> getSections() {
+        return sections;
     }
 
     @Override
