@@ -22,12 +22,12 @@ public class Position implements Serializable {
     private String description;
     private String additionalInfo;
 
-    public Position(int startYear, Month startMonth, String title, String description) {
-        this(YearMonth.of(startYear, startMonth), title, description);
+    public Position(int startYear, Month startMonth, String description, String additionalInfo) {
+        this(YearMonth.of(startYear, startMonth), description, additionalInfo);
     }
 
-    public Position(int startYear, Month startMonth, int endYear, Month endMonth, String title, String description) {
-        this(YearMonth.of(startYear, startMonth), YearMonth.of(endYear, endMonth), title, description);
+    public Position(int startYear, Month startMonth, int endYear, Month endMonth, String description, String additionalInfo) {
+        this(YearMonth.of(startYear, startMonth), YearMonth.of(endYear, endMonth), description, additionalInfo);
     }
 
     public Position(YearMonth dateFrom, String description, String additionalInfo) {
