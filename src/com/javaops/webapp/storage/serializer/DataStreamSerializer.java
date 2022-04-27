@@ -13,8 +13,6 @@ import java.util.logging.Logger;
 
 public class DataStreamSerializer implements StreamSerializer {
 
-    private Logger LOG = Logger.getLogger(this.getClass().getName());
-
     @Override
     public void doWrite(Resume resume, OutputStream os) throws IOException {
         try (DataOutputStream dos = new DataOutputStream(os)) {
@@ -80,7 +78,6 @@ public class DataStreamSerializer implements StreamSerializer {
                         }
                     }
                 }
-                LOG.info("WRITE ============= sectionType ============= " + sectionType);
             }
             // TODO implements sections
         }
@@ -103,7 +100,6 @@ public class DataStreamSerializer implements StreamSerializer {
             int sectionsSize = dis.readInt();
             for (int i = 0; i < sectionsSize; i++) {
                 String sectionType = dis.readUTF();
-                LOG.info("============= sectionType ============= " + sectionType);
                 if (isTextSection(sectionType)) {
                     TextSection textSection = new TextSection(dis.readUTF());
 
@@ -125,9 +121,7 @@ public class DataStreamSerializer implements StreamSerializer {
                     } else {
                         resume.setSection(SectionTypes.QUALIFICATIONS, listSection);
                     }
-                } else if (sectionType.equals(SectionTypes.EDUCATION.getTitle()) || sectionType.equals(SectionTypes.EXPERIENCE.getTitle())) {
-                    LOG.info("Read organizationSection ===");
-                    LOG.info("===========================");
+                } else if (isOrganizationSection(sectionType)) {
                     int organizationsSize = dis.readInt();
 
                     List<Organization> organizations = new ArrayList<>();
