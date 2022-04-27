@@ -102,30 +102,30 @@ public class ResumeTestData {
         ));
         OrganizationSection organizationSection = new OrganizationSection(organizations);
         resume.setSection(EXPERIENCE, organizationSection);
-//
-//        //SET EDUCATION
-//        List<Organization> education = new ArrayList<>();
-//        Organization edu1 = new Organization(
-//                "Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики",
-//                "https://itmo.ru/ru/",
-//                List.of(
-//                        new Position(
-//                                YearMonth.of(1987, 9),
-//                                YearMonth.of(1993, 7),
-//                                "Инженер (программист Fortran, C)",
-//                                null
-//                        ),
-//                        new Position(
-//                                YearMonth.of(1993, 9),
-//                                YearMonth.of(1996, 7),
-//                                "Аспирантура (программист С, С++)",
-//                                null
-//                        )
-//                )
-//        );
-//        education.add(edu1);
-//        OrganizationSection educationSection = new OrganizationSection(education);
-//        resume.setSection(EDUCATION, educationSection);
+
+        //SET EDUCATION
+        List<Organization> education = new ArrayList<>();
+        Organization edu1 = new Organization(
+                "Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики",
+                "https://itmo.ru/ru/",
+                List.of(
+                        new Position(
+                                YearMonth.of(1987, 9),
+                                YearMonth.of(1993, 7),
+                                "Инженер (программист Fortran, C)",
+                                null
+                        ),
+                        new Position(
+                                YearMonth.of(1993, 9),
+                                YearMonth.of(1996, 7),
+                                "Аспирантура (программист С, С++)",
+                                null
+                        )
+                )
+        );
+        education.add(edu1);
+        OrganizationSection educationSection = new OrganizationSection(education);
+        resume.setSection(EDUCATION, educationSection);
         return resume;
     }
 

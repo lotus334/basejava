@@ -45,6 +45,8 @@ public class DataStreamSerializer implements StreamSerializer {
                         dos.writeUTF(skill);
                     }
                 } else if (section.getClass().equals(OrganizationSection.class)) {
+                    dos.writeUTF(sectionType.getTitle());
+
                     OrganizationSection organizationSection = (OrganizationSection) section;
                     List<Organization> organizations = organizationSection.getSectionStorage();
 
@@ -64,17 +66,21 @@ public class DataStreamSerializer implements StreamSerializer {
 
                         dos.writeInt(positions.size());
 
-//                        public Position(YearMonth dateFrom, YearMonth dateTo, String description, String additionalInfo)
                         for (Position position : positions) {
                             dos.writeInt(position.getDateFrom().getYear());
                             dos.writeInt(position.getDateFrom().getMonthValue());
                             dos.writeInt(position.getDateTo().getYear());
                             dos.writeInt(position.getDateTo().getMonthValue());
                             dos.writeUTF(position.getDescription());
-                            dos.writeUTF(position.getAdditionalInfo());
+                            boolean isAdditInfoEmpty = position.getAdditionalInfo() == null;
+                            dos.writeBoolean(isAdditInfoEmpty);
+                            if (!isAdditInfoEmpty) {
+                                dos.writeUTF(position.getAdditionalInfo());
+                            }
                         }
                     }
                 }
+                LOG.info("WRITE ============= sectionType ============= " + sectionType);
             }
             // TODO implements sections
         }
@@ -97,6 +103,7 @@ public class DataStreamSerializer implements StreamSerializer {
             int sectionsSize = dis.readInt();
             for (int i = 0; i < sectionsSize; i++) {
                 String sectionType = dis.readUTF();
+                LOG.info("============= sectionType ============= " + sectionType);
                 if (isTextSection(sectionType)) {
                     TextSection textSection = new TextSection(dis.readUTF());
 
@@ -118,8 +125,8 @@ public class DataStreamSerializer implements StreamSerializer {
                     } else {
                         resume.setSection(SectionTypes.QUALIFICATIONS, listSection);
                     }
-                } else if (isOrganizationSection(sectionType)) {
-                    LOG.info("organizationSection ===");
+                } else if (sectionType.equals(SectionTypes.EDUCATION.getTitle()) || sectionType.equals(SectionTypes.EXPERIENCE.getTitle())) {
+                    LOG.info("Read organizationSection ===");
                     LOG.info("===========================");
                     int organizationsSize = dis.readInt();
 
@@ -149,7 +156,11 @@ public class DataStreamSerializer implements StreamSerializer {
                             int monthTo = dis.readInt();
                             YearMonth dateTo = YearMonth.of(yearTo, monthTo);
                             String description = dis.readUTF();
-                            String additionalInfo = dis.readUTF();
+                            String additionalInfo = null;
+                            boolean isAdditInfoEmpty = dis.readBoolean();
+                            if (!isAdditInfoEmpty) {
+                                additionalInfo = dis.readUTF();
+                            }
                             Position position = new Position(dateFrom, dateTo, description, additionalInfo);
                             positions.add(position);
                         }
