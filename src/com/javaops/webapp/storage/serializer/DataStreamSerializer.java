@@ -1,7 +1,6 @@
 package com.javaops.webapp.storage.serializer;
 
 import com.javaops.webapp.model.*;
-import com.javaops.webapp.storage.AbstractStorage;
 
 import java.io.*;
 import java.time.YearMonth;
@@ -9,7 +8,6 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 public class DataStreamSerializer implements StreamSerializer {
 
@@ -32,19 +30,19 @@ public class DataStreamSerializer implements StreamSerializer {
 
                 if (section == null) {
                     continue;
-                } else if (section.getClass().equals(TextSection.class)) {
-                    dos.writeUTF(sectionType.getTitle());
+                }
+
+                String sectionTitle = sectionType.getTitle();
+                dos.writeUTF(sectionTitle);
+                if (isTextSection(sectionTitle)) {
                     dos.writeUTF(((TextSection) section).getArticle());
-                } else if (section.getClass().equals(ListSection.class)) {
-                    dos.writeUTF(sectionType.getTitle());
+                } else if (isListSection(sectionTitle)) {
                     List<String> skills = ((ListSection) section).getSkills();
                     dos.writeInt(skills.size());
                     for (String skill : skills) {
                         dos.writeUTF(skill);
                     }
-                } else if (section.getClass().equals(OrganizationSection.class)) {
-                    dos.writeUTF(sectionType.getTitle());
-
+                } else if (isOrganizationSection(sectionTitle)) {
                     OrganizationSection organizationSection = (OrganizationSection) section;
                     List<Organization> organizations = organizationSection.getSectionStorage();
 
@@ -70,6 +68,7 @@ public class DataStreamSerializer implements StreamSerializer {
                             dos.writeInt(position.getDateTo().getYear());
                             dos.writeInt(position.getDateTo().getMonthValue());
                             dos.writeUTF(position.getDescription());
+
                             boolean isAdditInfoEmpty = position.getAdditionalInfo() == null;
                             dos.writeBoolean(isAdditInfoEmpty);
                             if (!isAdditInfoEmpty) {
@@ -103,11 +102,7 @@ public class DataStreamSerializer implements StreamSerializer {
                 if (isTextSection(sectionType)) {
                     TextSection textSection = new TextSection(dis.readUTF());
 
-                    if (sectionType.equals(SectionTypes.PERSONAL.getTitle())) {
-                        resume.setSection(SectionTypes.PERSONAL, textSection);
-                    } else {
-                        resume.setSection(SectionTypes.OBJECTIVE, textSection);
-                    }
+                    chooseAndSetSection(resume, sectionType, SectionTypes.PERSONAL, SectionTypes.OBJECTIVE, textSection);
                 } else if (isListSection(sectionType)) {
                     int listSize = dis.readInt();
                     List<String> skills = new ArrayList<>();
@@ -116,11 +111,7 @@ public class DataStreamSerializer implements StreamSerializer {
                     }
                     ListSection listSection = new ListSection(skills);
 
-                    if (sectionType.equals(SectionTypes.ACHIEVEMENT.getTitle())) {
-                        resume.setSection(SectionTypes.ACHIEVEMENT, listSection);
-                    } else {
-                        resume.setSection(SectionTypes.QUALIFICATIONS, listSection);
-                    }
+                    chooseAndSetSection(resume, sectionType, SectionTypes.ACHIEVEMENT, SectionTypes.QUALIFICATIONS, listSection);
                 } else if (isOrganizationSection(sectionType)) {
                     int organizationsSize = dis.readInt();
 
@@ -164,15 +155,9 @@ public class DataStreamSerializer implements StreamSerializer {
                     }
                     OrganizationSection organizationSection = new OrganizationSection(organizations);
 
-                    if (sectionType.equals(SectionTypes.EDUCATION.getTitle())) {
-                        resume.setSection(SectionTypes.EDUCATION, organizationSection);
-                    } else {
-                        resume.setSection(SectionTypes.EXPERIENCE, organizationSection);
-                    }
+                    chooseAndSetSection(resume, sectionType, SectionTypes.EDUCATION, SectionTypes.EXPERIENCE, organizationSection);
                 }
             }
-
-            // TODO implements sections
             return resume;
         }
     }
@@ -188,4 +173,13 @@ public class DataStreamSerializer implements StreamSerializer {
     private boolean isOrganizationSection(String type) {
         return type.equals(SectionTypes.EDUCATION.getTitle()) || type.equals(SectionTypes.EXPERIENCE.getTitle());
     }
+
+    private void chooseAndSetSection(Resume resume, String sectionType, SectionTypes sectionType1, SectionTypes sectionType2, Section section) {
+        if (sectionType.equals(sectionType1.getTitle())) {
+            resume.setSection(sectionType1, section);
+        } else {
+            resume.setSection(sectionType2, section);
+        }
+    }
 }
+
