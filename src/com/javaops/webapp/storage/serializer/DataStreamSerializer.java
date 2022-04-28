@@ -4,10 +4,9 @@ import com.javaops.webapp.model.*;
 
 import java.io.*;
 import java.time.YearMonth;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static com.javaops.webapp.model.SectionTypes.*;
 
 public class DataStreamSerializer implements StreamSerializer {
 
@@ -19,66 +18,75 @@ public class DataStreamSerializer implements StreamSerializer {
 
             Map<ContactTypes, String> contacts = resume.getContacts();
             dos.writeInt(contacts.size());
-            for (Map.Entry<ContactTypes, String> entry : contacts.entrySet()) {
-                dos.writeUTF(entry.getKey().name());
-                dos.writeUTF(entry.getValue());
-            }
+
+            writeWithException(contacts.entrySet(), dos, contactTypesStringEntry -> {
+                dos.writeUTF(contactTypesStringEntry.getKey().name());
+                dos.writeUTF(contactTypesStringEntry.getValue());
+            });
 
             dos.writeInt(resume.getSections().size());
-            for (SectionTypes sectionType : SectionTypes.values()) {
+
+            Set<SectionTypes> sectionTypes = Set.of(SectionTypes.values());
+
+            writeWithException(sectionTypes, dos, sectionType -> {
                 Section section = resume.getSection(sectionType);
 
-                if (section == null) {
-                    continue;
-                }
+                if (section != null) {
+                    dos.writeUTF(String.valueOf(sectionType));
+                    switch (sectionType) {
+                        case PERSONAL:
+                        case OBJECTIVE:
+                            dos.writeUTF(((TextSection) section).getArticle());
+                            break;
 
-                String sectionTitle = sectionType.getTitle();
-                dos.writeUTF(sectionTitle);
-                if (isTextSection(sectionTitle)) {
-                    dos.writeUTF(((TextSection) section).getArticle());
-                } else if (isListSection(sectionTitle)) {
-                    List<String> skills = ((ListSection) section).getSkills();
-                    dos.writeInt(skills.size());
-                    for (String skill : skills) {
-                        dos.writeUTF(skill);
-                    }
-                } else if (isOrganizationSection(sectionTitle)) {
-                    OrganizationSection organizationSection = (OrganizationSection) section;
-                    List<Organization> organizations = organizationSection.getSectionStorage();
-
-                    dos.writeInt(organizations.size());
-
-                    for (Organization organization : organizations) {
-                        Link homePage = organization.getHomePage();
-                        dos.writeUTF(homePage.getName());
-
-                        boolean isUrlEmpty = homePage.getUrl() == null;
-                        dos.writeBoolean(isUrlEmpty);
-                        if (!isUrlEmpty) {
-                            dos.writeUTF(homePage.getUrl());
-                        }
-
-                        List<Position> positions = organization.getPositions();
-
-                        dos.writeInt(positions.size());
-
-                        for (Position position : positions) {
-                            dos.writeInt(position.getDateFrom().getYear());
-                            dos.writeInt(position.getDateFrom().getMonthValue());
-                            dos.writeInt(position.getDateTo().getYear());
-                            dos.writeInt(position.getDateTo().getMonthValue());
-                            dos.writeUTF(position.getDescription());
-
-                            boolean isAdditInfoEmpty = position.getAdditionalInfo() == null;
-                            dos.writeBoolean(isAdditInfoEmpty);
-                            if (!isAdditInfoEmpty) {
-                                dos.writeUTF(position.getAdditionalInfo());
+                        case QUALIFICATIONS:
+                        case ACHIEVEMENT:
+                            List<String> skills = ((ListSection) section).getSkills();
+                            dos.writeInt(skills.size());
+                            for (String skill : skills) {
+                                dos.writeUTF(skill);
                             }
-                        }
+                            break;
+
+                        case EDUCATION:
+                        case EXPERIENCE:
+                            OrganizationSection organizationSection = (OrganizationSection) section;
+                            List<Organization> organizations = organizationSection.getSectionStorage();
+
+                            dos.writeInt(organizations.size());
+
+                            writeWithException(organizations, dos, organization -> {
+                                Link homePage = organization.getHomePage();
+                                dos.writeUTF(homePage.getName());
+
+                                boolean isUrlEmpty = homePage.getUrl() == null;
+                                dos.writeBoolean(isUrlEmpty);
+                                if (!isUrlEmpty) {
+                                    dos.writeUTF(homePage.getUrl());
+                                }
+
+                                List<Position> positions = organization.getPositions();
+
+                                dos.writeInt(positions.size());
+
+                                writeWithException(positions, dos, position -> {
+                                    dos.writeInt(position.getDateFrom().getYear());
+                                    dos.writeInt(position.getDateFrom().getMonthValue());
+                                    dos.writeInt(position.getDateTo().getYear());
+                                    dos.writeInt(position.getDateTo().getMonthValue());
+                                    dos.writeUTF(position.getDescription());
+
+                                    boolean isAdditInfoEmpty = position.getAdditionalInfo() == null;
+                                    dos.writeBoolean(isAdditInfoEmpty);
+                                    if (!isAdditInfoEmpty) {
+                                        dos.writeUTF(position.getAdditionalInfo());
+                                    }
+                                });
+                            });
+                            break;
                     }
                 }
-            }
-            // TODO implements sections
+            });
         }
     }
 
@@ -98,88 +106,91 @@ public class DataStreamSerializer implements StreamSerializer {
 
             int sectionsSize = dis.readInt();
             for (int i = 0; i < sectionsSize; i++) {
-                String sectionType = dis.readUTF();
-                if (isTextSection(sectionType)) {
-                    TextSection textSection = new TextSection(dis.readUTF());
+                SectionTypes sectionType = SectionTypes.valueOf(dis.readUTF());
 
-                    chooseAndSetSection(resume, sectionType, SectionTypes.PERSONAL, SectionTypes.OBJECTIVE, textSection);
-                } else if (isListSection(sectionType)) {
-                    int listSize = dis.readInt();
-                    List<String> skills = new ArrayList<>();
-                    for (int j = 0; j < listSize; j++) {
-                        skills.add(dis.readUTF());
-                    }
-                    ListSection listSection = new ListSection(skills);
+                switch (sectionType) {
+                    case PERSONAL:
+                    case OBJECTIVE:
+                        TextSection textSection = new TextSection(dis.readUTF());
 
-                    chooseAndSetSection(resume, sectionType, SectionTypes.ACHIEVEMENT, SectionTypes.QUALIFICATIONS, listSection);
-                } else if (isOrganizationSection(sectionType)) {
-                    int organizationsSize = dis.readInt();
+                        chooseAndSetSection(resume, sectionType, PERSONAL, SectionTypes.OBJECTIVE, textSection);
+                        break;
 
-                    List<Organization> organizations = new ArrayList<>();
-
-                    for (int j = 0; j < organizationsSize; j++) {
-                        String homePageName = dis.readUTF();
-                        boolean isUlrEmpty = dis.readBoolean();
-                        Link homePage;
-
-                        if (!isUlrEmpty) {
-                            String homePageUrl = dis.readUTF();
-                            homePage = new Link(homePageName, homePageUrl);
-                        } else {
-                            homePage = new Link(homePageName, null);
+                    case QUALIFICATIONS:
+                    case ACHIEVEMENT:
+                        int listSize = dis.readInt();
+                        List<String> skills = new ArrayList<>();
+                        for (int j = 0; j < listSize; j++) {
+                            skills.add(dis.readUTF());
                         }
+                        ListSection listSection = new ListSection(skills);
 
-                        List<Position> positions = new ArrayList<>();
+                        chooseAndSetSection(resume, sectionType, SectionTypes.ACHIEVEMENT, SectionTypes.QUALIFICATIONS, listSection);
+                        break;
 
-                        int positionsSize = dis.readInt();
+                    case EDUCATION:
+                    case EXPERIENCE:
+                        int organizationsSize = dis.readInt();
 
-                        for (int k = 0; k < positionsSize; k++) {
-                            int yearFrom = dis.readInt();
-                            int monthFrom = dis.readInt();
-                            YearMonth dateFrom = YearMonth.of(yearFrom, monthFrom);
-                            int yearTo = dis.readInt();
-                            int monthTo = dis.readInt();
-                            YearMonth dateTo = YearMonth.of(yearTo, monthTo);
-                            String description = dis.readUTF();
-                            String additionalInfo = null;
-                            boolean isAdditInfoEmpty = dis.readBoolean();
-                            if (!isAdditInfoEmpty) {
-                                additionalInfo = dis.readUTF();
+                        List<Organization> organizations = new ArrayList<>();
+
+                        for (int j = 0; j < organizationsSize; j++) {
+                            String homePageName = dis.readUTF();
+                            boolean isUlrEmpty = dis.readBoolean();
+                            Link homePage;
+
+                            if (!isUlrEmpty) {
+                                String homePageUrl = dis.readUTF();
+                                homePage = new Link(homePageName, homePageUrl);
+                            } else {
+                                homePage = new Link(homePageName, null);
                             }
-                            Position position = new Position(dateFrom, dateTo, description, additionalInfo);
-                            positions.add(position);
+
+                            List<Position> positions = new ArrayList<>();
+
+                            int positionsSize = dis.readInt();
+
+                            for (int k = 0; k < positionsSize; k++) {
+                                int yearFrom = dis.readInt();
+                                int monthFrom = dis.readInt();
+                                YearMonth dateFrom = YearMonth.of(yearFrom, monthFrom);
+                                int yearTo = dis.readInt();
+                                int monthTo = dis.readInt();
+                                YearMonth dateTo = YearMonth.of(yearTo, monthTo);
+                                String description = dis.readUTF();
+                                String additionalInfo = null;
+                                boolean isAdditInfoEmpty = dis.readBoolean();
+                                if (!isAdditInfoEmpty) {
+                                    additionalInfo = dis.readUTF();
+                                }
+                                Position position = new Position(dateFrom, dateTo, description, additionalInfo);
+                                positions.add(position);
+                            }
+
+                            Organization organization = new Organization(homePage, positions);
+                            organizations.add(organization);
                         }
+                        OrganizationSection organizationSection = new OrganizationSection(organizations);
 
-                        Organization organization = new Organization(homePage, positions);
-                        organizations.add(organization);
-                    }
-                    OrganizationSection organizationSection = new OrganizationSection(organizations);
-
-                    chooseAndSetSection(resume, sectionType, SectionTypes.EDUCATION, SectionTypes.EXPERIENCE, organizationSection);
+                        chooseAndSetSection(resume, sectionType, SectionTypes.EDUCATION, SectionTypes.EXPERIENCE, organizationSection);
+                        break;
                 }
             }
             return resume;
         }
     }
 
-    private boolean isTextSection(String sectionType) {
-        return sectionType.equals(SectionTypes.PERSONAL.getTitle()) || sectionType.equals(SectionTypes.OBJECTIVE.getTitle());
-    }
-
-    private boolean isListSection(String type) {
-        return type.equals(SectionTypes.ACHIEVEMENT.getTitle()) || type.equals(SectionTypes.QUALIFICATIONS.getTitle());
-    }
-
-    private boolean isOrganizationSection(String type) {
-        return type.equals(SectionTypes.EDUCATION.getTitle()) || type.equals(SectionTypes.EXPERIENCE.getTitle());
-    }
-
-    private void chooseAndSetSection(Resume resume, String sectionType, SectionTypes sectionType1, SectionTypes sectionType2, Section section) {
-        if (sectionType.equals(sectionType1.getTitle())) {
+    private void chooseAndSetSection(Resume resume, SectionTypes sectionType, SectionTypes sectionType1, SectionTypes sectionType2, Section section) {
+        if (sectionType == sectionType1) {
             resume.setSection(sectionType1, section);
         } else {
             resume.setSection(sectionType2, section);
         }
     }
-}
 
+    private <T> void writeWithException(Collection<T> collection, DataOutputStream dos, CustomConsumer<T> customConsumer) throws IOException {
+        for (T t : collection) {
+            customConsumer.accept(t);
+        }
+    }
+}
