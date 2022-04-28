@@ -113,7 +113,7 @@ public class DataStreamSerializer implements StreamSerializer {
                     case OBJECTIVE:
                         TextSection textSection = new TextSection(dis.readUTF());
 
-                        chooseAndSetSection(resume, sectionType, PERSONAL, SectionTypes.OBJECTIVE, textSection);
+                        chooseAndSetSection(resume, sectionType, PERSONAL, OBJECTIVE, textSection);
                         break;
 
                     case QUALIFICATIONS:
@@ -125,7 +125,7 @@ public class DataStreamSerializer implements StreamSerializer {
                         }
                         ListSection listSection = new ListSection(skills);
 
-                        chooseAndSetSection(resume, sectionType, SectionTypes.ACHIEVEMENT, SectionTypes.QUALIFICATIONS, listSection);
+                        chooseAndSetSection(resume, sectionType, ACHIEVEMENT, QUALIFICATIONS, listSection);
                         break;
 
                     case EDUCATION:
@@ -172,7 +172,7 @@ public class DataStreamSerializer implements StreamSerializer {
                         }
                         OrganizationSection organizationSection = new OrganizationSection(organizations);
 
-                        chooseAndSetSection(resume, sectionType, SectionTypes.EDUCATION, SectionTypes.EXPERIENCE, organizationSection);
+                        chooseAndSetSection(resume, sectionType, EDUCATION, EXPERIENCE, organizationSection);
                         break;
                 }
             }
