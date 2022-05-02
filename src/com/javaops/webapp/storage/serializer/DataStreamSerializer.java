@@ -40,7 +40,8 @@ public class DataStreamSerializer implements StreamSerializer {
 
             int sectionsSize = dis.readInt();
             for (int i = 0; i < sectionsSize; i++) {
-                readSection(resume, dis);
+                SectionTypes sectionType = valueOf(dis.readUTF());
+                resume.setSection(sectionType, readSection(sectionType, dis));
             }
             return resume;
         }
@@ -53,19 +54,11 @@ public class DataStreamSerializer implements StreamSerializer {
         }
     }
 
-//    должно быть 2а метода
-//    Метод который читает и заполняет наше резюме.
-//    Метод который читает и отдает коллекцию List так же типизированную, нужно будет использовать их для чтения SectionType.EXPERIENCE и SectionType.EDUCATION
-    private <T> void readWithException(DataInputStream dis, VendorWithException consumer) throws IOException {
+    private <T> void readWithException(DataInputStream dis, VendorWithException vendor) throws IOException {
         int size = dis.readInt();
         for (int i = 0; i < size; i++) {
-            consumer.get();
+            vendor.take();
         }
-    }
-
-    private void writePositionDate(YearMonth date, DataOutputStream dos) throws IOException{
-        dos.writeInt(date.getYear());
-        dos.writeInt(date.getMonthValue());
     }
 
     private void writeSection(Resume resume, SectionTypes sectionType, DataOutputStream dos) throws IOException {
@@ -119,54 +112,62 @@ public class DataStreamSerializer implements StreamSerializer {
         }
     }
 
-    private void readSection(Resume resume, DataInputStream dis) throws IOException {
-        SectionTypes sectionType = valueOf(dis.readUTF());
-
+    private Section readSection(SectionTypes sectionType, DataInputStream dis) throws IOException {
         switch (sectionType) {
             case PERSONAL:
             case OBJECTIVE:
-                resume.setSection(sectionType, new TextSection(dis.readUTF()));
-                break;
+                return new TextSection(dis.readUTF());
 
             case QUALIFICATIONS:
             case ACHIEVEMENT:
                 List<String> skills = new ArrayList<>();
                 readWithException(dis, () -> skills.add(dis.readUTF()));
-                resume.setSection(sectionType, new ListSection(skills));
-                break;
+                return new ListSection(skills);
 
             case EDUCATION:
             case EXPERIENCE:
-                List<Organization> organizations = new ArrayList<>();
-
-                readWithException(dis, () -> {
-                    String homePageName = dis.readUTF();
-                    Link homePage = new Link(homePageName, dis.readBoolean() ? null : dis.readUTF());
-
-                    List<Position> positions = new ArrayList<>();
-
-                    readWithException(dis, () -> {
-                        YearMonth dateFrom = YearMonth.of(dis.readInt(), dis.readInt());
-                        YearMonth dateTo = YearMonth.of(dis.readInt(), dis.readInt());
-                        String description = dis.readUTF();
-                        String additionalInfo = dis.readBoolean() ? null : dis.readUTF();
-                        Position position = new Position(dateFrom, dateTo, description, additionalInfo);
-                        positions.add(position);
-                    });
-
-                    Organization organization = new Organization(homePage, positions);
-                    organizations.add(organization);
-                });
-                resume.setSection(sectionType, new OrganizationSection(organizations));
-                break;
+                return new OrganizationSection(
+                        readList(dis, () -> new Organization(
+                                new Link(dis.readUTF(), dis.readBoolean() ? null : dis.readUTF()),
+                                readList(dis, () -> new Position(
+                                        readPositionDate(dis),
+                                        readPositionDate(dis),
+                                        dis.readUTF(),
+                                        dis.readBoolean() ? null : dis.readUTF())
+                                ))
+                        ));
+            default:
+                throw new IllegalStateException();
         }
     }
-}
 
-interface ConsumerWithException<T> {
-    void accept(T t) throws IOException;
-}
+    private void writePositionDate(YearMonth date, DataOutputStream dos) throws IOException{
+        dos.writeInt(date.getYear());
+        dos.writeInt(date.getMonthValue());
+    }
 
-interface VendorWithException {
-    void get() throws IOException;
+    private YearMonth readPositionDate(DataInputStream dis) throws IOException {
+        return YearMonth.of(dis.readInt(), dis.readInt());
+    }
+
+    private <T> List<T> readList(DataInputStream dis, SupplierWithException<T> vendor) throws IOException {
+        List<T> list = new ArrayList<>();
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            list.add(vendor.get());
+        }
+        return list;
+    }
+
+    private interface ConsumerWithException<T> {
+        void accept(T t) throws IOException;
+    }
+
+    private interface VendorWithException {
+        void take() throws IOException;
+    }
+
+    private interface SupplierWithException<T> {
+        T get() throws IOException;
+    }
 }
