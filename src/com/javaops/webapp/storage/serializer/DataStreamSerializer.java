@@ -17,13 +17,13 @@ public class DataStreamSerializer implements StreamSerializer {
             dos.writeUTF(resume.getFullName());
 
             Map<ContactTypes, String> contacts = resume.getContacts();
-            writeWithException(contacts.entrySet(), dos, contactTypesStringEntry -> {
+            writeCollection(contacts.entrySet(), dos, contactTypesStringEntry -> {
                 dos.writeUTF(contactTypesStringEntry.getKey().name());
                 dos.writeUTF(contactTypesStringEntry.getValue());
             });
 
             Set<SectionTypes> sectionTypes = resume.getSections().keySet();
-            writeWithException(sectionTypes, dos, sectionType -> writeSection(resume, sectionType, dos));
+            writeCollection(sectionTypes, dos, sectionType -> writeSection(resume, sectionType, dos));
         }
     }
 
@@ -35,7 +35,7 @@ public class DataStreamSerializer implements StreamSerializer {
             Resume resume = new Resume(fullName, uuid);
 
             Map<ContactTypes, String> contacts = new EnumMap<>(ContactTypes.class);
-            readWithException(dis, () -> contacts.put(ContactTypes.valueOf(dis.readUTF()), dis.readUTF()));
+            readItems(dis, () -> contacts.put(ContactTypes.valueOf(dis.readUTF()), dis.readUTF()));
             resume.setContacts(contacts);
 
             int sectionsSize = dis.readInt();
@@ -47,17 +47,17 @@ public class DataStreamSerializer implements StreamSerializer {
         }
     }
 
-    private <T> void writeWithException(Collection<T> collection, DataOutputStream dos, ConsumerWithException<T> consumerWithException) throws IOException {
+    private <T> void writeCollection(Collection<T> collection, DataOutputStream dos, ElementWriter<T> elementWriter) throws IOException {
         dos.writeInt(collection.size());
         for (T t : collection) {
-            consumerWithException.accept(t);
+            elementWriter.write(t);
         }
     }
 
-    private <T> void readWithException(DataInputStream dis, VendorWithException vendor) throws IOException {
+    private <T> void readItems(DataInputStream dis, ElementProcessor processor) throws IOException {
         int size = dis.readInt();
         for (int i = 0; i < size; i++) {
-            vendor.take();
+            processor.take();
         }
     }
 
@@ -75,7 +75,7 @@ public class DataStreamSerializer implements StreamSerializer {
                 case QUALIFICATIONS:
                 case ACHIEVEMENT:
                     List<String> skills = ((ListSection) section).getSkills();
-                    writeWithException(skills, dos, dos::writeUTF);
+                    writeCollection(skills, dos, dos::writeUTF);
                     break;
 
                 case EDUCATION:
@@ -83,7 +83,7 @@ public class DataStreamSerializer implements StreamSerializer {
                     OrganizationSection organizationSection = (OrganizationSection) section;
                     List<Organization> organizations = organizationSection.getSectionStorage();
 
-                    writeWithException(organizations, dos, organization -> {
+                    writeCollection(organizations, dos, organization -> {
                         Link homePage = organization.getHomePage();
                         dos.writeUTF(homePage.getName());
 
@@ -95,9 +95,9 @@ public class DataStreamSerializer implements StreamSerializer {
 
                         List<Position> positions = organization.getPositions();
 
-                        writeWithException(positions, dos, position -> {
-                            writePositionDate(position.getDateFrom(), dos);
-                            writePositionDate(position.getDateTo(), dos);
+                        writeCollection(positions, dos, position -> {
+                            writeYearMonth(position.getDateFrom(), dos);
+                            writeYearMonth(position.getDateTo(), dos);
                             dos.writeUTF(position.getDescription());
 
                             boolean isAdditInfoEmpty = position.getAdditionalInfo() == null;
@@ -121,7 +121,7 @@ public class DataStreamSerializer implements StreamSerializer {
             case QUALIFICATIONS:
             case ACHIEVEMENT:
                 List<String> skills = new ArrayList<>();
-                readWithException(dis, () -> skills.add(dis.readUTF()));
+                readItems(dis, () -> skills.add(dis.readUTF()));
                 return new ListSection(skills);
 
             case EDUCATION:
@@ -130,8 +130,8 @@ public class DataStreamSerializer implements StreamSerializer {
                         readList(dis, () -> new Organization(
                                 new Link(dis.readUTF(), dis.readBoolean() ? null : dis.readUTF()),
                                 readList(dis, () -> new Position(
-                                        readPositionDate(dis),
-                                        readPositionDate(dis),
+                                        readYearMonth(dis),
+                                        readYearMonth(dis),
                                         dis.readUTF(),
                                         dis.readBoolean() ? null : dis.readUTF())
                                 ))
@@ -141,33 +141,33 @@ public class DataStreamSerializer implements StreamSerializer {
         }
     }
 
-    private void writePositionDate(YearMonth date, DataOutputStream dos) throws IOException{
+    private void writeYearMonth(YearMonth date, DataOutputStream dos) throws IOException{
         dos.writeInt(date.getYear());
         dos.writeInt(date.getMonthValue());
     }
 
-    private YearMonth readPositionDate(DataInputStream dis) throws IOException {
+    private YearMonth readYearMonth(DataInputStream dis) throws IOException {
         return YearMonth.of(dis.readInt(), dis.readInt());
     }
 
-    private <T> List<T> readList(DataInputStream dis, SupplierWithException<T> vendor) throws IOException {
+    private <T> List<T> readList(DataInputStream dis, ElementReader<T> reader) throws IOException {
         List<T> list = new ArrayList<>();
         int size = dis.readInt();
         for (int i = 0; i < size; i++) {
-            list.add(vendor.get());
+            list.add(reader.read());
         }
         return list;
     }
 
-    private interface ConsumerWithException<T> {
-        void accept(T t) throws IOException;
+    private interface ElementWriter<T> {
+        void write(T t) throws IOException;
     }
 
-    private interface VendorWithException {
+    private interface ElementProcessor {
         void take() throws IOException;
     }
 
-    private interface SupplierWithException<T> {
-        T get() throws IOException;
+    private interface ElementReader<T> {
+        T read() throws IOException;
     }
 }
