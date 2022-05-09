@@ -24,7 +24,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public void clear() {
-        sqlHelper.makeQuery("DELETE FROM resume", ps -> {
+        sqlHelper.executeQuery("DELETE FROM resume", ps -> {
             ps.execute();
             return null;
         });
@@ -32,7 +32,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public Resume get(String uuid) {
-        return sqlHelper.makeQuery("SELECT * FROM resume r WHERE r.uuid =?", ps -> {
+        return sqlHelper.executeQuery("SELECT * FROM resume r WHERE r.uuid =?", ps -> {
             ps.setString(1, uuid);
             ResultSet rs = ps.executeQuery();
             if (!rs.next()) {
@@ -44,7 +44,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public void update(Resume r) {
-        sqlHelper.makeQuery("UPDATE resume r SET full_name = ? WHERE uuid = ?", ps -> {
+        sqlHelper.executeQuery("UPDATE resume r SET full_name = ? WHERE uuid = ?", ps -> {
             ps.setString(1, r.getFullName());
             ps.setString(2, r.getUuid());
             if (ps.executeUpdate() == 0) {
@@ -79,7 +79,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public void delete(String uuid) {
-        sqlHelper.makeQuery("DELETE FROM resume r WHERE r.uuid =?", ps -> {
+        sqlHelper.executeQuery("DELETE FROM resume r WHERE r.uuid =?", ps -> {
             ps.setString(1, uuid);
             if (ps.executeUpdate() == 0) {
                 throw new NotExistStorageException(uuid);
@@ -90,7 +90,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        return sqlHelper.makeQuery("SELECT * FROM resume r", ps -> {
+        return sqlHelper.executeQuery("SELECT * FROM resume r", ps -> {
             ResultSet rs = ps.executeQuery();
             List<Resume> resumes = new ArrayList<>();
             while (rs.next()) {
@@ -105,7 +105,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public int size() {
-        return sqlHelper.makeQuery("SELECT count(*) FROM resume", ps -> {
+        return sqlHelper.executeQuery("SELECT count(*) FROM resume", ps -> {
             ResultSet rs = ps.executeQuery();
             rs.next();
             return rs.getInt("count");

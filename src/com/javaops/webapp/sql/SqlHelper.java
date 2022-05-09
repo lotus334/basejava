@@ -12,7 +12,7 @@ public class SqlHelper {
     public SqlHelper(ConnectionFactory connectionFactory) {
         this.connectionFactory = connectionFactory;
     }
-    public <T> T makeQuery(String request, SqlProcessor<T> sqlProcessor)  {
+    public <T> T executeQuery(String request, SqlProcessor<T> sqlProcessor)  {
         try (Connection conn = connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(request)) {
             return sqlProcessor.makeQuery(ps);
