@@ -7,53 +7,51 @@ import com.javaops.webapp.model.Resume;
 import com.javaops.webapp.sql.ConnectionFactory;
 import com.javaops.webapp.sql.SqlHelper;
 import com.javaops.webapp.sql.SqlProcessor;
-import com.javaops.webapp.sql.SqlVoidProcessor;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class SqlStorage implements Storage {
-    public final ConnectionFactory connectionFactory;
+    private final ConnectionFactory connectionFactory;
+    private final SqlHelper sqlHelper;
 
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
         connectionFactory = () -> DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+        sqlHelper = new SqlHelper(connectionFactory);
     }
 
     @Override
     public void clear() {
-        String query = "DELETE FROM resume";
-        SqlVoidProcessor sqlProcessor = ps -> {
+        sqlHelper.makeQuery("DELETE FROM resume", ps -> {
             ps.execute();
-        };
-        SqlHelper.makeVoidQuery(connectionFactory, query, sqlProcessor);
+            return null;
+        });
     }
 
     @Override
     public Resume get(String uuid) {
-        String query = "SELECT * FROM resume r WHERE r.uuid =?";
-        SqlProcessor<Resume> sqlProcessor = ps -> {
+        return sqlHelper.makeQuery("SELECT * FROM resume r WHERE r.uuid =?", ps -> {
             ps.setString(1, uuid);
             ResultSet rs = ps.executeQuery();
             if (!rs.next()) {
                 throw new NotExistStorageException(uuid);
             }
             return new Resume(rs.getString("full_name"), uuid);
-        };
-        return SqlHelper.makeQuery(connectionFactory, query, sqlProcessor);
+        });
     }
 
     @Override
     public void update(Resume r) {
-        String query = "UPDATE resume r SET full_name = ? WHERE uuid = ?";
-        SqlVoidProcessor sqlProcessor = ps -> {
+        sqlHelper.makeQuery("UPDATE resume r SET full_name = ? WHERE uuid = ?", ps -> {
             ps.setString(1, r.getFullName());
             ps.setString(2, r.getUuid());
             if (ps.executeUpdate() == 0) {
                 throw new NotExistStorageException(r.getUuid());
             }
-        };
-        SqlHelper.makeVoidQuery(connectionFactory, query, sqlProcessor);
+            return null;
+        });
     }
 
     @Override
@@ -81,41 +79,36 @@ public class SqlStorage implements Storage {
 
     @Override
     public void delete(String uuid) {
-        String query = "DELETE FROM resume r WHERE r.uuid =?";
-        SqlVoidProcessor sqlProcessor = ps -> {
+        sqlHelper.makeQuery("DELETE FROM resume r WHERE r.uuid =?", ps -> {
             ps.setString(1, uuid);
             if (ps.executeUpdate() == 0) {
                 throw new NotExistStorageException(uuid);
             }
-        };
-        SqlHelper.makeVoidQuery(connectionFactory, query, sqlProcessor);
+            return null;
+        });
     }
 
     @Override
     public List<Resume> getAllSorted() {
-        String query = "SELECT * FROM resume r";
-        SqlProcessor<List<Resume>> sqlProcessor = ps -> {
+        return sqlHelper.makeQuery("SELECT * FROM resume r", ps -> {
             ResultSet rs = ps.executeQuery();
             List<Resume> resumes = new ArrayList<>();
             while (rs.next()) {
                 String fullName = rs.getString("full_name");
-                String uuid = rs.getString("uuid").replaceAll("\\s+","");
+                String uuid = rs.getString("uuid");
                 resumes.add(new Resume(fullName, uuid));
             }
-            resumes.sort((o1, o2) -> o2.getUuid().compareTo(o1.getUuid()));
+            resumes.sort(Comparator.reverseOrder());
             return resumes;
-        };
-        return SqlHelper.makeQuery(connectionFactory, query, sqlProcessor);
+        });
     }
 
     @Override
     public int size() {
-        String query = "SELECT count(*) FROM resume";
-        SqlProcessor<Integer> sqlProcessor = ps -> {
+        return sqlHelper.makeQuery("SELECT count(*) FROM resume", ps -> {
             ResultSet rs = ps.executeQuery();
             rs.next();
             return rs.getInt("count");
-        };
-        return SqlHelper.makeQuery(connectionFactory, query, sqlProcessor);
+        });
     }
 }
