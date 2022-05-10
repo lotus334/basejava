@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -112,7 +111,7 @@ public abstract class AbstractStorageTest {
     public void getAllSorted() {
         List<Resume> expectedResumes = List.of(RESUME_3, RESUME_2, RESUME_1)
                 .stream()
-                .sorted(Comparator.reverseOrder())
+                .sorted(Storage.RESUME_COMPARATOR)
                 .collect(Collectors.toList());
         assertEquals(expectedResumes, storage.getAllSorted());
     }

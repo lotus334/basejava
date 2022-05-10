@@ -6,14 +6,13 @@ import com.javaops.webapp.exception.StorageException;
 import com.javaops.webapp.model.Resume;
 import com.javaops.webapp.sql.ConnectionFactory;
 import com.javaops.webapp.sql.SqlHelper;
-import com.javaops.webapp.sql.SqlProcessor;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class SqlStorage implements Storage {
+
     private final ConnectionFactory connectionFactory;
     private final SqlHelper sqlHelper;
 
@@ -91,7 +90,7 @@ public class SqlStorage implements Storage {
                 String uuid = rs.getString("uuid");
                 resumes.add(new Resume(fullName, uuid));
             }
-            resumes.sort(Comparator.reverseOrder());
+            resumes.sort(RESUME_COMPARATOR);
             return resumes;
         });
     }
