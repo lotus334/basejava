@@ -1,10 +1,7 @@
 package com.javaops.webapp.storage;
 
-import com.javaops.webapp.exception.ExistStorageException;
 import com.javaops.webapp.exception.NotExistStorageException;
-import com.javaops.webapp.exception.StorageException;
 import com.javaops.webapp.model.Resume;
-import com.javaops.webapp.sql.ConnectionFactory;
 import com.javaops.webapp.sql.SqlHelper;
 
 import java.sql.*;
@@ -16,12 +13,10 @@ public class SqlStorage implements Storage {
 
     private static final Logger LOG = Logger.getLogger(SqlStorage.class.getName());
 
-    private final ConnectionFactory connectionFactory;
     private final SqlHelper sqlHelper;
 
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
-        connectionFactory = () -> DriverManager.getConnection(dbUrl, dbUser, dbPassword);
-        sqlHelper = new SqlHelper(connectionFactory);
+        sqlHelper = new SqlHelper(dbUrl, dbUser, dbPassword);
     }
 
     @Override
@@ -61,18 +56,12 @@ public class SqlStorage implements Storage {
     @Override
     public void save(Resume resume) {
         LOG.info("Save " + resume);
-        String query = "INSERT INTO resume (uuid, full_name) VALUES (?,?)";
-        try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement(query)) {
+        sqlHelper.executeQuery("INSERT INTO resume (uuid, full_name) VALUES (?,?)", ps -> {
             ps.setString(1, resume.getUuid());
             ps.setString(2, resume.getFullName());
             ps.execute();
-        } catch (SQLException e) {
-            if (get(resume.getUuid()) != null) {
-                throw new ExistStorageException(resume.getUuid());
-            }
-            throw new StorageException(e);
-        }
+            return null;
+        }, resume.getUuid());
     }
 
     @Override
@@ -90,7 +79,7 @@ public class SqlStorage implements Storage {
     @Override
     public List<Resume> getAllSorted() {
         LOG.info("getAllSorted");
-        return sqlHelper.executeQuery("SELECT * FROM resume r", ps -> {
+        return sqlHelper.executeQuery("SELECT * FROM resume r ORDER BY full_name, uuid", ps -> {
             ResultSet rs = ps.executeQuery();
             List<Resume> resumes = new ArrayList<>();
             while (rs.next()) {
@@ -98,7 +87,6 @@ public class SqlStorage implements Storage {
                 String uuid = rs.getString("uuid");
                 resumes.add(new Resume(fullName, uuid));
             }
-            resumes.sort(RESUME_COMPARATOR);
             return resumes;
         });
     }

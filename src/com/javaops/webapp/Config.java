@@ -1,5 +1,8 @@
 package com.javaops.webapp;
 
+import com.javaops.webapp.storage.SqlStorage;
+import com.javaops.webapp.storage.Storage;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -9,6 +12,7 @@ import java.util.Properties;
 public class Config {
     private static final File PROPS = new File("config\\resumes.properties");
     private static final Config INSTANCE = new Config();
+    public Storage storage;
 
     private Properties props = new Properties();
     private File storageDir;
@@ -24,13 +28,14 @@ public class Config {
         } catch (IOException e) {
             throw new IllegalStateException("Invalid config file " + PROPS.getAbsolutePath());
         }
+        storage = new SqlStorage(
+                props.getProperty("db.url"),
+                props.getProperty("db.user"),
+                props.getProperty("db.password")
+                );
     }
 
     public File getStorageDir() {
         return storageDir;
-    }
-
-    public Properties getProps() {
-        return props;
     }
 }

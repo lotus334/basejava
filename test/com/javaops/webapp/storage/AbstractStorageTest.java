@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -18,6 +19,8 @@ import static org.junit.Assert.assertEquals;
 public abstract class AbstractStorageTest {
 
     protected static final File STORAGE_DIR = Config.get().getStorageDir();
+    protected static final Comparator<Resume> RESUME_COMPARATOR = ((Comparator.comparing(Resume::getFullName)
+            .thenComparing(Resume::getUuid)));
 
     protected static final String UUID_1 = UUID.randomUUID().toString();
     protected static final String UUID_2 = UUID.randomUUID().toString();
@@ -111,7 +114,7 @@ public abstract class AbstractStorageTest {
     public void getAllSorted() {
         List<Resume> expectedResumes = List.of(RESUME_3, RESUME_2, RESUME_1)
                 .stream()
-                .sorted(Storage.RESUME_COMPARATOR)
+                .sorted(RESUME_COMPARATOR)
                 .collect(Collectors.toList());
         assertEquals(expectedResumes, storage.getAllSorted());
     }
