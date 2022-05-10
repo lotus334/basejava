@@ -159,14 +159,17 @@ public class DataStreamSerializer implements StreamSerializer {
         return list;
     }
 
+    @FunctionalInterface
     private interface ElementWriter<T> {
         void write(T t) throws IOException;
     }
 
+    @FunctionalInterface
     private interface ElementProcessor {
         void take() throws IOException;
     }
 
+    @FunctionalInterface
     private interface ElementReader<T> {
         T read() throws IOException;
     }
