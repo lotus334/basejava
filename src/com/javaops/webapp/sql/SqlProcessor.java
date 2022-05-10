@@ -4,5 +4,5 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public interface SqlProcessor<T> {
-    T makeQuery(PreparedStatement ps) throws SQLException;
+    T executeQuery(PreparedStatement ps) throws SQLException;
 }

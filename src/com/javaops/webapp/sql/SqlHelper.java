@@ -12,10 +12,11 @@ public class SqlHelper {
     public SqlHelper(ConnectionFactory connectionFactory) {
         this.connectionFactory = connectionFactory;
     }
+
     public <T> T executeQuery(String request, SqlProcessor<T> sqlProcessor)  {
         try (Connection conn = connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(request)) {
-            return sqlProcessor.makeQuery(ps);
+            return sqlProcessor.executeQuery(ps);
         } catch (SQLException e) {
             throw new StorageException(e);
         }

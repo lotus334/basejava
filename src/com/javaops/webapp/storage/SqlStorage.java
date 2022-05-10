@@ -57,13 +57,6 @@ public class SqlStorage implements Storage {
     @Override
     public void save(Resume r) {
         String query = "INSERT INTO resume (uuid, full_name) VALUES (?,?)";
-        SqlProcessor<Integer> sqlProcessor = ps -> {
-            ps.setString(1, r.getUuid());
-            ps.setString(2, r.getFullName());
-            ps.execute();
-            return 0;
-        };
-
         try (Connection conn = connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, r.getUuid());
