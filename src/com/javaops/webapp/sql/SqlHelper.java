@@ -1,8 +1,5 @@
 package com.javaops.webapp.sql;
 
-import com.javaops.webapp.exception.ExistStorageException;
-import com.javaops.webapp.exception.StorageException;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -21,6 +18,10 @@ public class SqlHelper {
         connectionFactory = () -> DriverManager.getConnection(dbUrl, dbUser, dbPassword);
     }
 
+    public <T> void executeQuery(String request)  {
+        executeQuery(request, PreparedStatement::execute, null);
+    }
+
     public <T> T executeQuery(String request, SqlProcessor<T> sqlProcessor)  {
         return executeQuery(request, sqlProcessor, null);
     }
@@ -30,14 +31,7 @@ public class SqlHelper {
              PreparedStatement ps = conn.prepareStatement(request)) {
             return sqlProcessor.executeQuery(ps);
         } catch (SQLException e) {
-            if (uuid != null) {
-                LOG.info(String.valueOf(e.getSQLState()));
-                // повторяющееся значение ключа
-                if (e.getSQLState().equalsIgnoreCase("23505")) {
-                    throw new ExistStorageException(uuid);
-                }
-            }
-            throw new StorageException(e);
+            throw SqlExceptionUtil.convertException(e, uuid);
         }
     }
 }

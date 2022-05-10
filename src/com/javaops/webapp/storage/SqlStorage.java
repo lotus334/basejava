@@ -3,6 +3,7 @@ package com.javaops.webapp.storage;
 import com.javaops.webapp.exception.NotExistStorageException;
 import com.javaops.webapp.model.Resume;
 import com.javaops.webapp.sql.SqlHelper;
+import com.javaops.webapp.sql.SqlProcessor;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -21,10 +22,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public void clear() {
-        sqlHelper.executeQuery("DELETE FROM resume", ps -> {
-            ps.execute();
-            return null;
-        });
+        sqlHelper.executeQuery("DELETE FROM resume");
     }
 
     @Override

@@ -4,6 +4,6 @@ import com.javaops.webapp.Config;
 
 public class SqlStorageTest extends AbstractStorageTest {
     public SqlStorageTest() {
-        super(Config.get().storage);
+        super(Config.get().getStorage());
     }
 }

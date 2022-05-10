@@ -12,16 +12,16 @@ import java.util.Properties;
 public class Config {
     private static final File PROPS = new File("config\\resumes.properties");
     private static final Config INSTANCE = new Config();
-    public Storage storage;
 
-    private Properties props = new Properties();
-    private File storageDir;
+    private final Storage storage;
+    private final File storageDir;
 
     public static Config get() {
         return INSTANCE;
     }
 
     private Config() {
+        Properties props = new Properties();
         try (InputStream is = new FileInputStream(PROPS)) {
             props.load(is);
             storageDir = new File(props.getProperty("storage.dir"));
@@ -37,5 +37,9 @@ public class Config {
 
     public File getStorageDir() {
         return storageDir;
+    }
+
+    public Storage getStorage() {
+        return storage;
     }
 }
