@@ -10,8 +10,11 @@ import com.javaops.webapp.sql.SqlHelper;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class SqlStorage implements Storage {
+
+    private static final Logger LOG = Logger.getLogger(SqlStorage.class.getName());
 
     private final ConnectionFactory connectionFactory;
     private final SqlHelper sqlHelper;
@@ -31,6 +34,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public Resume get(String uuid) {
+        LOG.info("Get " + uuid);
         return sqlHelper.executeQuery("SELECT * FROM resume r WHERE r.uuid =?", ps -> {
             ps.setString(1, uuid);
             ResultSet rs = ps.executeQuery();
@@ -42,28 +46,30 @@ public class SqlStorage implements Storage {
     }
 
     @Override
-    public void update(Resume r) {
+    public void update(Resume resume) {
+        LOG.info("Update " + resume);
         sqlHelper.executeQuery("UPDATE resume r SET full_name = ? WHERE uuid = ?", ps -> {
-            ps.setString(1, r.getFullName());
-            ps.setString(2, r.getUuid());
+            ps.setString(1, resume.getFullName());
+            ps.setString(2, resume.getUuid());
             if (ps.executeUpdate() == 0) {
-                throw new NotExistStorageException(r.getUuid());
+                throw new NotExistStorageException(resume.getUuid());
             }
             return null;
         });
     }
 
     @Override
-    public void save(Resume r) {
+    public void save(Resume resume) {
+        LOG.info("Save " + resume);
         String query = "INSERT INTO resume (uuid, full_name) VALUES (?,?)";
         try (Connection conn = connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, r.getUuid());
-            ps.setString(2, r.getFullName());
+            ps.setString(1, resume.getUuid());
+            ps.setString(2, resume.getFullName());
             ps.execute();
         } catch (SQLException e) {
-            if (get(r.getUuid()) != null) {
-                throw new ExistStorageException(r.getUuid());
+            if (get(resume.getUuid()) != null) {
+                throw new ExistStorageException(resume.getUuid());
             }
             throw new StorageException(e);
         }
@@ -71,6 +77,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public void delete(String uuid) {
+        LOG.info("Delete " + uuid);
         sqlHelper.executeQuery("DELETE FROM resume r WHERE r.uuid =?", ps -> {
             ps.setString(1, uuid);
             if (ps.executeUpdate() == 0) {
@@ -82,6 +89,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
+        LOG.info("getAllSorted");
         return sqlHelper.executeQuery("SELECT * FROM resume r", ps -> {
             ResultSet rs = ps.executeQuery();
             List<Resume> resumes = new ArrayList<>();

@@ -29,12 +29,12 @@ public class PathStorage extends AbstractStorage<Path> {
     }
 
     @Override
-    public void clear() {
+    public void doClear() {
         getFiles().forEach(this::doRemove);
     }
 
     @Override
-    public int size() {
+    public int getSize() {
         return (int) getFiles().count();
     }
 

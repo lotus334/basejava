@@ -15,12 +15,12 @@ public abstract class AbstractMapStorage<SK> extends AbstractStorage<SK> {
     }
 
     @Override
-    public void clear() {
-        storage.clear();
+    protected int getSize() {
+        return storage.size();
     }
 
     @Override
-    public int size() {
-        return storage.size();
+    protected void doClear() {
+        storage.clear();
     }
 }

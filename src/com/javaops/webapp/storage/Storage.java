@@ -10,7 +10,6 @@ public interface Storage {
 
     Comparator<Resume> RESUME_COMPARATOR = ((Comparator.comparing(Resume::getFullName)
             .thenComparing(Resume::getUuid)));
-    Logger LOG = Logger.getLogger(AbstractStorage.class.getName());
 
     void save(Resume resume);
 

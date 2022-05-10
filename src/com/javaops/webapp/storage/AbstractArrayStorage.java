@@ -13,13 +13,13 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected int size = 0;
 
     @Override
-    public void clear() {
+    public void doClear() {
         Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
     @Override
-    public int size() {
+    public int getSize() {
         return size;
     }
 

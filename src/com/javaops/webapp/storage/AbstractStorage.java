@@ -5,9 +5,13 @@ import com.javaops.webapp.exception.NotExistStorageException;
 import com.javaops.webapp.model.Resume;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Logger;
 
 public abstract class AbstractStorage<SK> implements Storage {
+
+    private static final Logger LOG = Logger.getLogger(AbstractStorage.class.getName());
 
     @Override
     public void save(Resume resume) {
@@ -65,6 +69,18 @@ public abstract class AbstractStorage<SK> implements Storage {
         return searchKey;
     }
 
+    @Override
+    public int size() {
+        LOG.warning("size");
+        return getSize();
+    }
+
+    @Override
+    public void clear() {
+        LOG.warning("clear");
+        doClear();
+    }
+
     protected abstract SK getSearchKey(String uuid);
 
     protected abstract void doSave(Resume resume, SK searchKey);
@@ -78,4 +94,8 @@ public abstract class AbstractStorage<SK> implements Storage {
     protected abstract boolean isExist(SK searchKey);
 
     protected abstract Resume[] doGetAll();
+
+    protected abstract int getSize();
+
+    protected abstract void doClear();
 }
