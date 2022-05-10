@@ -4,7 +4,6 @@ import com.javaops.webapp.model.Resume;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.logging.Logger;
 
 public interface Storage {
 
