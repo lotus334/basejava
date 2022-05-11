@@ -31,18 +31,18 @@ public class ResumeTestData {
         //SET PERSONAL
         TextSection personalSection =
                 new TextSection("Аналитический склад ума, сильная логика, креативность, инициативность.");
-        resume.setSection(PERSONAL, personalSection);
+//        resume.setSection(PERSONAL, personalSection);
 
         //SET OBJECTIVE
         TextSection objectiveSection =
                 new TextSection("Ведущий стажировок и корпоративного обучения");
-        resume.setSection(OBJECTIVE, objectiveSection);
+//        resume.setSection(OBJECTIVE, objectiveSection);
 
         //SET ACHIEVEMENT
         List<String> achievement = new ArrayList<>(List.of(
                 "С 2013 года: разработка проектов"
         ));
-        resume.setSection(ACHIEVEMENT, new ListSection(achievement));
+//        resume.setSection(ACHIEVEMENT, new ListSection(achievement));
 
         //SET
         List<String> qualificationSection = new ArrayList<>(List.of(
@@ -59,7 +59,7 @@ public class ResumeTestData {
                 "Отличное знание и опыт",
                 "Родной русский, английский"
         ));
-        resume.setSection(QUALIFICATIONS, new ListSection(qualificationSection));
+//        resume.setSection(QUALIFICATIONS, new ListSection(qualificationSection));
 
         //SET EXPERIENCE
         List<Organization> organizations = new ArrayList<>(List.of(
@@ -101,7 +101,7 @@ public class ResumeTestData {
                 )
         ));
         OrganizationSection organizationSection = new OrganizationSection(organizations);
-        resume.setSection(EXPERIENCE, organizationSection);
+//        resume.setSection(EXPERIENCE, organizationSection);
 
         //SET EDUCATION
         List<Organization> education = new ArrayList<>();
@@ -125,7 +125,7 @@ public class ResumeTestData {
         );
         education.add(edu1);
         OrganizationSection educationSection = new OrganizationSection(education);
-        resume.setSection(EDUCATION, educationSection);
+//        resume.setSection(EDUCATION, educationSection);
         return resume;
     }
 

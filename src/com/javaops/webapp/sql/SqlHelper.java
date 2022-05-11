@@ -1,16 +1,13 @@
 package com.javaops.webapp.sql;
 
+import com.javaops.webapp.exception.StorageException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.logging.Logger;
 
 public class SqlHelper {
-
-
-    private static final Logger LOG = Logger.getLogger(SqlHelper.class.getName());
-
 
     private ConnectionFactory connectionFactory;
 
@@ -32,6 +29,22 @@ public class SqlHelper {
             return sqlProcessor.executeQuery(ps);
         } catch (SQLException e) {
             throw SqlExceptionUtil.convertException(e, uuid);
+        }
+    }
+
+    public <T> T transactionalExecute(SqlTransaction<T> executor) {
+        try (Connection conn = connectionFactory.getConnection()) {
+            try {
+                conn.setAutoCommit(false);
+                T res = executor.execute(conn);
+                conn.commit();
+                return res;
+            } catch (SQLException e) {
+                conn.rollback();
+                throw SqlExceptionUtil.convertException(e);
+            }
+        } catch (SQLException e) {
+            throw new StorageException(e);
         }
     }
 }

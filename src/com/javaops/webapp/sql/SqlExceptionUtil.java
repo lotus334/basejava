@@ -10,7 +10,11 @@ public class SqlExceptionUtil {
     private SqlExceptionUtil() {
     }
 
-    public static StorageException convertException(SQLException e, String uuid) {
+    public static StorageException convertException(SQLException e) {
+        return convertException(e, null);
+    }
+
+        public static StorageException convertException(SQLException e, String uuid) {
         if (e instanceof PSQLException) {
 //            http://www.postgresql.org/docs/9.3/static/errcodes-appendix.html
             if (e.getSQLState().equals("23505")) {
