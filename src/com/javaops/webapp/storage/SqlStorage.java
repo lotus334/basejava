@@ -25,35 +25,6 @@ public class SqlStorage implements Storage {
     }
 
     @Override
-    public Resume get(String uuid) {
-        LOG.info("Get " + uuid);
-        return sqlHelper.executeQuery(
-                "    SELECT * FROM resume r " +
-                        " LEFT JOIN contact c " +
-                        "        ON r.uuid = c.resume_uuid " +
-                        "     WHERE r.uuid =? ",
-                ps -> {
-            ps.setString(1, uuid);
-            ResultSet rs = ps.executeQuery();
-            if (!rs.next()) {
-                throw new NotExistStorageException(uuid);
-            }
-            Resume resume = new Resume(rs.getString("full_name"), uuid);
-            String contactType = rs.getString("type");
-            if (contactType != null) {
-                do {
-                    contactType = rs.getString("type");
-                    String value = rs.getString("value");
-                    ContactTypes type = ContactTypes.valueOf(contactType);
-                    resume.setContact(type, value);
-                } while (rs.next());
-            }
-            return resume;
-
-        });
-    }
-
-    @Override
     public void update(Resume resume) {
         LOG.info("Update " + resume);
         sqlHelper.transactionalExecute(conn -> {
@@ -141,6 +112,25 @@ public class SqlStorage implements Storage {
     }
 
     @Override
+    public Resume get(String uuid) {
+        LOG.info("Get " + uuid);
+        return sqlHelper.executeQuery(
+                "    SELECT * FROM resume r " +
+                        " LEFT JOIN contact c " +
+                        "        ON r.uuid = c.resume_uuid " +
+                        "     WHERE r.uuid =? ",
+                ps -> {
+                    ps.setString(1, uuid);
+                    ResultSet rs = ps.executeQuery();
+                    if (!rs.next()) {
+                        throw new NotExistStorageException(uuid);
+                    }
+                    return getResumesFromResultSet(rs).get(0);
+
+                });
+    }
+
+    @Override
     public List<Resume> getAllSorted() {
         LOG.info("getAllSorted");
         return sqlHelper.executeQuery(
@@ -150,25 +140,30 @@ public class SqlStorage implements Storage {
                         " ORDER BY full_name, uuid",
                 ps -> {
                     ResultSet rs = ps.executeQuery();
-                    List<Resume> resumes = new ArrayList<>();
-                    Resume resume = null;
-                    while (rs.next()) {
-                        String uuid = rs.getString("uuid");
-                        if (resume == null || !resume.getUuid().equals(uuid)) {
-                            String fullName = rs.getString("full_name");
-                            resume = new Resume(fullName, uuid);
-                            resumes.add(resume);
-                        }
-                        String contactType = rs.getString("type");
-                        if (contactType != null) {
-                            String value = rs.getString("value");
-                            ContactTypes type = ContactTypes.valueOf(contactType);
-                            resume.setContact(type, value);
-                        }
-                    }
-                    return resumes;
+                    rs.next();
+                    return getResumesFromResultSet(rs);
 
                 });
+    }
+
+    private List<Resume> getResumesFromResultSet(ResultSet rs) throws SQLException {
+        List<Resume> resumes = new ArrayList<>();
+        Resume resume = null;
+        do {
+            String uuid = rs.getString("uuid");
+            if (resume == null || !resume.getUuid().equals(uuid)) {
+                String fullName = rs.getString("full_name");
+                resume = new Resume(fullName, uuid);
+                resumes.add(resume);
+            }
+            String contactType = rs.getString("type");
+            if (contactType != null) {
+                String value = rs.getString("value");
+                ContactTypes type = ContactTypes.valueOf(contactType);
+                resume.setContact(type, value);
+            }
+        } while (rs.next());
+        return resumes;
     }
 
     @Override
