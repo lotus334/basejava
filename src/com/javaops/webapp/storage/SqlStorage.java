@@ -39,7 +39,7 @@ public class SqlStorage implements Storage {
                 ps.setString(1, resume.getUuid());
                 ps.execute();
             }
-            insertContactsFromConn(conn, resume);
+            insertIntoContactFromConn(conn, resume);
             return null;
         });
     }
@@ -53,7 +53,7 @@ public class SqlStorage implements Storage {
                         ps.setString(2, resume.getFullName());
                         ps.execute();
                     }
-                    insertContactsFromConn(conn, resume);
+                    insertIntoContactFromConn(conn, resume);
                     return null;
                 }
         );
@@ -135,7 +135,7 @@ public class SqlStorage implements Storage {
         return resumes;
     }
 
-    private void insertContactsFromConn(Connection conn, Resume resume) throws SQLException {
+    private void insertIntoContactFromConn(Connection conn, Resume resume) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement("INSERT INTO contact (resume_uuid, type, value) VALUES (?,?,?)")) {
             for (Map.Entry<ContactTypes, String> e : resume.getContacts().entrySet()) {
                 ps.setString(1, resume.getUuid());
