@@ -16,6 +16,11 @@ public class SqlStorage implements Storage {
     private final SqlHelper sqlHelper;
 
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         sqlHelper = new SqlHelper(dbUrl, dbUser, dbPassword);
     }
 
@@ -39,7 +44,7 @@ public class SqlStorage implements Storage {
                 ps.setString(1, resume.getUuid());
                 ps.execute();
             }
-            insertIntoContactFromConn(conn, resume);
+            insertContact(conn, resume);
             return null;
         });
     }
@@ -53,7 +58,7 @@ public class SqlStorage implements Storage {
                         ps.setString(2, resume.getFullName());
                         ps.execute();
                     }
-                    insertIntoContactFromConn(conn, resume);
+                    insertContact(conn, resume);
                     return null;
                 }
         );
@@ -135,7 +140,7 @@ public class SqlStorage implements Storage {
         return resumes;
     }
 
-    private void insertIntoContactFromConn(Connection conn, Resume resume) throws SQLException {
+    private void insertContact(Connection conn, Resume resume) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement("INSERT INTO contact (resume_uuid, type, value) VALUES (?,?,?)")) {
             for (Map.Entry<ContactTypes, String> e : resume.getContacts().entrySet()) {
                 ps.setString(1, resume.getUuid());
