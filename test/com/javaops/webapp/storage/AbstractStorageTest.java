@@ -4,6 +4,7 @@ import com.javaops.webapp.Config;
 import com.javaops.webapp.ResumeTestData;
 import com.javaops.webapp.exception.ExistStorageException;
 import com.javaops.webapp.exception.NotExistStorageException;
+import com.javaops.webapp.model.ContactTypes;
 import com.javaops.webapp.model.Resume;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,6 +44,10 @@ public abstract class AbstractStorageTest {
         storage.save(RESUME_1);
         storage.save(RESUME_3);
         storage.save(RESUME_2);
+        RESUME_4.setContact(ContactTypes.STACKOVERFLOW, "overflow");
+        RESUME_1.setContact(ContactTypes.HOMEPAGE, "homepage");
+        RESUME_3.setContact(ContactTypes.GITHUB, "gh");
+        RESUME_2.setContact(ContactTypes.GITHUB, "git");
     }
 
     @Test
@@ -74,6 +79,9 @@ public abstract class AbstractStorageTest {
     @Test
     public void update() {
         Resume newResume = new Resume("fullName3", UUID_3);
+        RESUME_3.setContact(ContactTypes.STACKOVERFLOW, "overflow");
+        RESUME_3.setContact(ContactTypes.HOMEPAGE, "homepage");
+        RESUME_3.setContact(ContactTypes.GITHUB, "git");
         storage.update(newResume);
         assertEquals(newResume, storage.get(UUID_3));
     }
