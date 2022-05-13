@@ -16,19 +16,15 @@ public class SqlHelper {
     }
 
     public <T> void executeQuery(String request)  {
-        executeQuery(request, PreparedStatement::execute, null);
+        executeQuery(request, PreparedStatement::execute);
     }
 
     public <T> T executeQuery(String request, SqlProcessor<T> sqlProcessor)  {
-        return executeQuery(request, sqlProcessor, null);
-    }
-
-    public <T> T executeQuery(String request, SqlProcessor<T> sqlProcessor, String uuid)  {
         try (Connection conn = connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(request)) {
             return sqlProcessor.executeQuery(ps);
         } catch (SQLException e) {
-            throw SqlExceptionUtil.convertException(e, uuid);
+            throw SqlExceptionUtil.convertException(e);
         }
     }
 
