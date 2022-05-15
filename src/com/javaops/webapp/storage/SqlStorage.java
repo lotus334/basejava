@@ -8,10 +8,13 @@ import com.javaops.webapp.sql.SqlHelper;
 import java.sql.*;
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class SqlStorage implements Storage {
 
     private static final Logger LOG = Logger.getLogger(SqlStorage.class.getName());
+    protected static final Comparator<Resume> RESUME_COMPARATOR = ((Comparator.comparing(Resume::getFullName)
+            .thenComparing(Resume::getUuid)));
 
     private final SqlHelper sqlHelper;
 
@@ -82,17 +85,7 @@ public class SqlStorage implements Storage {
     @Override
     public List<Resume> getAllSorted() {
         LOG.info("getAllSorted");
-        return sqlHelper.executeQuery(
-                "    SELECT * FROM resume r " +
-                        " LEFT JOIN contact c " +
-                        "        ON r.uuid = c.resume_uuid " +
-                        " ORDER BY full_name, uuid",
-                ps -> {
-                    ResultSet rs = ps.executeQuery();
-                    rs.next();
-                    return getResumesFromResultSet(rs);
-
-                });
+        return getResumesFromPreparedStatement();
     }
 
     @Override
@@ -122,6 +115,46 @@ public class SqlStorage implements Storage {
             }
         } while (rs.next());
         return resumes;
+    }
+
+    private List<Resume> getResumesFromPreparedStatement() {
+        return sqlHelper.transactionalExecute(conn -> {
+            PreparedStatement psResume = conn.prepareStatement(
+                    "SELECT * FROM resume " +
+                            "ORDER BY full_name, uuid"
+            );
+            ResultSet rsResume = psResume.executeQuery();
+            Map<String, Resume> uuidResumeMap = new HashMap<>();
+            while (rsResume.next()) {
+                String uuid = rsResume.getString("uuid");
+                String fullName = rsResume.getString("full_name");
+                Resume resume = new Resume(fullName, uuid);
+                uuidResumeMap.put(uuid, resume);
+            }
+
+            PreparedStatement psContact = conn.prepareStatement(
+                    "SELECT * FROM contact " +
+                            "ORDER BY resume_uuid"
+            );
+            ResultSet rsContact = psContact.executeQuery();
+            Resume resume = null;
+            while (rsContact.next()) {
+                String resumeUuid = rsContact.getString("resume_uuid");
+                if (resume == null || !resume.getUuid().equals(resumeUuid)) {
+                    resume = uuidResumeMap.get(resumeUuid);
+                }
+                String contactType = rsContact.getString("type");
+                String value = rsContact.getString("value");
+                ContactTypes type = ContactTypes.valueOf(contactType);
+                resume.setContact(type, value);
+            }
+
+            return uuidResumeMap
+                    .values()
+                    .stream()
+                    .sorted(RESUME_COMPARATOR)
+                    .collect(Collectors.toList());
+        });
     }
 
     private void insertResume(Connection conn, Resume resume) throws SQLException {
