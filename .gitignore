@@ -4,3 +4,14 @@ out
 log
 
 storage/*
+
+apache-tomcat-10.0.20/logs/*
+
+apache-tomcat-10.0.20/webapps/*
+!apache-tomcat-10.0.20/webapps/docs
+!apache-tomcat-10.0.20/webapps/examples
+!apache-tomcat-10.0.20/webapps/host-manager
+!apache-tomcat-10.0.20/webapps/manager
+!apache-tomcat-10.0.20/webapps/ROOT
+
+apache-tomcat-10.0.20/work/Catalina/localhost/host-manager
